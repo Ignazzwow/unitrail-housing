@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Moon, Sun, Globe, Menu } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import Image from "next/image"
 
 const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
@@ -88,8 +89,15 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-teal-600 dark:bg-teal-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">UH</span>
+            <div className="w-8 h-8 relative">
+              <Image
+                src="/unitrail_housing_logo.png"
+                alt="UniTrail Housing Logo"
+                width={32}
+                height={32}
+                className="object-contain rounded-md"
+                priority
+              />
             </div>
             <span className="font-bold text-lg text-foreground">UniTrail Housing</span>
           </a>
@@ -126,7 +134,7 @@ export function Navigation() {
                   >
                     <span>{language.flag}</span>
                     <span>{language.name}</span>
-                    {selectedLanguage.code === language.code && <span className="ml-auto text-teal-600">✓</span>}
+                    {selectedLanguage.code === language.code && <span className="ml-auto text-primary">✓</span>}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -155,7 +163,7 @@ export function Navigation() {
                         key={link.href}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="text-lg font-medium text-foreground hover:text-teal-600 transition-colors"
+                        className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                       >
                         {link.label}
                       </a>
@@ -201,7 +209,7 @@ export function Navigation() {
                               <span>{language.flag}</span>
                               <span>{language.name}</span>
                               {selectedLanguage.code === language.code && (
-                                <span className="ml-auto text-teal-600">✓</span>
+                                <span className="ml-auto text-primary">✓</span>
                               )}
                             </DropdownMenuItem>
                           ))}

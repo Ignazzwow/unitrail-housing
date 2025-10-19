@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export function Contact() {
@@ -119,8 +119,8 @@ export function Contact() {
                 <CardTitle className="text-card-foreground">Email Us</CardTitle>
               </CardHeader>
               <CardContent>
-                <a href="mailto:housing@unitrail.com" className="text-primary hover:underline">
-                  housing@unitrail.com
+                <a href="mailto:housing@unitrail.in" className="text-primary hover:underline">
+                  housing@unitrail.in
                 </a>
               </CardContent>
             </Card>
@@ -133,32 +133,13 @@ export function Contact() {
                 <CardTitle className="text-card-foreground">Call Us</CardTitle>
               </CardHeader>
               <CardContent>
-                <a href="tel:+441234567890" className="text-primary hover:underline">
-                  +44 (0) 123 456 7890
+                <a href="tel:+4917656800301" className="text-primary hover:underline">
+                  +49 176 56800301
                 </a>
-                <p className="mt-2 text-sm text-muted-foreground">Mon-Fri: 9am-6pm GMT</p>
+                <p className="mt-2 text-sm text-muted-foreground">Mon-Fri: 9am-6pm GMT+2</p>
               </CardContent>
             </Card>
 
-            <Card className="border-border bg-card">
-              <CardHeader>
-                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <MapPin className="h-5 w-5 text-primary" />
-                </div>
-                <CardTitle className="text-card-foreground">Visit Us</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <address className="not-italic text-muted-foreground">
-                  UniTrail Housing
-                  <br />
-                  123 Student Quarter
-                  <br />
-                  London, UK
-                  <br />
-                  SW1A 1AA
-                </address>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>

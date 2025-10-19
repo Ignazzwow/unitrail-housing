@@ -52,7 +52,7 @@ export function Features() {
         <div className="mb-16 grid gap-4 md:grid-cols-3">
           <div className="relative aspect-video overflow-hidden rounded-2xl shadow-lg md:col-span-2">
             <Image
-              src="/generated-images/modern-student-apartment-living-room-with-study-ar.jpg"
+              src="/modern-student-apartment-living-room-with-study-ar.jpg"
               alt="Modern student apartment"
               width={800}
               height={400}
@@ -61,7 +61,7 @@ export function Features() {
           </div>
           <div className="relative aspect-video overflow-hidden rounded-2xl shadow-lg">
             <Image
-              src="/generated-images/cozy-student-bedroom.png"
+              src="/cozy-student-bedroom.png"
               alt="Cozy student bedroom"
               width={400}
               height={400}

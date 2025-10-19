@@ -34,12 +34,12 @@ const faqs = [
   {
     question: "Do you offer support after I move in?",
     answer:
-      "Our support doesn't end at move-in. We provide 24/7 emergency support, regular property maintenance, and a dedicated student support team to help with any issues or questions throughout your stay.",
+      "Our support doesn't end at move-in. We provide responsive assistance, regular property maintenance, and a dedicated student support team to help with any issues or questions throughout your stay.",
   },
   {
     question: "Are the properties safe and secure?",
     answer:
-      "Safety is our top priority. All properties are verified and inspected regularly. Most include secure entry systems, CCTV, and 24/7 security. We also provide safety guides and emergency contacts for all residents.",
+      "Safety is our top priority. All properties are verified and inspected regularly. Many include secure entry systems and CCTV. We also provide safety guides and emergency contacts for all residents.",
   },
 ]
 

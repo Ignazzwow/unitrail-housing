@@ -1,4 +1,4 @@
-import { Home } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -7,13 +7,19 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Home className="h-5 w-5 text-primary-foreground" />
+              <div className="w-8 h-8 relative">
+                <Image
+                  src="/unitrail_housing_logo.png"
+                  alt="UniTrail Housing Logo"
+                  width={32}
+                  height={32}
+                  className="object-contain rounded-md"
+                />
               </div>
               <span className="text-xl font-bold text-card-foreground">UniTrail Housing</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Helping international students find their home away from home since 2020.
+              Housing Solutions for Tomorrow’s Graduates.
             </p>
           </div>
 
@@ -74,11 +80,6 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               UniTrail Housing is an independent division of UniTrail, dedicated exclusively to student accommodation
               services.
-            </p>
-            <p className="mt-4 text-sm text-muted-foreground">
-              <a href="https://unitrail.com" className="text-primary hover:underline">
-                Visit main UniTrail website →
-              </a>
             </p>
           </div>
         </div>
