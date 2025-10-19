@@ -52,7 +52,8 @@ export function HowItWorks() {
               key={step.number}
               className={`flex flex-col gap-8 items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}
             >
-              <div className="flex-1">
+              {/* Image - shown first on mobile */}
+              <div className="flex-1 order-1 lg:order-none">
                 <div className="relative aspect-square max-w-md mx-auto overflow-hidden rounded-2xl shadow-xl">
                   <Image
                     src={step.image || "/placeholder.svg"}
@@ -64,14 +65,21 @@ export function HowItWorks() {
                 </div>
               </div>
 
-              <div className="flex-1 text-center lg:text-left">
-                <div className="mb-4 flex items-center justify-center lg:justify-start gap-4">
+              {/* Icon, number, title and description - shown second on mobile */}
+              <div className="flex-1 text-center lg:text-left order-2 lg:order-none">
+                {/* Icon - centered above on desktop, inline on mobile */}
+                <div className="mb-4 flex items-center justify-center lg:justify-center gap-4 lg:mb-6">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg">
                     <step.icon className="h-8 w-8" />
                   </div>
-                  <div className="text-4xl font-bold text-primary/30">{step.number}</div>
                 </div>
-                <h3 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{step.title}</h3>
+                
+                {/* Number and title - inline on mobile, below icon on desktop */}
+                <div className="mb-4 flex items-center justify-center lg:justify-start gap-4">
+                  <div className="text-4xl font-bold text-primary/30">{step.number}</div>
+                  <h3 className="text-2xl font-bold text-foreground md:text-3xl">{step.title}</h3>
+                </div>
+                
                 <p className="text-lg text-muted-foreground">{step.description}</p>
               </div>
             </div>
