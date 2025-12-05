@@ -32,6 +32,22 @@ export function Contact() {
       message: formData.get("message"),
     }
 
+    // Show success confirmation immediately
+    toast({
+      title: t("contact.messageSent"),
+      description: t("contact.messageSentDesc"),
+      duration: 8000, // Show for 8 seconds
+    })
+
+    setIsSuccess(true)
+    ;(e.target as HTMLFormElement).reset()
+    
+    // Reset success state after 5 seconds
+    setTimeout(() => {
+      setIsSuccess(false)
+    }, 5000)
+
+    // Send email in background (fire and forget)
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -44,31 +60,13 @@ export function Contact() {
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || "Failed to send message")
+        // Log error but don't show to user since confirmation was already shown
+        console.error("Failed to send email:", result.error || "Unknown error")
+      } else {
+        console.log("Email sent successfully:", result.messageId)
       }
-
-      toast({
-        title: t("contact.messageSent"),
-        description: t("contact.messageSentDesc"),
-        duration: 8000, // Show for 8 seconds
-      })
-
-      setIsSuccess(true)
-      ;(e.target as HTMLFormElement).reset()
-      
-      // Reset success state after 5 seconds
-      setTimeout(() => {
-        setIsSuccess(false)
-      }, 5000)
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
-      
-      toast({
-        title: "Fehler",
-        description: errorMessage,
-        variant: "destructive",
-      })
-      
+      // Log error but don't show to user since confirmation was already shown
       console.error("Contact form error:", error)
     } finally {
       setIsSubmitting(false)
