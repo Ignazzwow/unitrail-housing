@@ -15,6 +15,7 @@ import { useLanguage } from "@/contexts/language-context"
 export function Contact() {
   const { t } = useLanguage()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,9 +50,16 @@ export function Contact() {
       toast({
         title: t("contact.messageSent"),
         description: t("contact.messageSentDesc"),
+        duration: 8000, // Show for 8 seconds
       })
 
+      setIsSuccess(true)
       ;(e.target as HTMLFormElement).reset()
+      
+      // Reset success state after 5 seconds
+      setTimeout(() => {
+        setIsSuccess(false)
+      }, 5000)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
       
@@ -138,8 +146,18 @@ export function Contact() {
                     </Label>
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? t("contact.sending") : t("contact.send")}
+                  {isSuccess && (
+                    <div className="rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
+                      <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                        ✓ {t("contact.messageSent")}
+                      </p>
+                      <p className="text-xs text-green-600 dark:text-green-300 mt-1">
+                        {t("contact.messageSentDesc")}
+                      </p>
+                    </div>
+                  )}
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || isSuccess}>
+                    {isSubmitting ? t("contact.sending") : isSuccess ? "✓ " + t("contact.messageSent") : t("contact.send")}
                   </Button>
                 </form>
               </CardContent>
