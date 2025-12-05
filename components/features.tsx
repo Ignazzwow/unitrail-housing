@@ -1,51 +1,50 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, DollarSign, Calendar, MessageCircle, FileCheck, Globe } from "lucide-react"
-import Image from "next/image"
+"use client"
 
-const features = [
-  {
-    icon: MapPin,
-    title: "Prime Locations",
-    description: "Properties near universities, public transport, and essential amenities for student life.",
-  },
-  {
-    icon: DollarSign,
-    title: "Transparent Pricing",
-    description: "No hidden fees. Clear pricing with all costs included upfront so you can budget confidently.",
-  },
-  {
-    icon: Calendar,
-    title: "Flexible Terms",
-    description: "Short-term and long-term options available to match your study duration and needs.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Multilingual Support",
-    description: "Our team speaks multiple languages to help you feel comfortable and understood.",
-  },
-  {
-    icon: FileCheck,
-    title: "Easy Documentation",
-    description: "Simple, straightforward paperwork process designed for international students.",
-  },
-  {
-    icon: Globe,
-    title: "Cultural Integration",
-    description: "Resources and events to help you settle in and connect with your new community.",
-  },
-]
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { MapPin, DollarSign, Calendar, MessageCircle, FileCheck } from "lucide-react"
+import Image from "next/image"
+import { useLanguage } from "@/contexts/language-context"
 
 export function Features() {
+  const { t } = useLanguage()
+  
+  const features = [
+    {
+      icon: MapPin,
+      title: t("features.primeLocations"),
+      description: t("features.primeLocationsDesc"),
+    },
+    {
+      icon: DollarSign,
+      title: t("features.transparentPricing"),
+      description: t("features.transparentPricingDesc"),
+    },
+    {
+      icon: Calendar,
+      title: t("features.flexibleTerms"),
+      description: t("features.flexibleTermsDesc"),
+    },
+    {
+      icon: MessageCircle,
+      title: t("features.multilingualSupport"),
+      description: t("features.multilingualSupportDesc"),
+    },
+    {
+      icon: FileCheck,
+      title: t("features.easyDocumentation"),
+      description: t("features.easyDocumentationDesc"),
+    }
+  ]
+
   return (
     <section id="features" className="bg-background py-20">
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            Why Choose UniTrail Housing?
+            {t("features.title")}
           </h2>
           <p className="text-pretty text-lg text-muted-foreground">
-            We understand the challenges of moving to a new country. That's why we've built a service that puts
-            international students first.
+            {t("features.description")}
           </p>
         </div>
 
@@ -57,6 +56,7 @@ export function Features() {
               width={800}
               height={400}
               className="object-cover"
+              loading="lazy"
             />
           </div>
           <div className="relative aspect-video overflow-hidden rounded-2xl shadow-lg">
@@ -66,6 +66,7 @@ export function Features() {
               width={400}
               height={400}
               className="object-cover"
+              loading="lazy"
             />
           </div>
         </div>

@@ -1,48 +1,52 @@
+"use client"
+
 import { Search, CheckCircle, Key, Heart } from "lucide-react"
 import Image from "next/image"
-
-const steps = [
-  {
-    icon: Search,
-    number: "01",
-    title: "Browse & Search",
-    description: "Explore our verified properties filtered by location, budget, and preferences.",
-    image: "/student-browsing-apartment-listings-on-laptop.jpg",
-  },
-  {
-    icon: CheckCircle,
-    number: "02",
-    title: "Apply Online",
-    description: "Submit your application with our simple online form. We'll guide you through every step.",
-    image: "/student-filling-out-online-application-form-happil.jpg",
-  },
-  {
-    icon: Key,
-    number: "03",
-    title: "Get Approved",
-    description: "Our team reviews your application quickly and helps with all necessary documentation.",
-    image: "/friendly-housing-agent-reviewing-documents-with-st.jpg",
-  },
-  {
-    icon: Heart,
-    number: "04",
-    title: "Move In",
-    description: "Collect your keys and settle into your new home. Welcome to your student journey!",
-    image: "/excited-student-holding-keys-to-new-apartment.jpg",
-  },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export function HowItWorks() {
+  const { t } = useLanguage()
+  
+  const steps = [
+    {
+      icon: Search,
+      number: "01",
+      title: t("howItWorks.browseSearch"),
+      description: t("howItWorks.browseSearchDesc"),
+      image: "/student-browsing-apartment-listings-on-laptop.jpg",
+    },
+    {
+      icon: CheckCircle,
+      number: "02",
+      title: t("howItWorks.applyOnline"),
+      description: t("howItWorks.applyOnlineDesc"),
+      image: "/student-filling-out-online-application-form-happil.jpg",
+    },
+    {
+      icon: Key,
+      number: "03",
+      title: t("howItWorks.getApproved"),
+      description: t("howItWorks.getApprovedDesc"),
+      image: "/friendly-housing-agent-reviewing-documents-with-st.jpg",
+    },
+    {
+      icon: Heart,
+      number: "04",
+      title: t("howItWorks.moveIn"),
+      description: t("howItWorks.moveInDesc"),
+      image: "/excited-student-holding-keys-to-new-apartment.jpg",
+    },
+  ]
+
   return (
     <section id="how-it-works" className="bg-secondary/20 py-20">
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            How It Works
+            {t("howItWorks.title")}
           </h2>
           <p className="text-pretty text-lg text-muted-foreground">
-            Finding your perfect student accommodation is easy with UniTrail Housing. Just four simple steps to your new
-            home.
+            {t("howItWorks.description")}
           </p>
         </div>
 
@@ -61,6 +65,7 @@ export function HowItWorks() {
                     width={400}
                     height={400}
                     className="object-cover"
+                    loading="lazy"
                   />
                 </div>
               </div>
