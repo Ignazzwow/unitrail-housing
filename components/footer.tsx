@@ -2,18 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import type { Language } from "@/lib/translations"
-
-const languages = [
-  { code: "de" as Language, name: "Deutsch" },
-  { code: "en" as Language, name: "English" },
-  { code: "hi" as Language, name: "हिन्दी" },
-  { code: "ru" as Language, name: "Русский" },
-  { code: "zh" as Language, name: "中文" },
-  { code: "ar" as Language, name: "العربية" },
-]
 
 const navRoutes = [
   { key: "features", href: "/#features" },
@@ -23,44 +12,29 @@ const navRoutes = [
 ]
 
 export function Footer() {
-  const { language, setLanguage, t } = useLanguage()
-  const selectedLanguage = languages.find(l => l.code === language) || languages[0]
+  const { t } = useLanguage()
   
   return (
     <footer className="border-t border-border bg-card py-12">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Link href="/" className="mb-4 flex items-center gap-2">
-              <div className="w-12 h-12 relative">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="w-10 h-10 relative">
                 <Image
                   src="/New_UniTrail_Housing_Logo.png"
                   alt="UniTrail Housing Logo"
-                  width={48}
-                  height={48}
-                  className="object-contain rounded-lg"
+                  width={40}
+                  height={40}
+                  className="object-contain"
                   loading="lazy"
                 />
               </div>
               <span className="text-xl font-bold text-card-foreground">UniTrail Housing</span>
-            </Link>
-            <p className="text-sm text-muted-foreground mb-4">
+            </div>
+            <p className="text-sm text-muted-foreground">
               {t("footer.tagline")}
             </p>
-            {/* Language Selector */}
-            <div className="flex items-center gap-2">
-              {languages.map((languageOption) => (
-                <Button
-                  key={languageOption.code}
-                  variant={selectedLanguage.code === languageOption.code ? "default" : "outline"}
-                  size="sm"
-                  className={selectedLanguage.code === languageOption.code ? "px-3" : "px-3 bg-transparent hover:bg-primary/10 hover:text-primary hover:border-primary/30"}
-                  onClick={() => setLanguage(languageOption.code)}
-                >
-                  {languageOption.code === "hi" ? "IN" : languageOption.code === "zh" ? "CN" : languageOption.code === "ar" ? "AR" : languageOption.code.toUpperCase()}
-                </Button>
-              ))}
-            </div>
           </div>
 
           <div>
@@ -68,7 +42,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {navRoutes.map((route) => (
                 <li key={route.key}>
-                  <Link href={route.href} className="text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 px-2 py-1 rounded-md inline-block">
+                  <Link href={route.href} className="text-muted-foreground hover:text-primary">
                     {t(`nav.${route.key}`)}
                   </Link>
                 </li>
@@ -80,17 +54,22 @@ export function Footer() {
             <h3 className="mb-4 font-semibold text-card-foreground">{t("footer.legal")}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/datenschutz" className="text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 px-2 py-1 rounded-md inline-block">
+                <a href="#privacy" className="text-muted-foreground hover:text-primary">
                   {t("footer.privacyPolicy")}
-                </Link>
+                </a>
               </li>
               <li>
-                <Link href="/cookie-einstellungen" className="text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 px-2 py-1 rounded-md inline-block">
-                  {t("footer.cookieSettings")}
-                </Link>
+                <a href="#terms" className="text-muted-foreground hover:text-primary">
+                  {t("footer.termsOfService")}
+                </a>
               </li>
               <li>
-                <Link href="/impressum" className="text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 px-2 py-1 rounded-md inline-block">
+                <a href="#cookies" className="text-muted-foreground hover:text-primary">
+                  {t("footer.cookiePolicy")}
+                </a>
+              </li>
+              <li>
+                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
                   {t("footer.imprint")}
                 </Link>
               </li>

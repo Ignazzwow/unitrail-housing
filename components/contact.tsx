@@ -15,62 +15,22 @@ import { useLanguage } from "@/contexts/language-context"
 export function Contact() {
   const { t } = useLanguage()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    const formData = new FormData(e.currentTarget)
-    const data = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      phone: formData.get("phone") || "",
-      university: formData.get("university") || "",
-      message: formData.get("message"),
-    }
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Show success confirmation immediately
     toast({
       title: t("contact.messageSent"),
       description: t("contact.messageSentDesc"),
-      duration: 8000, // Show for 8 seconds
     })
 
-    setIsSuccess(true)
+    setIsSubmitting(false)
     ;(e.target as HTMLFormElement).reset()
-    
-    // Reset success state after 5 seconds
-    setTimeout(() => {
-      setIsSuccess(false)
-    }, 5000)
-
-    // Send email in background (fire and forget)
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        // Log error but don't show to user since confirmation was already shown
-        console.error("Failed to send email:", result.error || "Unknown error")
-      } else {
-        console.log("Email sent successfully:", result.messageId)
-      }
-    } catch (error) {
-      // Log error but don't show to user since confirmation was already shown
-      console.error("Contact form error:", error)
-    } finally {
-      setIsSubmitting(false)
-    }
   }
 
   return (
@@ -144,18 +104,8 @@ export function Contact() {
                     </Label>
                   </div>
 
-                  {isSuccess && (
-                    <div className="rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
-                      <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                        ✓ {t("contact.messageSent")}
-                      </p>
-                      <p className="text-xs text-green-600 dark:text-green-300 mt-1">
-                        {t("contact.messageSentDesc")}
-                      </p>
-                    </div>
-                  )}
-                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || isSuccess}>
-                    {isSubmitting ? t("contact.sending") : isSuccess ? "✓ " + t("contact.messageSent") : t("contact.send")}
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? t("contact.sending") : t("contact.send")}
                   </Button>
                 </form>
               </CardContent>
