@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "prisma generate && next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
@@ -84,5 +84,15 @@
     "tsx": "^4.21.0",
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "better-sqlite3",
+      "esbuild",
+      "sharp"
+    ]
   }
 }
