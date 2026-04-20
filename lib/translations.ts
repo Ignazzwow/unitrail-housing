@@ -272,8 +272,8 @@ export const translations = {
   de: {
     nav: {
       listings: "Angebote",
-      forStudents: "Für Studierende",
-      forLandlords: "Für Vermieter",
+      forStudents: "Für Studenten",
+      forLandlords: "Vermieten",
       faq: "FAQ",
       about: "Über uns",
       contact: "Kontakt",
