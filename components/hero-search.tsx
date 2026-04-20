@@ -13,8 +13,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Search } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function HeroSearch() {
+  const { t } = useLanguage()
   const router = useRouter()
   const [location, setLocation] = useState("")
   const [propertyType, setPropertyType] = useState<string>("")
@@ -39,12 +41,14 @@ export function HeroSearch() {
     <form onSubmit={handleSearch} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <div className="space-y-2 sm:col-span-2 lg:col-span-2">
-          <Label htmlFor="location" className="text-sm font-medium">Location</Label>
+          <Label htmlFor="location" className="text-sm font-medium">
+            {t("heroSearch.location")}
+          </Label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="location"
-              placeholder="City or area (e.g. Berlin, Munich)"
+              placeholder={t("heroSearch.locationPlaceholder")}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="pl-9"
@@ -52,42 +56,48 @@ export function HeroSearch() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="property_type" className="text-sm font-medium">Property Type</Label>
+          <Label htmlFor="property_type" className="text-sm font-medium">
+            {t("heroSearch.propertyType")}
+          </Label>
           <Select value={propertyType || "all"} onValueChange={(v) => setPropertyType(v === "all" ? "" : v)}>
             <SelectTrigger id="property_type">
-              <SelectValue placeholder="Any" />
+              <SelectValue placeholder={t("heroSearch.any")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Any</SelectItem>
-              <SelectItem value="apartment">Apartment</SelectItem>
-              <SelectItem value="house">House</SelectItem>
-              <SelectItem value="studio">Studio</SelectItem>
-              <SelectItem value="student_housing">Student Housing</SelectItem>
+              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
+              <SelectItem value="apartment">{t("heroSearch.typeApartment")}</SelectItem>
+              <SelectItem value="house">{t("heroSearch.typeHouse")}</SelectItem>
+              <SelectItem value="studio">{t("heroSearch.typeStudio")}</SelectItem>
+              <SelectItem value="student_housing">{t("heroSearch.typeStudentHousing")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="listing_type" className="text-sm font-medium">Listing Type</Label>
+          <Label htmlFor="listing_type" className="text-sm font-medium">
+            {t("heroSearch.listingType")}
+          </Label>
           <Select value={listingType || "all"} onValueChange={(v) => setListingType(v === "all" ? "" : v)}>
             <SelectTrigger id="listing_type">
-              <SelectValue placeholder="Any" />
+              <SelectValue placeholder={t("heroSearch.any")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Any</SelectItem>
-              <SelectItem value="rent">Rent</SelectItem>
-              <SelectItem value="student_housing">Student Housing</SelectItem>
-              <SelectItem value="pg">PG</SelectItem>
+              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
+              <SelectItem value="rent">{t("heroSearch.listingRent")}</SelectItem>
+              <SelectItem value="student_housing">{t("heroSearch.typeStudentHousing")}</SelectItem>
+              <SelectItem value="pg">{t("heroSearch.listingPg")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bedrooms" className="text-sm font-medium">Bedrooms</Label>
+          <Label htmlFor="bedrooms" className="text-sm font-medium">
+            {t("heroSearch.bedrooms")}
+          </Label>
           <Select value={bedrooms || "all"} onValueChange={(v) => setBedrooms(v === "all" ? "" : v)}>
             <SelectTrigger id="bedrooms">
-              <SelectValue placeholder="Any" />
+              <SelectValue placeholder={t("heroSearch.any")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Any</SelectItem>
+              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
               <SelectItem value="1">1+</SelectItem>
               <SelectItem value="2">2+</SelectItem>
               <SelectItem value="3">3+</SelectItem>
@@ -96,9 +106,11 @@ export function HeroSearch() {
         </div>
       </div>
       <div className="flex flex-wrap items-end gap-4">
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <div className="space-y-2">
-            <Label htmlFor="min_price" className="text-sm font-medium">Min Price €</Label>
+            <Label htmlFor="min_price" className="text-sm font-medium">
+              {t("heroSearch.minPrice")}
+            </Label>
             <Input
               id="min_price"
               type="number"
@@ -110,7 +122,9 @@ export function HeroSearch() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="max_price" className="text-sm font-medium">Max Price €</Label>
+            <Label htmlFor="max_price" className="text-sm font-medium">
+              {t("heroSearch.maxPrice")}
+            </Label>
             <Input
               id="max_price"
               type="number"
@@ -124,7 +138,7 @@ export function HeroSearch() {
         </div>
         <Button type="submit" size="lg" className="gap-2">
           <Search className="h-4 w-4" />
-          Search
+          {t("heroSearch.search")}
         </Button>
       </div>
     </form>

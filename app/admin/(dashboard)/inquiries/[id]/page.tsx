@@ -19,6 +19,7 @@ interface InquiryDetail {
   name: string
   email: string
   phone?: string | null
+  city?: string | null
   message: string
   status: string
   source: string
@@ -102,6 +103,10 @@ export default function InquiryDetailPage() {
             <div>
               <p className="text-sm text-muted-foreground">Phone</p>
               <p className="font-medium">{inquiry.phone ?? "—"}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">City / location</p>
+              <p className="font-medium">{inquiry.city?.trim() ? inquiry.city : "—"}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Linked Property</p>

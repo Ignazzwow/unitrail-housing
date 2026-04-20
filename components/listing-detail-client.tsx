@@ -80,7 +80,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
           <section>
             <h2 className="mb-4 text-2xl font-semibold text-foreground">Beschreibung</h2>
             <p className="whitespace-pre-line text-muted-foreground">
-              {L.detailedDescription || L.description || "No description available."}
+              {L.detailedDescription || L.description || t("listings.noDescription")}
             </p>
           </section>
 

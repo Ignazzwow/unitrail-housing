@@ -92,6 +92,7 @@ model Inquiry {
   name       String
   email      String
   phone      String?  @default("")
+  city       String?  @default("")
   message    String
   source     String   @default("website_form")
   status     String   @default("new") // new, in_progress, closed

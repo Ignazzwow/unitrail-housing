@@ -2,8 +2,9 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { getListings } from "@/lib/listings-data"
 import { AngeboteListClient } from "@/components/angebote-list-client"
+import { AngeboteFiltersSummary } from "@/components/angebote-filters-summary"
+import { AngeboteNoResults } from "@/components/angebote-no-results"
 import type { ListingsFilters } from "@/lib/listings-data"
-import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
@@ -32,32 +33,9 @@ export default async function AngebotePage({
       <Navigation />
       <div className="pt-16">
         <div className="container mx-auto px-4 py-16">
-          {hasFilters && (
-            <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <span>Showing results for:</span>
-              {filters.location && (
-                <span className="rounded-md bg-primary/10 px-2 py-1 text-primary">Location: {filters.location}</span>
-              )}
-              {filters.propertyType && (
-                <span className="rounded-md bg-primary/10 px-2 py-1 text-primary">Type: {filters.propertyType}</span>
-              )}
-              {filters.minPrice != null && (
-                <span className="rounded-md bg-primary/10 px-2 py-1 text-primary">Min: €{filters.minPrice}</span>
-              )}
-              {filters.maxPrice != null && (
-                <span className="rounded-md bg-primary/10 px-2 py-1 text-primary">Max: €{filters.maxPrice}</span>
-              )}
-              {filters.bedrooms != null && (
-                <span className="rounded-md bg-primary/10 px-2 py-1 text-primary">{filters.bedrooms}+ bedrooms</span>
-              )}
-              <Link href="/angebote" className="text-primary hover:underline ml-2">Clear filters</Link>
-            </div>
-          )}
+          <AngeboteFiltersSummary filters={filters} hasFilters={hasFilters} />
           {listings.length === 0 && hasFilters ? (
-            <div className="py-16 text-center">
-              <p className="text-lg text-muted-foreground mb-4">No properties found matching your search.</p>
-              <Link href="/angebote" className="text-primary hover:underline font-medium">View all listings</Link>
-            </div>
+            <AngeboteNoResults />
           ) : (
             <AngeboteListClient listings={listings} />
           )}

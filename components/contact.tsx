@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Phone } from "lucide-react"
+import { Mail, Phone, User } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -17,6 +17,7 @@ export function Contact() {
   const { t } = useLanguage()
   const searchParams = useSearchParams()
   const fromLandlords = searchParams.get("from") === "landlords"
+  const publicEmail = t("contact.publicEmail")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
@@ -151,8 +152,8 @@ export function Contact() {
                 <CardTitle className="text-card-foreground">{t("contact.emailUs")}</CardTitle>
               </CardHeader>
               <CardContent>
-                <a href="mailto:housing@unitrail.in" className="text-primary hover:underline">
-                  housing@unitrail.in
+                <a href={`mailto:${publicEmail}`} className="text-primary hover:underline">
+                  {publicEmail}
                 </a>
               </CardContent>
             </Card>
@@ -168,6 +169,19 @@ export function Contact() {
                 <a href="tel:+4917656800301" className="text-primary hover:underline">
                   +49 176 56800301
                 </a>
+                <div className="mt-4 flex gap-4 border-t border-border pt-4">
+                  <div
+                    className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-dashed border-muted-foreground/40 bg-muted/40 text-muted-foreground"
+                    aria-hidden
+                  >
+                    <User className="h-10 w-10 opacity-40" strokeWidth={1.25} />
+                    <span className="sr-only">{t("contact.contactPhotoPlaceholder")}</span>
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-1 text-sm">
+                    <p className="font-medium text-foreground">{t("contact.phoneContactLine")}</p>
+                    <p className="text-muted-foreground">{t("contact.phoneContactName")}</p>
+                  </div>
+                </div>
                 <p className="mt-2 text-sm text-muted-foreground">{t("contact.hours")}</p>
               </CardContent>
             </Card>

@@ -8,6 +8,7 @@ const inquirySchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
   phone: z.string().optional().default(""),
+  city: z.string().optional().default(""),
   message: z.string().min(1, "Message is required"),
   source: z.string().optional().default("website_form"),
 })
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { property_id, name, email, phone, message, source } = parseResult.data
+    const { property_id, name, email, phone, city, message, source } = parseResult.data
 
     const ipAddress = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? undefined
     const userAgent = request.headers.get("user-agent") ?? undefined
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
         name,
         email,
         phone: phone || "",
+        city: city || "",
         message,
         source,
         status: "new",
@@ -44,7 +46,15 @@ export async function POST(request: NextRequest) {
     })
 
     // Send notification email (non-blocking)
-    sendInquiryNotification(inquiry.id, { name, email, phone, message, propertyId: property_id ?? undefined }).catch(
+    sendInquiryNotification(inquiry.id, {
+      name,
+      email,
+      phone,
+      city,
+      message,
+      propertyId: property_id ?? undefined,
+      source,
+    }).catch(
       (err) => console.error("Failed to send inquiry notification:", err)
     )
 

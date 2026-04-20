@@ -13,9 +13,21 @@ const transporter = nodemailer.createTransport({
 
 export async function sendInquiryNotification(
   inquiryId: string,
-  data: { name: string; email: string; phone?: string; message: string; propertyId?: string | null }
+  data: {
+    name: string
+    email: string
+    phone?: string
+    city?: string
+    message: string
+    propertyId?: string | null
+    source?: string
+  }
 ) {
-  const adminEmail = process.env.ADMIN_EMAIL || "housing@unitrail.in"
+  const landlordSources = new Set(["landlord_cta", "landlord_cta_form", "landlords_page"])
+  const landlordEmail = process.env.LANDLORD_INQUIRY_EMAIL || "vermieten@unitrail-housing.de"
+  const defaultAdmin = process.env.ADMIN_EMAIL || "housing@unitrail.in"
+  const adminEmail =
+    data.source && landlordSources.has(data.source) ? landlordEmail : defaultAdmin
   const from = process.env.SMTP_FROM || "noreply@unitrail.in"
 
   let propertyTitle = "General Inquiry"
@@ -31,7 +43,9 @@ export async function sendInquiryNotification(
     <h2>New Inquiry</h2>
     <p><strong>From:</strong> ${data.name} (${data.email})</p>
     ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ""}
+    ${data.city ? `<p><strong>City / location:</strong> ${data.city}</p>` : ""}
     <p><strong>Property:</strong> ${propertyTitle}</p>
+    ${data.source ? `<p><strong>Source:</strong> ${data.source}</p>` : ""}
     <p><strong>Message:</strong></p>
     <p>${data.message.replace(/\n/g, "<br>")}</p>
     <hr>

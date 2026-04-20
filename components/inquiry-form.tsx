@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { useLanguage } from "@/contexts/language-context"
 
 interface InquiryFormProps {
   propertyId?: string
@@ -17,6 +18,7 @@ interface InquiryFormProps {
 export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
   const router = useRouter()
   const { toast } = useToast()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,16 +42,24 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
       })
       if (res.ok) {
         toast({
-          title: "Message sent!",
-          description: "We'll get back to you soon.",
+          title: t("propertyInquiry.messageSent"),
+          description: t("propertyInquiry.messageSentDesc"),
         })
         router.push("/angebote")
       } else {
         const err = await res.json()
-        toast({ title: "Error", description: err.error ?? "Failed to send", variant: "destructive" })
+        toast({
+          title: t("propertyInquiry.errorSend"),
+          description: err.error ?? t("propertyInquiry.errorGeneric"),
+          variant: "destructive",
+        })
       }
     } catch {
-      toast({ title: "Error", description: "Failed to send message", variant: "destructive" })
+      toast({
+        title: t("propertyInquiry.errorSend"),
+        description: t("propertyInquiry.errorGeneric"),
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
@@ -58,37 +68,39 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Send your inquiry</CardTitle>
+        <CardTitle>{t("propertyInquiry.title")}</CardTitle>
         {propertyTitle && (
-          <p className="text-sm text-muted-foreground">About: {propertyTitle}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("propertyInquiry.aboutProperty")} {propertyTitle}
+          </p>
         )}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName">{t("propertyInquiry.firstName")}</Label>
               <Input id="firstName" name="firstName" required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="lastName">{t("propertyInquiry.lastName")}</Label>
               <Input id="lastName" name="lastName" required />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("propertyInquiry.email")}</Label>
             <Input id="email" name="email" type="email" required />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone</Label>
+            <Label htmlFor="phone">{t("propertyInquiry.phone")}</Label>
             <Input id="phone" name="phone" type="tel" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="message">{t("propertyInquiry.message")}</Label>
             <Textarea id="message" name="message" rows={5} required />
           </div>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Sending..." : "Send Inquiry"}
+            {loading ? t("propertyInquiry.sending") : t("propertyInquiry.send")}
           </Button>
         </form>
       </CardContent>

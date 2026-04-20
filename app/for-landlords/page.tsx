@@ -1,8 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import {
   Banknote,
   Building2,
@@ -15,6 +14,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLanguage } from "@/contexts/language-context"
+import { LandlordInquiryDialog } from "@/components/landlord-inquiry-dialog"
 
 const BENEFIT_ICON_KEYS = [
   { icon: Banknote, titleKey: "forLandlords.benefitPaymentsTitle", descKey: "forLandlords.benefitPaymentsDesc" },
@@ -30,6 +30,7 @@ const BENEFIT_ICON_KEYS = [
 
 export default function ForLandlordsPage() {
   const { t } = useLanguage()
+  const [landlordFormOpen, setLandlordFormOpen] = useState(false)
 
   const landlordBenefits = useMemo(
     () =>
@@ -134,11 +135,13 @@ export default function ForLandlordsPage() {
               {t("forLandlords.ctaTitle")}
             </h2>
             <p className="mx-auto mb-8 max-w-xl text-pretty text-muted-foreground">{t("forLandlords.ctaLead")}</p>
-            <Button size="lg" asChild className="font-semibold">
-              <Link href="/contact?from=landlords">{t("forLandlords.ctaButton")}</Link>
+            <Button size="lg" className="font-semibold" type="button" onClick={() => setLandlordFormOpen(true)}>
+              {t("forLandlords.ctaButton")}
             </Button>
           </div>
         </section>
+
+        <LandlordInquiryDialog open={landlordFormOpen} onOpenChange={setLandlordFormOpen} />
 
         <Footer />
       </div>
