@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "title": "Cozy Room in City Center",
+    "location": "Berlin Mitte",
+    "price": "450",
+    "totalSize": 25,
+    "rooms": 1,
+    "bathrooms": 1,
+    "availableFrom": "2024-09-01",
+    "sharedRoom": false,
+    "images": ["/modern-student-apartment-living-room-with-study-ar.jpg"],
+    "features": ["WiFi", "Furnished", "Near University"],
+    "description": "A cozy room in the heart of Berlin.",
+    "detailedDescription": "Spacious room with natural light, ideal for students. Walking distance to universities and public transport.",
+    "address": "Alexanderplatz 1, 10178 Berlin",
+    "deposit": "900",
+    "minimumStay": "6 months"
+  },
+  {
+    "id": "2",
+    "title": "Shared Apartment near Campus",
+    "location": "Munich Schwabing",
+    "price": "380",
+    "totalSize": 80,
+    "rooms": 3,
+    "bathrooms": 2,
+    "availableFrom": "2024-08-15",
+    "sharedRoom": true,
+    "images": ["/cozy-student-bedroom.png"],
+    "features": ["WiFi", "Kitchen", "Laundry"],
+    "description": "Shared apartment in student-friendly neighborhood.",
+    "detailedDescription": "Large shared apartment with modern amenities. Great for students looking for community living.",
+    "address": "Leopoldstraße 100, 80802 München",
+    "deposit": "1140",
+    "minimumStay": "3 months"
+  }
+]

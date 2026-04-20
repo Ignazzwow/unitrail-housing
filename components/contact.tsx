@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,23 +15,44 @@ import { useLanguage } from "@/contexts/language-context"
 
 export function Contact() {
   const { t } = useLanguage()
+  const searchParams = useSearchParams()
+  const fromLandlords = searchParams.get("from") === "landlords"
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    toast({
-      title: t("contact.messageSent"),
-      description: t("contact.messageSentDesc"),
-    })
-
-    setIsSubmitting(false)
-    ;(e.target as HTMLFormElement).reset()
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    const name = `${formData.get("firstName")} ${formData.get("lastName")}`.trim()
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email: formData.get("email"),
+          phone: formData.get("phone") || "",
+          message: formData.get("message"),
+          source: fromLandlords ? "landlords_page" : "website_form",
+        }),
+      })
+      if (res.ok) {
+        toast({
+          title: t("contact.messageSent"),
+          description: t("contact.messageSentDesc"),
+        })
+        form.reset()
+      } else {
+        const err = await res.json()
+        toast({ title: "Error", description: err.error ?? "Failed to send", variant: "destructive" })
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to send message", variant: "destructive" })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -55,6 +77,14 @@ export function Contact() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {fromLandlords ? (
+                  <p className="mb-4 rounded-md border border-primary/25 bg-primary/5 px-3 py-2.5 text-sm text-foreground">
+                    {t("contact.landlordListingNote")}
+                  </p>
+                ) : null}
+                <p className="mb-4 border-l-2 border-primary pl-3 text-sm leading-relaxed text-muted-foreground">
+                  {t("contact.teamReplyWithin24")}
+                </p>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
@@ -97,7 +127,7 @@ export function Contact() {
                     <input type="checkbox" id="consent" name="consent" required className="mt-1" />
                     <Label htmlFor="consent" className="text-sm leading-relaxed text-muted-foreground">
                       {t("contact.consent")}{" "}
-                      <a href="#privacy" className="text-primary underline">
+                      <a href="/datenschutz" className="text-primary underline">
                         {t("contact.privacyPolicy")}
                       </a>
                       . {t("contact.consentEnd")}

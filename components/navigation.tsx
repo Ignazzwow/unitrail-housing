@@ -1,28 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Globe, Menu } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Image from "next/image"
+import Link from "next/link"
+import { useLanguage } from "@/contexts/language-context"
 
+/** Must match `Language` in language-context — only these have full UI copy in translations. */
 const languages = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "zh", name: "中文", flag: "🇨🇳" },
-  { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+  { code: "en" as const, name: "English", flag: "🇬🇧" },
+  { code: "de" as const, name: "Deutsch", flag: "🇩🇪" },
 ]
 
 export function Navigation() {
+  const { language, setLanguage, t } = useLanguage()
   const [isDark, setIsDark] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0])
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const selectedLanguage = useMemo(
+    () => languages.find((l) => l.code === language) ?? languages[0],
+    [language]
+  )
 
   useEffect(() => {
     // Check for saved theme preference or default to light mode
@@ -66,17 +69,16 @@ export function Navigation() {
     }
   }
 
-  const handleLanguageChange = (language: (typeof languages)[0]) => {
-    setSelectedLanguage(language)
-    // Here you would integrate with a translation service
-    console.log("[v0] Language changed to:", language.code)
+  const handleLanguageChange = (lang: (typeof languages)[number]) => {
+    setLanguage(lang.code)
   }
 
   const navLinks = [
-    { href: "#features", label: "Features" },
-    { href: "#how-it-works", label: "How It Works" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#contact", label: "Contact" },
+    { href: "/angebote", labelKey: "nav.listings" as const },
+    { href: "/for-landlords", labelKey: "nav.forLandlords" as const },
+    { href: "/faq", labelKey: "nav.faq" as const },
+    { href: "/about", labelKey: "nav.about" as const },
+    { href: "/contact", labelKey: "nav.contact" as const },
   ]
 
   return (
@@ -88,7 +90,7 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 relative">
               <Image
                 src="/New_UniTrail_Housing_Logo.png"
@@ -100,18 +102,33 @@ export function Navigation() {
               />
             </div>
             <span className="font-bold text-lg text-foreground">UniTrail Housing</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  {t("nav.forStudents")}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem asChild>
+                  <Link href="/for-students">{t("nav.studentsOverview")}</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/for-students/accommodation">{t("nav.studentsAccommodation")}</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                {link.label}
-              </a>
+                {t(link.labelKey)}
+              </Link>
             ))}
           </div>
 
@@ -158,15 +175,29 @@ export function Navigation() {
                 <div className="flex flex-col gap-6 mt-6">
                   {/* Mobile Navigation Links */}
                   <div className="flex flex-col gap-4">
+                    <Link
+                      href="/for-students"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    >
+                      {t("nav.forStudents")}
+                    </Link>
+                    <Link
+                      href="/for-students/accommodation"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-base pl-4 text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {t("nav.studentsAccommodation")}
+                    </Link>
                     {navLinks.map((link) => (
-                      <a
+                      <Link
                         key={link.href}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                       >
-                        {link.label}
-                      </a>
+                        {t(link.labelKey)}
+                      </Link>
                     ))}
                   </div>
 

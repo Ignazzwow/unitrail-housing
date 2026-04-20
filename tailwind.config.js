@@ -66,5 +66,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  /* Animations come from `tw-animate-css` in app/globals.css (Tailwind v4–compatible). */
+  plugins: [],
 }

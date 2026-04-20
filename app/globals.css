@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Explicit scan paths — fixes missing utilities when v4 auto-detection skips files (unstyled UI). */
+@source "../components/**/*.{tsx,ts,jsx,js}";
+@source "./**/*.{tsx,ts,jsx,js}";
+@source "../contexts/**/*.{tsx,ts,jsx,js}";
+@source "../lib/**/*.{tsx,ts,jsx,js}";
+@source "../hooks/**/*.{ts,tsx}";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

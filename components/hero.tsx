@@ -4,12 +4,10 @@ import Image from "next/image"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-secondary/20 to-background">
+    <section className="relative overflow-visible bg-gradient-to-b from-primary/10 via-secondary/20 to-background min-h-[calc(100vh-100px)]">
       <div className="container mx-auto px-4 py-20 md:py-32">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="mx-auto max-w-2xl text-center lg:text-left">
-            
-
             <h1 className="mb-6 text-balance font-sans text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl">
               Your Home Away From Home
             </h1>
@@ -20,9 +18,6 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
-              <Button size="lg" className="w-full sm:w-auto" asChild>
-                <a href="#contact">Find Your Home</a>
-              </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent hover:bg-primary/10 hover:text-primary hover:border-primary/30" asChild>
                 <a href="#how-it-works">How It Works</a>
               </Button>

@@ -5,10 +5,12 @@ import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 
 const navRoutes = [
-  { key: "features", href: "/#features" },
-  { key: "howItWorks", href: "/#how-it-works" },
-  { key: "faq", href: "/#faq" },
-  { key: "contact", href: "/#contact" },
+  { key: "listings", href: "/angebote" },
+  { key: "forStudents", href: "/for-students" },
+  { key: "forLandlords", href: "/for-landlords" },
+  { key: "faq", href: "/faq" },
+  { key: "about", href: "/about" },
+  { key: "contact", href: "/contact" },
 ]
 
 export function Footer() {
@@ -47,6 +49,16 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="/datenschutz" className="text-muted-foreground hover:text-primary">
+                  {t("footer.privacyPolicy")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
+                  {t("footer.imprint")}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -54,9 +66,14 @@ export function Footer() {
             <h3 className="mb-4 font-semibold text-card-foreground">{t("footer.legal")}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#privacy" className="text-muted-foreground hover:text-primary">
+                <Link href="/datenschutz" className="text-muted-foreground hover:text-primary">
                   {t("footer.privacyPolicy")}
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
+                  {t("footer.imprint")}
+                </Link>
               </li>
               <li>
                 <a href="#terms" className="text-muted-foreground hover:text-primary">
@@ -64,13 +81,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#cookies" className="text-muted-foreground hover:text-primary">
+                <Link href="/datenschutz#cookies" className="text-muted-foreground hover:text-primary">
                   {t("footer.cookiePolicy")}
-                </a>
-              </li>
-              <li>
-                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
-                  {t("footer.imprint")}
                 </Link>
               </li>
             </ul>
@@ -87,6 +99,23 @@ export function Footer() {
         <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
           <p className="mt-2">{t("footer.gdpr")}</p>
+          <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2" aria-label={t("footer.legal")}>
+            <Link href="/datenschutz" className="hover:text-primary">
+              {t("footer.privacyPolicy")}
+            </Link>
+            <span className="text-border" aria-hidden>
+              |
+            </span>
+            <Link href="/impressum" className="hover:text-primary">
+              {t("footer.imprint")}
+            </Link>
+            <span className="text-border" aria-hidden>
+              |
+            </span>
+            <Link href="/datenschutz#cookies" className="hover:text-primary">
+              {t("footer.cookiePolicy")}
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

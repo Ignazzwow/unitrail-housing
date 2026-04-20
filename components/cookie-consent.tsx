@@ -57,7 +57,7 @@ export function CookieConsent() {
               Cookie Policy
             </a>{" "}
             and{" "}
-            <a href="#privacy" className="text-primary underline">
+            <a href="/datenschutz" className="text-primary underline">
               Privacy Policy
             </a>
           </p>

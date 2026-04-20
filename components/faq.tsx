@@ -6,8 +6,10 @@ import { translations } from "@/lib/translations"
 
 export function FAQ() {
   const { language, t } = useLanguage()
-  
-  const faqs = translations[language].faq.questions
+
+  const bundle = translations[language] ?? translations.en
+  const rawQuestions = bundle.faq?.questions
+  const faqs = Array.isArray(rawQuestions) ? rawQuestions : translations.en.faq.questions
 
   return (
     <section id="faq" className="bg-background py-20">

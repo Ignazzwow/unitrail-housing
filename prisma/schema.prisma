@@ -1,0 +1,103 @@
+// Prisma schema for UniTrail Housing
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============= ACCESS MODEL =============
+model AdminUser {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("admin") // admin, super_admin, staff
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ============= PROPERTIES =============
+model Property {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  title              String
+  description        String   @default("")
+  detailedDescription String? @map("detailed_description")
+  propertyType       String   @default("apartment") // apartment, house, studio, pg, student_housing
+  listingType        String   @default("rent") // rent, sale, pg, student_housing
+  price              Float
+  currency           String   @default("EUR")
+  location           String   // city, area
+  address            String?  @default("")
+  latitude           Float?
+  longitude          Float?
+  bedrooms           Int      @default(0)
+  bathrooms          Int      @default(0)
+  areaSqft           Float?   @map("area_sqft")
+  areaSqm            Float?   @map("area_sqm")
+  furnishing         String   @default("unfurnished") // furnished, semi, unfurnished
+  availabilityStatus String   @default("available") @map("availability_status") // available, reserved, rented, sold, upcoming
+  isFeatured         Boolean  @default(false) @map("is_featured")
+  isActive           Boolean  @default(true) @map("is_active")
+  deposit            String?  @default("")
+  minimumStay        String?  @map("minimum_stay")
+  availableFrom      String?  @map("available_from")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  images   PropertyImage[]
+  propertyAmenities PropertyAmenity[]
+  inquiries Inquiry[]
+}
+
+model PropertyImage {
+  id          String   @id @default(cuid())
+  propertyId  String   @map("property_id")
+  imageUrl    String   @map("image_url")
+  caption     String?  @default("")
+  displayOrder Int     @default(0) @map("display_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  @@map("property_images")
+}
+
+// ============= AMENITIES =============
+model Amenity {
+  id   String @id @default(cuid())
+  name String @unique
+
+  properties PropertyAmenity[]
+}
+
+model PropertyAmenity {
+  propertyId String @map("property_id")
+  amenityId  String @map("amenity_id")
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity  Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([propertyId, amenityId])
+  @@map("property_amenities")
+}
+
+// ============= INQUIRIES =============
+model Inquiry {
+  id         String   @id @default(cuid())
+  propertyId String?  @map("property_id")
+  name       String
+  email      String
+  phone      String?  @default("")
+  message    String
+  source     String   @default("website_form")
+  status     String   @default("new") // new, in_progress, closed
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  property Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+}
