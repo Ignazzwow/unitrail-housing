@@ -47,10 +47,14 @@ export function Contact() {
         form.reset()
       } else {
         const err = await res.json()
-        toast({ title: "Error", description: err.error ?? "Failed to send", variant: "destructive" })
+        toast({
+          title: t("contact.errorTitle"),
+          description: err.error ?? t("contact.errorSend"),
+          variant: "destructive",
+        })
       }
     } catch {
-      toast({ title: "Error", description: "Failed to send message", variant: "destructive" })
+      toast({ title: t("contact.errorTitle"), description: t("contact.errorSendMessage"), variant: "destructive" })
     } finally {
       setIsSubmitting(false)
     }

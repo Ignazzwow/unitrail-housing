@@ -6,6 +6,8 @@ import { HowItWorks } from "@/components/how-it-works"
 import { Footer } from "@/components/footer"
 import { CookieConsent } from "@/components/cookie-consent"
 import { HomeLearnMore } from "@/components/home-learn-more"
+import { NurembergWgSection } from "@/components/nuremberg-wg-section"
+import { Contact } from "@/components/contact"
 
 export default function Home() {
   return (
@@ -14,8 +16,10 @@ export default function Home() {
       <div className="pt-16">
         <Hero />
         <HomeHeroSearchSection />
+        <NurembergWgSection />
         <Features />
         <HowItWorks />
+        <Contact />
         <HomeLearnMore />
         <Footer />
       </div>

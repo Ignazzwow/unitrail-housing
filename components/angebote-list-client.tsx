@@ -45,7 +45,7 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
                         <div className="relative h-48 w-full">
                           <Image
                             src={image}
-                            alt={`${L.title} - Bild ${index + 1}`}
+                            alt={`${L.title} - ${t("listings.imageLabel")} ${index + 1}`}
                             fill
                             className="object-cover"
                             loading={index === 0 ? "lazy" : undefined}
@@ -56,7 +56,7 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
                   ) : (
                     <CarouselItem>
                       <div className="flex h-48 w-full items-center justify-center bg-muted text-muted-foreground">
-                        No image
+                        {t("listings.noImage")}
                       </div>
                     </CarouselItem>
                   )}
@@ -124,7 +124,7 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
               </div>
               <div className="space-y-2">
                 <Button className="w-full" variant="outline" asChild>
-                  <Link href={`/angebote/${listing.slug}`}>{t("listings.viewButton") || "Ansehen"}</Link>
+                  <Link href={`/angebote/${listing.slug}`}>{t("listings.viewButton")}</Link>
                 </Button>
                 <Button className="w-full" asChild>
                   <Link href={`/angebote/${listing.slug}/anfrage`}>{t("listings.contactButton")}</Link>

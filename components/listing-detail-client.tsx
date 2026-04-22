@@ -24,7 +24,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
       <Link href="/angebote">
         <Button variant="ghost" className="mb-8">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          {t("listings.backToListings") || "Zurück zu den Angeboten"}
+          {t("listings.backToListings")}
         </Button>
       </Link>
 
@@ -54,7 +54,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                   <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                     <Image
                       src={image}
-                      alt={`${L.title} - Bild ${index + 1}`}
+                      alt={`${L.title} - ${t("listings.imageLabel")} ${index + 1}`}
                       fill
                       className="object-cover"
                       priority={index === 0}
@@ -65,7 +65,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
             ) : (
               <CarouselItem>
                 <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                  No image
+                  {t("listings.noImage")}
                 </div>
               </CarouselItem>
             )}
@@ -78,7 +78,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">
           <section>
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">Beschreibung</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">{t("listings.descriptionTitle")}</h2>
             <p className="whitespace-pre-line text-muted-foreground">
               {L.detailedDescription || L.description || t("listings.noDescription")}
             </p>
@@ -86,13 +86,13 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
 
           <section>
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              {t("listings.propertyDetails") || "Objektangaben"}
+              {t("listings.propertyDetails")}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                 <Square className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.totalSize") || "Gesamtfläche"}</p>
+                  <p className="text-sm text-muted-foreground">{t("listings.totalSize")}</p>
                   <p className="font-semibold text-foreground">{L.areaSqm} m²</p>
                 </div>
               </div>
@@ -100,7 +100,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                 <Bed className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    {L.sharedRoom ? t("listings.roomType") || "Zimmertyp" : t("listings.rooms") || "Zimmer"}
+                    {L.sharedRoom ? t("listings.roomType") : t("listings.rooms")}
                   </p>
                   <p className="font-semibold text-foreground">
                     {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
@@ -110,14 +110,14 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
               <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                 <Bath className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.bathrooms") || "Badezimmer"}</p>
+                  <p className="text-sm text-muted-foreground">{t("listings.bathrooms")}</p>
                   <p className="font-semibold text-foreground">{L.bathrooms}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                 <Calendar className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.availableFrom") || "Verfügbar ab"}</p>
+                  <p className="text-sm text-muted-foreground">{t("listings.availableFrom")}</p>
                   <p className="font-semibold text-foreground">{L.availableFrom}</p>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                 <div className="flex items-center gap-3 rounded-lg border border-border p-4 sm:col-span-2">
                   <MapPin className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("listings.address") || "Adresse"}</p>
+                    <p className="text-sm text-muted-foreground">{t("listings.address")}</p>
                     <p className="font-semibold text-foreground">{listing.address}</p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
               {L.deposit && (
                 <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("listings.deposit") || "Kaution"}</p>
+                    <p className="text-sm text-muted-foreground">{t("listings.deposit")}</p>
                     <p className="font-semibold text-foreground">{L.deposit} €</p>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                 <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      {t("listings.minimumStay") || "Mindestmietdauer"}
+                      {t("listings.minimumStay")}
                     </p>
                     <p className="font-semibold text-foreground">{L.minimumStay}</p>
                   </div>
@@ -153,7 +153,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
 
           <section>
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              {t("listings.featuresTitle") || "Ausstattung"}
+              {t("listings.featuresTitle")}
             </h2>
             <div className="flex flex-wrap gap-2">
               {L.features.map((feature, index) => (

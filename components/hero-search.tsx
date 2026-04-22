@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Search } from "lucide-react"
+import { Building2, MapPin, Search, WalletCards } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 export function HeroSearch() {
@@ -20,126 +20,83 @@ export function HeroSearch() {
   const router = useRouter()
   const [location, setLocation] = useState("")
   const [propertyType, setPropertyType] = useState<string>("")
-  const [listingType, setListingType] = useState<string>("")
-  const [minPrice, setMinPrice] = useState("")
-  const [maxPrice, setMaxPrice] = useState("")
-  const [bedrooms, setBedrooms] = useState<string>("")
+  const [priceRange, setPriceRange] = useState<[number, number]>([200, 3000])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     const params = new URLSearchParams()
     if (location.trim()) params.set("location", location.trim())
     if (propertyType) params.set("property_type", propertyType)
-    if (listingType) params.set("listing_type", listingType)
-    if (minPrice) params.set("min_price", minPrice)
-    if (maxPrice) params.set("max_price", maxPrice)
-    if (bedrooms) params.set("bedrooms", bedrooms)
+    params.set("min_price", String(priceRange[0]))
+    params.set("max_price", String(priceRange[1]))
     router.push(`/angebote?${params.toString()}`)
   }
 
   return (
-    <form onSubmit={handleSearch} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <div className="space-y-2 sm:col-span-2 lg:col-span-2">
-          <Label htmlFor="location" className="text-sm font-medium">
-            {t("heroSearch.location")}
-          </Label>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+    <form onSubmit={handleSearch}>
+      <div className="rounded-2xl border border-border/80 bg-background p-2 shadow-sm">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center">
+          <div className="flex items-center gap-2 rounded-xl px-3 py-2 md:min-w-0 md:flex-1 md:border-r md:border-border">
+            <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
             <Input
               id="location"
               placeholder={t("heroSearch.locationPlaceholder")}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="pl-9"
+              className="h-auto border-0 p-0 text-sm shadow-none focus-visible:ring-0"
             />
           </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="property_type" className="text-sm font-medium">
-            {t("heroSearch.propertyType")}
-          </Label>
-          <Select value={propertyType || "all"} onValueChange={(v) => setPropertyType(v === "all" ? "" : v)}>
-            <SelectTrigger id="property_type">
-              <SelectValue placeholder={t("heroSearch.any")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
-              <SelectItem value="apartment">{t("heroSearch.typeApartment")}</SelectItem>
-              <SelectItem value="house">{t("heroSearch.typeHouse")}</SelectItem>
-              <SelectItem value="studio">{t("heroSearch.typeStudio")}</SelectItem>
-              <SelectItem value="student_housing">{t("heroSearch.typeStudentHousing")}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="listing_type" className="text-sm font-medium">
-            {t("heroSearch.listingType")}
-          </Label>
-          <Select value={listingType || "all"} onValueChange={(v) => setListingType(v === "all" ? "" : v)}>
-            <SelectTrigger id="listing_type">
-              <SelectValue placeholder={t("heroSearch.any")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
-              <SelectItem value="rent">{t("heroSearch.listingRent")}</SelectItem>
-              <SelectItem value="student_housing">{t("heroSearch.typeStudentHousing")}</SelectItem>
-              <SelectItem value="pg">{t("heroSearch.listingPg")}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="bedrooms" className="text-sm font-medium">
-            {t("heroSearch.bedrooms")}
-          </Label>
-          <Select value={bedrooms || "all"} onValueChange={(v) => setBedrooms(v === "all" ? "" : v)}>
-            <SelectTrigger id="bedrooms">
-              <SelectValue placeholder={t("heroSearch.any")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
-              <SelectItem value="1">1+</SelectItem>
-              <SelectItem value="2">2+</SelectItem>
-              <SelectItem value="3">3+</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className="flex flex-wrap items-end gap-4">
-        <div className="flex items-end gap-2">
-          <div className="space-y-2">
-            <Label htmlFor="min_price" className="text-sm font-medium">
-              {t("heroSearch.minPrice")}
-            </Label>
-            <Input
-              id="min_price"
-              type="number"
-              placeholder="0"
-              min={0}
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              className="w-24"
+
+          <div className="rounded-xl px-3 py-2 md:min-w-0 md:flex-1 md:border-r md:border-border">
+            <Select value={propertyType || "all"} onValueChange={(v) => setPropertyType(v === "all" ? "" : v)}>
+              <SelectTrigger
+                id="property_type"
+                className="h-auto border-0 p-0 text-sm shadow-none ring-0 focus:ring-0 focus:ring-offset-0"
+              >
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 shrink-0" />
+                  <SelectValue placeholder={t("heroSearch.propertyType")} />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("heroSearch.any")}</SelectItem>
+                <SelectItem value="house">{t("heroSearch.typeHouse")}</SelectItem>
+                <SelectItem value="apartment">{t("heroSearch.typeFlat")}</SelectItem>
+                <SelectItem value="student_housing">{t("heroSearch.typeWgFlats")}</SelectItem>
+                <SelectItem value="studio">{t("heroSearch.typeStudioApartment")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1 rounded-xl px-3 py-2 md:min-w-0 md:flex-[1.2]">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <WalletCards className="h-4 w-4 shrink-0" />
+                <span>{t("heroSearch.price")}</span>
+              </div>
+              <div className="text-xs font-medium text-muted-foreground">
+                EUR {priceRange[0].toLocaleString()} - EUR {priceRange[1].toLocaleString()}
+              </div>
+            </div>
+            <Slider
+              value={priceRange}
+              min={200}
+              max={3000}
+              step={25}
+              onValueChange={(value) => setPriceRange([value[0], value[1]])}
+              className="[&_[data-slot=slider-range]]:bg-primary [&_[data-slot=slider-thumb]]:border-primary"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="max_price" className="text-sm font-medium">
-              {t("heroSearch.maxPrice")}
-            </Label>
-            <Input
-              id="max_price"
-              type="number"
-              placeholder="1000"
-              min={0}
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-24"
-            />
-          </div>
+
+          <Button
+            type="submit"
+            size="icon"
+            className="h-12 w-12 shrink-0 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
+            aria-label={t("heroSearch.search")}
+          >
+            <Search className="h-5 w-5" />
+          </Button>
         </div>
-        <Button type="submit" size="lg" className="gap-2">
-          <Search className="h-4 w-4" />
-          {t("heroSearch.search")}
-        </Button>
       </div>
     </form>
   )

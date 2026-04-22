@@ -4,8 +4,10 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { X } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function CookieConsent() {
+  const { t } = useLanguage()
   const [showConsent, setShowConsent] = useState(false)
 
   useEffect(() => {
@@ -33,32 +35,29 @@ export function CookieConsent() {
         <CardHeader className="relative">
           <Button variant="ghost" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={declineCookies}>
             <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{t("cookie.close")}</span>
           </Button>
-          <CardTitle className="text-card-foreground">Cookie Consent</CardTitle>
-          <CardDescription className="text-muted-foreground">We use cookies to enhance your experience</CardDescription>
+          <CardTitle className="text-card-foreground">{t("cookie.title")}</CardTitle>
+          <CardDescription className="text-muted-foreground">{t("cookie.subtitle")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            We use essential cookies to make our site work and analytics cookies to understand how you use our site. We
-            only use cookies with your consent in compliance with GDPR.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("cookie.description")}</p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button onClick={acceptCookies} className="flex-1">
-              Accept All
+              {t("cookie.acceptAll")}
             </Button>
             <Button onClick={declineCookies} variant="outline" className="flex-1 bg-transparent">
-              Essential Only
+              {t("cookie.essentialOnly")}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Read our{" "}
+            {t("cookie.readOur")}{" "}
             <a href="#cookies" className="text-primary underline">
-              Cookie Policy
+              {t("cookie.cookiePolicy")}
             </a>{" "}
-            and{" "}
+            {t("cookie.and")}{" "}
             <a href="/datenschutz" className="text-primary underline">
-              Privacy Policy
+              {t("cookie.privacyPolicy")}
             </a>
           </p>
         </CardContent>

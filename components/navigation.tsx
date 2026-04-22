@@ -94,7 +94,7 @@ export function Navigation() {
             <div className="w-8 h-8 relative">
               <Image
                 src="/New_UniTrail_Housing_Logo.png"
-                alt="UniTrail Housing Logo"
+                alt={t("nav.logoAlt")}
                 width={32}
                 height={32}
                 className="object-contain rounded-md"
@@ -139,7 +139,7 @@ export function Navigation() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="hidden sm:flex">
                   <Globe className="h-5 w-5" />
-                  <span className="sr-only">Select language</span>
+                  <span className="sr-only">{t("nav.selectLanguage")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -160,7 +160,7 @@ export function Navigation() {
             {/* Theme Toggle */}
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              <span className="sr-only">Toggle theme</span>
+              <span className="sr-only">{t("nav.toggleTheme")}</span>
             </Button>
 
             {/* Mobile Menu */}
@@ -168,7 +168,7 @@ export function Navigation() {
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
                   <Menu className="h-5 w-5" />
-                  <span className="sr-only">Open menu</span>
+                  <span className="sr-only">{t("nav.openMenu")}</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
@@ -204,24 +204,24 @@ export function Navigation() {
                   {/* Mobile Actions */}
                   <div className="flex flex-col gap-4 pt-4 border-t border-border">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Theme</span>
+                      <span className="text-sm font-medium">{t("nav.themeLabel")}</span>
                       <Button variant="outline" size="sm" onClick={toggleTheme} className="gap-2 bg-transparent">
                         {isDark ? (
                           <>
                             <Sun className="h-4 w-4" />
-                            Light
+                            {t("nav.light")}
                           </>
                         ) : (
                           <>
                             <Moon className="h-4 w-4" />
-                            Dark
+                            {t("nav.dark")}
                           </>
                         )}
                       </Button>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <span className="text-sm font-medium">Language</span>
+                      <span className="text-sm font-medium">{t("nav.languageLabel")}</span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" className="justify-start gap-2 bg-transparent">
