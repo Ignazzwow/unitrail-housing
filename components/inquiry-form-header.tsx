@@ -2,7 +2,13 @@
 
 import { useLanguage } from "@/contexts/language-context"
 
-export function InquiryFormHeader({ title, location, price }: { title: string; location: string; price: string | number }) {
+type InquiryFormHeaderProps = {
+  title: string
+  location: string
+  price: string | number
+}
+
+export function InquiryFormHeader({ title, location, price }: InquiryFormHeaderProps) {
   const { t } = useLanguage()
 
   return (
@@ -11,7 +17,7 @@ export function InquiryFormHeader({ title, location, price }: { title: string; l
         {t("inquiryPage.titlePrefix")} {title}
       </h1>
       <p className="mb-8 text-muted-foreground">
-        {location} • {price} {t("inquiryPage.perMonth")}
+        {location} - {price} {t("inquiryPage.perMonth")}
       </p>
     </>
   )
