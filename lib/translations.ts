@@ -41,9 +41,9 @@ export const translations = {
       benefitPartnerTitle: "A Long-Term Rental Partner You Can Count On",
       benefitPartnerDesc:
         "We're not just here for a short-term fix. Unitrail Housing builds lasting relationships with our landlords, offering stable, long-term rental agreements that reduce void periods and give you peace of mind for years to come.",
-      benefitYieldsTitle: "Earn More Than the Market Rate",
+      benefitYieldsTitle: "Earn Good Returns on Your Investments",
       benefitYieldsDesc:
-        "Why settle for average? Unitrail Housing offers rental yields that go beyond what the open market typically provides. More income from your property, with no extra effort on your part.",
+        "Your property is one of your most valuable assets — and it should reward you accordingly. With Unitrail Housing, you enjoy consistent, competitive returns without the stress of managing tenants or maintenance yourself.",
       benefitSupportTitle: "Your Own Dedicated Support Contact",
       benefitSupportDesc:
         "Every landlord on our platform gets a dedicated point of contact. Have a question? Need an update? Your support partner is always on hand — no call centres, no waiting in queues.",
@@ -490,9 +490,9 @@ export const translations = {
       benefitPartnerTitle: "Ein langfristiger Mietpartner, auf den Sie zählen können",
       benefitPartnerDesc:
         "Wir sind keine kurzfristige Lösung. Unitrail Housing pflegt dauerhafte Beziehungen zu Vermietern, mit stabilen Langzeitmietverträgen, kein Leerstand und Ruhe für die kommenden Jahre.",
-      benefitYieldsTitle: "Mehr als marktübliche Rendite",
+      benefitYieldsTitle: "Gute Renditen auf Ihre Investitionen",
       benefitYieldsDesc:
-        "Warum sich mit Durchschnitt zufriedengeben? Unitrail Housing ermöglicht Mietrenditen über dem, was der freie Markt typischerweise bietet – mehr Ertrag ohne Mehraufwand für Sie.",
+        "Ihre Immobilie ist eine wertvolle Investition — und sollte sich auch so auszahlen. Mit Unitrail Housing profitieren Sie von stabilen, attraktiven Renditen, ohne sich um Mieter oder Instandhaltung kümmern zu müssen.",
       benefitSupportTitle: "Ihr eigener fester Ansprechpartner",
       benefitSupportDesc:
         "Jeder Vermieter auf unserer Plattform hat einen dedizierten Kontakt. Fragen oder Updates? Ihr Ansprechpartner ist für Sie da – ohne Callcenter und ohne Warteschleifen.",
