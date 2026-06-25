@@ -22,8 +22,8 @@ export default function Error({
       <h2 className="text-xl font-semibold">{t("appError.title")}</h2>
       <p className="text-center text-muted-foreground">
         {t("appError.description")}{" "}
-        <code className="rounded bg-muted px-1">/admin/login</code>. {t("appError.dbHint")}{" "}
-        <code className="rounded bg-muted px-1">npx prisma db push</code>.
+        <code className="break-all rounded bg-muted px-1">/admin/login</code>. {t("appError.dbHint")}{" "}
+        <code className="break-all rounded bg-muted px-1">npx prisma db push</code>.
       </p>
       <Button onClick={reset} variant="outline">
         {t("appError.tryAgain")}

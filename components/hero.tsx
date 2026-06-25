@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Shield, Users } from "lucide-react"
 import Image from "next/image"
@@ -9,8 +10,8 @@ export function Hero() {
   const { t } = useLanguage()
 
   return (
-    <section className="relative overflow-visible bg-gradient-to-b from-primary/10 via-secondary/20 to-background min-h-[calc(100vh-100px)]">
-      <div className="container mx-auto px-4 py-20 md:py-32">
+    <section className="relative min-h-0 overflow-hidden bg-gradient-to-b from-primary/10 via-secondary/20 to-background py-12 sm:min-h-[70vh] md:py-20 lg:min-h-[calc(100vh-100px)] lg:py-32">
+      <div className="container mx-auto px-4">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="mx-auto max-w-2xl text-center lg:text-left">
             <h1 className="mb-6 text-balance font-sans text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl">
@@ -22,6 +23,9 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
+              <Button size="lg" className="w-full sm:w-auto" asChild>
+                <Link href="/angebote">{t("hero.ctaBrowseListings")}</Link>
+              </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent hover:bg-primary/10 hover:text-primary hover:border-primary/30" asChild>
                 <a href="#how-it-works">{t("hero.ctaHowItWorks")}</a>
               </Button>

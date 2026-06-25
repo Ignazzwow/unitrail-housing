@@ -4,7 +4,6 @@ import { HomeHeroSearchSection } from "@/components/home-hero-search-section"
 import { Features } from "@/components/features"
 import { HowItWorks } from "@/components/how-it-works"
 import { Footer } from "@/components/footer"
-import { CookieConsent } from "@/components/cookie-consent"
 import { HomeLearnMore } from "@/components/home-learn-more"
 import { NurembergWgSection } from "@/components/nuremberg-wg-section"
 import { Contact } from "@/components/contact"
@@ -23,7 +22,6 @@ export default function Home() {
         <HomeLearnMore />
         <Footer />
       </div>
-      <CookieConsent />
     </main>
   )
 }

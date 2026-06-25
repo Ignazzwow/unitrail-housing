@@ -78,4 +78,23 @@ npm run dev
 
 ## Email Notifications
 
-Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` in `.env` to send inquiry notifications to `ADMIN_EMAIL` when a user submits the contact/inquiry form.
+When someone submits a contact or inquiry form, the app saves it to the admin dashboard and sends an email notification.
+
+### Required environment variables
+
+```bash
+ADMIN_NOTIFICATION_EMAIL="info@unitrail-housing.de"  # Comma-separated for multiple recipients
+LANDLORD_INQUIRY_EMAIL="vermieten@unitrail-housing.de"  # Landlord-specific forms
+NEXT_PUBLIC_SITE_URL="https://www.unitrail-housing.de"  # Used for admin dashboard links in emails
+
+SMTP_HOST="smtp.example.com"
+SMTP_PORT="587"
+SMTP_SECURE="false"  # Set to "true" for port 465
+SMTP_USER="info@unitrail-housing.de"
+SMTP_PASS="your-smtp-password"
+SMTP_FROM="UniTrail Housing <info@unitrail-housing.de>"
+```
+
+Copy `.env.example` to `.env` and fill in your SMTP provider details.
+
+Notifications are sent for all forms that post to `/api/inquiries` (contact page, property inquiry, landlord forms). Each email includes a direct link to the inquiry in the admin dashboard.

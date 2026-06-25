@@ -13,6 +13,7 @@ export const translations = {
       selectLanguage: "Select language",
       toggleTheme: "Toggle theme",
       openMenu: "Open menu",
+      menuTitle: "Menu",
       themeLabel: "Theme",
       languageLabel: "Language",
       light: "Light",
@@ -23,6 +24,7 @@ export const translations = {
       description:
         "UniTrail Housing connects international students with safe, affordable, and welcoming accommodation. Start your journey with confidence.",
       ctaHowItWorks: "How It Works",
+      ctaBrowseListings: "Browse Listings",
       verifiedTitle: "Verified Properties",
       verifiedDesc: "All listings are checked for safety and quality",
       communityTitle: "Student Community",
@@ -33,24 +35,24 @@ export const translations = {
       heroImageAlt: "Bright modern rental apartment living space",
       heroTitle: "Stress-Free Letting. Better Returns. Built for Landlords.",
       heroLead:
-        "At Unitrail Housing, we make letting your property simple, profitable, and completely hands-off. Whether you own one property or a full portfolio, we offer a smarter way to rent — with the reliability and support you deserve.",
-      whyTitle: "Why Landlords Choose Unitrail Housing",
+        "At UniTrail Housing, we make letting your property simple, profitable, and completely hands-off. Whether you own one property or a full portfolio, we offer a smarter way to rent — with the reliability and support you deserve.",
+      whyTitle: "Why Landlords Choose UniTrail Housing",
       benefitPaymentsTitle: "Reliable Payments, Every Time",
       benefitPaymentsDesc:
-        "Say goodbye to late rent and payment chasing. With Unitrail Housing, you receive consistent, on-time payments — giving you the financial certainty to plan ahead with confidence.",
+        "Say goodbye to late rent and payment chasing. With UniTrail Housing, you receive consistent, on-time payments — giving you the financial certainty to plan ahead with confidence.",
       benefitPartnerTitle: "A Long-Term Rental Partner You Can Count On",
       benefitPartnerDesc:
-        "We're not just here for a short-term fix. Unitrail Housing builds lasting relationships with our landlords, offering stable, long-term rental agreements that reduce void periods and give you peace of mind for years to come.",
+        "We're not just here for a short-term fix. UniTrail Housing builds lasting relationships with our landlords, offering stable, long-term rental agreements that reduce void periods and give you peace of mind for years to come.",
       benefitYieldsTitle: "Earn Good Returns on Your Investments",
       benefitYieldsDesc:
-        "Your property is one of your most valuable assets — and it should reward you accordingly. With Unitrail Housing, you enjoy consistent, competitive returns without the stress of managing tenants or maintenance yourself.",
+        "Your property is one of your most valuable assets — and it should reward you accordingly. With UniTrail Housing, you enjoy consistent, competitive returns without the stress of managing tenants or maintenance yourself.",
       benefitSupportTitle: "Your Own Dedicated Support Contact",
       benefitSupportDesc:
         "Every landlord on our platform gets a dedicated point of contact. Have a question? Need an update? Your support partner is always on hand — no call centres, no waiting in queues.",
       benefitManagementTitle: "Completely Hands-Off Property Management",
       benefitManagementDesc:
         "From day-to-day upkeep to tenant relations, we handle it all. You stay in full ownership of your property while we take care of everything else. Simply sit back and watch your investment work for you.",
-      promiseTitle: "The Unitrail Housing Promise",
+      promiseTitle: "The UniTrail Housing Promise",
       promisePart1:
         "We believe landlords deserve more than the standard letting experience. That's why we've built a model that puts your interests first — combining ",
       promiseBoldFinancial: "financial reliability",
@@ -61,7 +63,7 @@ export const translations = {
       promisePartEnd: " into one straightforward partnership.",
       ctaTitle: "Ready to Get More From Your Property?",
       ctaLead:
-        "Join the growing community of landlords who trust Unitrail Housing to deliver better returns and total peace of mind.",
+        "Join the growing community of landlords who trust UniTrail Housing to deliver better returns and total peace of mind.",
       ctaButton: "List your property now with us →",
     },
     features: {
@@ -131,7 +133,7 @@ export const translations = {
       emailUs: "Email Us",
       callUs: "Call Us",
       hours: "Mon-Fri 9:00 - 18:00",
-      publicEmail: "paul.worlitzsch@unitrail-housing.de",
+      publicEmail: "info@unitrail-housing.de",
       phoneContactLine: "Your contact person:",
       phoneContactName: "Paul Worlitzsch",
       contactPhotoPlaceholder: "Photo",
@@ -186,6 +188,9 @@ export const translations = {
       noImage: "No image",
       descriptionTitle: "Description",
     },
+    nurembergWg: {
+      title: "WG Apartments in Nuremberg",
+    },
     testimonials: {
       title: "What Students Say",
       description: "Real experiences from our community.",
@@ -229,7 +234,7 @@ export const translations = {
       cookies: "Cookies",
       cookiesText: "We use cookies.",
       cookiesText2: "Essential cookies for functionality.",
-      cookiesText3: "Analytics cookies with consent.",
+      cookiesText3: "Analytics cookies (Google Analytics) are only activated with your consent in the EEA, or according to your cookie choice.",
       cookiesText4: "See our Cookie Policy for details.",
       security: "Security",
       securityText: "We protect your data with industry standards.",
@@ -286,6 +291,15 @@ export const translations = {
       revokeConsent: "Revoke Consent",
       revokeConsentConfirm: "Are you sure you want to revoke all consent?",
       consentRevoked: "Consent revoked. Page will reload.",
+      termsTitle: "Terms of Service",
+      termsIntro:
+        "By using UniTrail Housing's website and services, you agree to the following terms. These apply to browsing listings, submitting inquiries, and using our accommodation services.",
+      termsText:
+        "We provide housing listings and inquiry services as described on this website. Availability, pricing, and property details may change. Submitting a form does not constitute a binding contract until confirmed in writing. You are responsible for providing accurate information in all inquiries. We reserve the right to update these terms; continued use of the site constitutes acceptance of changes.",
+      companyName: "UniTrail Housing",
+      ownerName: "Paul Worlitzsch",
+      street: "Wiesenstraße 10",
+      city: "92353 Postbauer-Heng, Germany",
     },
     about: {
       title: "About UniTrail Housing",
@@ -305,13 +319,13 @@ export const translations = {
     },
     aboutHero: {
       eyebrow: "About us",
-      title: "Unitrail Housing",
+      title: "UniTrail Housing",
       p1:
-        "Unitrail Housing helps international students and young professionals feel at home from day one. We connect you with fully furnished, move-in-ready rooms in safe, well-located shared apartments across Germany — no complicated paperwork, hidden fees, or landlord drama.",
+        "UniTrail Housing helps international students and young professionals feel at home from day one. We connect you with fully furnished, move-in-ready rooms in safe, well-located shared apartments across Germany — no complicated paperwork, hidden fees, or landlord drama.",
       p2:
         "Whether you are starting a new semester or a new job, we make your move easy: every room we offer is verified, all utilities are included, and support is always just a message away. No German required. No stress required.",
-      p3: "At Unitrail, we believe finding a home in a new country should feel exciting — not overwhelming.",
-      imageAlt: "Unitrail Housing room and study space",
+      p3: "At UniTrail, we believe finding a home in a new country should feel exciting — not overwhelming.",
+      imageAlt: "UniTrail Housing room and study space",
     },
     forStudentsPage: {
       title: "For Students",
@@ -462,6 +476,7 @@ export const translations = {
       selectLanguage: "Sprache auswählen",
       toggleTheme: "Farbschema wechseln",
       openMenu: "Menü öffnen",
+      menuTitle: "Menü",
       themeLabel: "Design",
       languageLabel: "Sprache",
       light: "Hell",
@@ -472,6 +487,7 @@ export const translations = {
       description:
         "UniTrail Housing verbindet internationale Studierende mit sicheren, bezahlbaren und einladenden Unterkünften. Starte deinen Weg mit gutem Gefühl.",
       ctaHowItWorks: "So funktioniert's",
+      ctaBrowseListings: "Angebote ansehen",
       verifiedTitle: "Geprüfte Objekte",
       verifiedDesc: "Alle Angebote werden auf Sicherheit und Qualität geprüft",
       communityTitle: "Studenten-Community",
@@ -482,24 +498,24 @@ export const translations = {
       heroImageAlt: "Helles, modernes Mietapartment – Wohnbereich",
       heroTitle: "Stressfreies Vermieten. Bessere Rendite. Für Vermieter gemacht.",
       heroLead:
-        "Bei Unitrail Housing machen wir die Vermietung Ihrer Immobilie einfach, profitabel und für Sie völlig entspannt. Ob eine Wohnung oder ein ganzes Portfolio – wir bieten einen smarteren Weg zu vermieten, mit der Zuverlässigkeit und dem Support, den Sie verdienen.",
-      whyTitle: "Warum Vermieter Unitrail Housing wählen",
+        "Bei UniTrail Housing machen wir die Vermietung Ihrer Immobilie einfach, profitabel und für Sie völlig entspannt. Ob eine Wohnung oder ein ganzes Portfolio – wir bieten einen smarteren Weg zu vermieten, mit der Zuverlässigkeit und dem Support, den Sie verdienen.",
+      whyTitle: "Warum Vermieter UniTrail Housing wählen",
       benefitPaymentsTitle: "Zuverlässige Zahlungen",
       benefitPaymentsDesc:
-        "Schluss mit verspäteter Miete und Mahnungen. Mit Unitrail Housing erhalten Sie planbare, pünktliche Zahlungen – für finanzielle Sicherheit und klare Perspektiven.",
+        "Schluss mit verspäteter Miete und Mahnungen. Mit UniTrail Housing erhalten Sie planbare, pünktliche Zahlungen – für finanzielle Sicherheit und klare Perspektiven.",
       benefitPartnerTitle: "Ein langfristiger Mietpartner, auf den Sie zählen können",
       benefitPartnerDesc:
-        "Wir sind keine kurzfristige Lösung. Unitrail Housing pflegt dauerhafte Beziehungen zu Vermietern, mit stabilen Langzeitmietverträgen, kein Leerstand und Ruhe für die kommenden Jahre.",
+        "Wir sind keine kurzfristige Lösung. UniTrail Housing pflegt dauerhafte Beziehungen zu Vermietern, mit stabilen Langzeitmietverträgen, kein Leerstand und Ruhe für die kommenden Jahre.",
       benefitYieldsTitle: "Gute Renditen auf Ihre Investitionen",
       benefitYieldsDesc:
-        "Ihre Immobilie ist eine wertvolle Investition — und sollte sich auch so auszahlen. Mit Unitrail Housing profitieren Sie von stabilen, attraktiven Renditen, ohne sich um Mieter oder Instandhaltung kümmern zu müssen.",
+        "Ihre Immobilie ist eine wertvolle Investition — und sollte sich auch so auszahlen. Mit UniTrail Housing profitieren Sie von stabilen, attraktiven Renditen, ohne sich um Mieter oder Instandhaltung kümmern zu müssen.",
       benefitSupportTitle: "Ihr eigener fester Ansprechpartner",
       benefitSupportDesc:
         "Jeder Vermieter auf unserer Plattform hat einen dedizierten Kontakt. Fragen oder Updates? Ihr Ansprechpartner ist für Sie da – ohne Callcenter und ohne Warteschleifen.",
       benefitManagementTitle: "Komplett entlastetes Property Management",
       benefitManagementDesc:
         "Vom laufenden Betrieb bis zur Mieterkommunikation übernehmen wir alles. Sie bleiben Eigentümer – wir kümmern uns um den Rest. Sie profitieren, wir managen.",
-      promiseTitle: "Das Unitrail Housing-Versprechen",
+      promiseTitle: "Das UniTrail Housing-Versprechen",
       promisePart1:
         "Wir finden, Vermieter verdienen mehr als das übliche Vermietungserlebnis. Deshalb haben wir ein Modell entwickelt, das Ihre Interessen in den Mittelpunkt stellt und dabei vereint: ",
       promiseBoldFinancial: "finanzielle Zuverlässigkeit",
@@ -510,7 +526,7 @@ export const translations = {
       promisePartEnd: " in einer klaren Partnerschaft.",
       ctaTitle: "Mehr aus Ihrer Immobilie holen?",
       ctaLead:
-        "Werden Sie Teil der wachsenden Gemeinschaft von Vermietern, die Unitrail Housing für bessere Rendite und volle Entlastung vertrauen.",
+        "Werden Sie Teil der wachsenden Gemeinschaft von Vermietern, die UniTrail Housing für bessere Rendite und volle Entlastung vertrauen.",
       ctaButton: "Jetzt Vermieten",
     },
     features: {
@@ -580,7 +596,7 @@ export const translations = {
       emailUs: "E-Mail",
       callUs: "Anrufen",
       hours: "Mo-Fr 9:00 - 18:00",
-      publicEmail: "paul.worlitzsch@unitrail-housing.de",
+      publicEmail: "info@unitrail-housing.de",
       phoneContactLine: "Ihre Ansprechpartner:",
       phoneContactName: "Paul Worlitzsch",
       contactPhotoPlaceholder: "Foto",
@@ -635,6 +651,9 @@ export const translations = {
       noImage: "Kein Bild",
       descriptionTitle: "Beschreibung",
     },
+    nurembergWg: {
+      title: "WG-Apartments in Nürnberg",
+    },
     testimonials: {
       title: "Was Studierende sagen",
       description: "Echte Erfahrungen aus unserer Community.",
@@ -678,7 +697,7 @@ export const translations = {
       cookies: "Cookies",
       cookiesText: "Wir verwenden Cookies.",
       cookiesText2: "Essenzielle Cookies für die Funktionalität.",
-      cookiesText3: "Analyse-Cookies mit Einwilligung.",
+      cookiesText3: "Analyse-Cookies (Google Analytics) werden im EWR nur mit Ihrer Einwilligung bzw. entsprechend Ihrer Cookie-Auswahl aktiviert.",
       cookiesText4: "Siehe Cookie-Richtlinie.",
       security: "Sicherheit",
       securityText: "Wir schützen Ihre Daten mit branchenüblichen Standards.",
@@ -735,6 +754,15 @@ export const translations = {
       revokeConsent: "Einwilligung widerrufen",
       revokeConsentConfirm: "Möchten Sie wirklich alle Einwilligungen widerrufen?",
       consentRevoked: "Einwilligung widerrufen. Die Seite wird neu geladen.",
+      termsTitle: "Allgemeine Geschäftsbedingungen",
+      termsIntro:
+        "Mit der Nutzung der Website und Dienste von UniTrail Housing akzeptieren Sie die folgenden Bedingungen. Dies gilt für das Durchsuchen von Angeboten, das Absenden von Anfragen und die Nutzung unserer Unterkunftsdienste.",
+      termsText:
+        "Wir stellen Wohnungsangebote und Anfragedienste wie auf dieser Website beschrieben bereit. Verfügbarkeit, Preise und Objektdetails können sich ändern. Das Absenden eines Formulars stellt keinen verbindlichen Vertrag dar, bis dies schriftlich bestätigt wurde. Sie sind verpflichtet, in allen Anfragen korrekte Angaben zu machen. Wir behalten uns vor, diese Bedingungen zu aktualisieren; die weitere Nutzung der Website gilt als Zustimmung zu Änderungen.",
+      companyName: "UniTrail Housing",
+      ownerName: "Paul Worlitzsch",
+      street: "Wiesenstraße 10",
+      city: "92353 Postbauer-Heng, Deutschland",
     },
     about: {
       title: "Über UniTrail Housing",
@@ -754,14 +782,14 @@ export const translations = {
     },
     aboutHero: {
       eyebrow: "Über uns",
-      title: "Unitrail Housing",
+      title: "UniTrail Housing",
       p1:
-        "Unitrail Housing hilft internationalen Studierenden und jungen Berufstätigen, sich vom ersten Tag an wie zu Hause zu fühlen. Wir vermitteln voll möblierte, bezugsfertige Zimmer in sicheren, gut gelegenen Wohngemeinschaften in ganz Deutschland — ohne komplizierte Unterlagen, versteckte Gebühren oder Vermieterstress.",
+        "UniTrail Housing hilft internationalen Studierenden und jungen Berufstätigen, sich vom ersten Tag an wie zu Hause zu fühlen. Wir vermitteln voll möblierte, bezugsfertige Zimmer in sicheren, gut gelegenen Wohngemeinschaften in ganz Deutschland — ohne komplizierte Unterlagen, versteckte Gebühren oder Vermieterstress.",
       p2:
         "Egal, ob Sie ein neues Semester oder einen neuen Job beginnen: Wir machen Ihren Umzug einfach. Jedes Zimmer ist geprüft, alle Nebenkosten sind enthalten und unser Support ist nur eine Nachricht entfernt. Kein Deutsch erforderlich. Kein Stress erforderlich.",
       p3:
-        "Bei Unitrail sind wir überzeugt: Ein neues Zuhause in einem neuen Land sollte sich aufregend anfühlen — nicht überfordernd.",
-      imageAlt: "Unitrail Housing Zimmer mit Arbeitsbereich",
+        "Bei UniTrail sind wir überzeugt: Ein neues Zuhause in einem neuen Land sollte sich aufregend anfühlen — nicht überfordernd.",
+      imageAlt: "UniTrail Housing Zimmer mit Arbeitsbereich",
     },
     forStudentsPage: {
       title: "Für Studenten",

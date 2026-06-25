@@ -25,7 +25,7 @@ export function Footer() {
               <div className="w-10 h-10 relative">
                 <Image
                   src="/New_UniTrail_Housing_Logo.png"
-                  alt="UniTrail Housing Logo"
+                  alt={t("nav.logoAlt")}
                   width={40}
                   height={40}
                   className="object-contain"
@@ -76,9 +76,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#terms" className="text-muted-foreground hover:text-primary">
+                <Link href="/datenschutz#terms" className="text-muted-foreground hover:text-primary">
                   {t("footer.termsOfService")}
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/datenschutz#cookies" className="text-muted-foreground hover:text-primary">

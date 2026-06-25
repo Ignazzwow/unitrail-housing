@@ -54,9 +54,13 @@ export async function POST(request: NextRequest) {
       message,
       propertyId: property_id ?? undefined,
       source,
-    }).catch(
-      (err) => console.error("Failed to send inquiry notification:", err)
-    )
+    })
+      .then((result) => {
+        if (!result.sent) {
+          console.warn(`[inquiries] Notification email not sent for inquiry ${inquiry.id}: ${result.reason}`)
+        }
+      })
+      .catch((err) => console.error("Failed to send inquiry notification:", err))
 
     return NextResponse.json({ success: true, id: inquiry.id })
   } catch (error) {

@@ -29,13 +29,13 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
       </Link>
 
       <div className="mb-8">
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+        <h1 className="mb-4 break-words text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
           {L.title}
         </h1>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <MapPin className="h-5 w-5" />
-            <span className="text-lg">{L.location}</span>
+          <div className="flex min-w-0 items-center gap-2 text-muted-foreground">
+            <MapPin className="h-5 w-5 shrink-0" />
+            <span className="text-base sm:text-lg">{L.location}</span>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-primary">{L.price}</span>
@@ -45,7 +45,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="relative mb-8 overflow-hidden">
         <Carousel className="w-full">
           <CarouselContent>
             {L.images.length > 0 ? (
@@ -70,8 +70,8 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
               </CarouselItem>
             )}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="left-2 h-8 w-8" />
+          <CarouselNext className="right-2 h-8 w-8" />
         </Carousel>
       </div>
 
@@ -169,7 +169,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
         </div>
 
         <div className="lg:col-span-1">
-          <div className="sticky top-24 space-y-4 rounded-lg border border-border bg-card p-6">
+          <div className="lg:sticky lg:top-24 space-y-4 rounded-lg border border-border bg-card p-6">
             <div className="text-center">
               <div className="mb-2 flex items-baseline justify-center gap-1">
                 <span className="text-4xl font-bold text-primary">{L.price}</span>

@@ -62,7 +62,7 @@ export default function ForLandlordsPage() {
           <div className="relative z-10 w-full">
             <div className="container mx-auto px-4 pb-16 pt-12 md:py-24 lg:py-28">
               <div className="max-w-2xl space-y-6 md:max-w-xl">
-                <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground drop-shadow-sm md:text-5xl lg:text-[3.25rem] lg:leading-tight">
+                <h1 className="text-balance text-3xl font-bold tracking-tight text-foreground drop-shadow-sm sm:text-4xl md:text-5xl lg:text-[3.25rem] lg:leading-tight">
                   {t("forLandlords.heroTitle")}
                 </h1>
                 <p className="text-pretty text-lg leading-relaxed text-muted-foreground md:text-xl">

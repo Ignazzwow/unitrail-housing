@@ -35,25 +35,25 @@ export function HeroSearch() {
   return (
     <form onSubmit={handleSearch}>
       <div className="rounded-2xl border border-border/80 bg-background p-2 shadow-sm">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center">
-          <div className="flex items-center gap-2 rounded-xl px-3 py-2 md:min-w-0 md:flex-1 md:border-r md:border-border">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+          <div className="flex w-full items-center gap-2 rounded-xl px-3 py-2 lg:min-w-0 lg:flex-1 lg:border-r lg:border-border">
             <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
             <Input
               id="location"
               placeholder={t("heroSearch.locationPlaceholder")}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="h-auto border-0 p-0 text-sm shadow-none focus-visible:ring-0"
+              className="h-auto min-w-0 border-0 p-0 text-sm shadow-none focus-visible:ring-0"
             />
           </div>
 
-          <div className="rounded-xl px-3 py-2 md:min-w-0 md:flex-1 md:border-r md:border-border">
+          <div className="w-full rounded-xl px-3 py-2 lg:min-w-0 lg:flex-1 lg:border-r lg:border-border">
             <Select value={propertyType || "all"} onValueChange={(v) => setPropertyType(v === "all" ? "" : v)}>
               <SelectTrigger
                 id="property_type"
-                className="h-auto border-0 p-0 text-sm shadow-none ring-0 focus:ring-0 focus:ring-offset-0"
+                className="h-auto w-full border-0 p-0 text-sm shadow-none ring-0 focus:ring-0 focus:ring-offset-0"
               >
-                <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="flex min-w-0 items-center gap-2 text-muted-foreground">
                   <Building2 className="h-4 w-4 shrink-0" />
                   <SelectValue placeholder={t("heroSearch.propertyType")} />
                 </div>
@@ -68,8 +68,8 @@ export function HeroSearch() {
             </Select>
           </div>
 
-          <div className="space-y-1 rounded-xl px-3 py-2 md:min-w-0 md:flex-[1.2]">
-            <div className="flex items-center justify-between gap-2">
+          <div className="w-full space-y-1 rounded-xl px-3 py-2 lg:min-w-0 lg:flex-[1.2]">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <WalletCards className="h-4 w-4 shrink-0" />
                 <span>{t("heroSearch.price")}</span>
@@ -90,11 +90,11 @@ export function HeroSearch() {
 
           <Button
             type="submit"
-            size="icon"
-            className="h-12 w-12 shrink-0 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
+            className="h-12 w-full shrink-0 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 lg:w-12"
             aria-label={t("heroSearch.search")}
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-5 w-5 lg:mx-auto" />
+            <span className="ml-2 lg:sr-only">{t("heroSearch.search")}</span>
           </Button>
         </div>
       </div>

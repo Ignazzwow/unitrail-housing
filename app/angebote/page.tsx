@@ -32,7 +32,7 @@ export default async function AngebotePage({
     <main className="min-h-screen">
       <Navigation />
       <div className="pt-16">
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 py-10 sm:py-16">
           <AngeboteFiltersSummary filters={filters} hasFilters={hasFilters} />
           {listings.length === 0 && hasFilters ? (
             <AngeboteNoResults />

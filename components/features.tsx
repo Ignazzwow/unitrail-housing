@@ -7,7 +7,7 @@ export function Features() {
   const { t } = useLanguage()
 
   return (
-    <section id="features" className="bg-background py-20 md:py-24">
+    <section id="features" className="bg-background py-12 md:py-20 lg:py-24">
       <div className="container mx-auto px-4">
         <div className="overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary via-primary/95 to-primary/85 text-primary-foreground shadow-2xl">
           <div className="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
@@ -15,7 +15,7 @@ export function Features() {
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/70">
                 {t("aboutHero.eyebrow")}
               </p>
-              <h2 className="text-balance text-5xl font-extrabold leading-[0.95] uppercase md:text-7xl lg:text-8xl">
+              <h2 className="text-balance text-3xl font-bold leading-tight text-primary-foreground sm:text-4xl md:text-5xl">
                 {t("aboutHero.title")}
               </h2>
               <div className="mt-8 space-y-4 text-sm leading-relaxed text-primary-foreground/85 md:text-base">

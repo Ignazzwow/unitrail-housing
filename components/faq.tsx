@@ -12,9 +12,9 @@ export function FAQ() {
   const faqs = Array.isArray(rawQuestions) ? rawQuestions : translations.en.faq.questions
 
   return (
-    <section id="faq" className="bg-background py-20">
+    <section id="faq" className="bg-background py-12 md:py-20">
       <div className="container mx-auto px-4">
-        <div className="mx-auto mb-16 max-w-3xl text-center">
+        <div className="mx-auto mb-10 max-w-3xl text-center md:mb-16">
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("faq.title")}
           </h2>

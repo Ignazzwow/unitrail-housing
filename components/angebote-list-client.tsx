@@ -70,15 +70,15 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
               </Carousel>
             </div>
             <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="mb-2 text-xl text-card-foreground">{L.title}</CardTitle>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{L.location}</span>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="mb-2 line-clamp-2 text-lg text-card-foreground sm:text-xl">{L.title}</CardTitle>
+                  <div className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{L.location}</span>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="shrink-0 sm:text-right">
                   <div className="flex items-baseline gap-1">
                     <span className="text-2xl font-bold text-primary">{L.price}</span>
                     <span className="text-sm text-muted-foreground">€</span>
@@ -88,27 +88,27 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
-                <div className="flex items-center gap-2">
-                  <Square className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
+              <div className="grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Square className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="truncate text-sm text-muted-foreground">
                     {L.areaSqm} m² {t("listings.totalSize")}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Bed className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Bed className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="truncate text-sm text-muted-foreground">
                     {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Bath className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Bath className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="truncate text-sm text-muted-foreground">
                     {L.bathrooms} {t("listings.bathrooms")}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                <div className="flex min-w-0 items-center gap-2 sm:col-span-2">
+                  <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">{L.availableFrom}</span>
                 </div>
               </div>

@@ -99,6 +99,16 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
             <Label htmlFor="message">{t("propertyInquiry.message")}</Label>
             <Textarea id="message" name="message" rows={5} required />
           </div>
+          <div className="flex items-start gap-2">
+            <input type="checkbox" id="consent" name="consent" required className="mt-1 h-4 w-4 shrink-0" />
+            <Label htmlFor="consent" className="text-sm leading-relaxed text-muted-foreground">
+              {t("contact.consent")}{" "}
+              <a href="/datenschutz" className="text-primary underline">
+                {t("contact.privacyPolicy")}
+              </a>
+              . {t("contact.consentEnd")}
+            </Label>
+          </div>
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? t("propertyInquiry.sending") : t("propertyInquiry.send")}
           </Button>

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Globe, Menu } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Image from "next/image"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
@@ -88,10 +88,10 @@ export function Navigation() {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 relative">
+          <Link href="/" className="flex min-w-0 items-center gap-2">
+            <div className="w-8 h-8 relative shrink-0">
               <Image
                 src="/New_UniTrail_Housing_Logo.png"
                 alt={t("nav.logoAlt")}
@@ -101,11 +101,11 @@ export function Navigation() {
                 priority
               />
             </div>
-            <span className="font-bold text-lg text-foreground">UniTrail Housing</span>
+            <span className="truncate font-bold text-base text-foreground sm:text-lg">UniTrail Housing</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
@@ -133,7 +133,7 @@ export function Navigation() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -166,26 +166,29 @@ export function Navigation() {
             {/* Mobile Menu */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className="lg:hidden">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">{t("nav.openMenu")}</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col gap-6 mt-6">
-                  {/* Mobile Navigation Links */}
-                  <div className="flex flex-col gap-4">
+              <SheetContent side="right" className="flex w-[min(100vw-2rem,400px)] flex-col gap-0 p-0">
+                <SheetHeader className="space-y-0 border-b border-border px-6 pb-5 pr-14 pt-6 text-left">
+                  <SheetTitle className="text-lg font-semibold text-foreground">{t("nav.menuTitle")}</SheetTitle>
+                </SheetHeader>
+
+                <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5">
+                  <nav className="flex flex-col gap-1">
                     <Link
                       href="/for-students"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                      className="rounded-lg px-3 py-2.5 text-base font-medium text-foreground transition-colors hover:bg-muted"
                     >
                       {t("nav.forStudents")}
                     </Link>
                     <Link
                       href="/for-students/accommodation"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-base pl-4 text-muted-foreground hover:text-primary transition-colors"
+                      className="ml-3 rounded-lg border-l-2 border-primary/25 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
                       {t("nav.studentsAccommodation")}
                     </Link>
@@ -194,59 +197,58 @@ export function Navigation() {
                         key={link.href}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                        className="rounded-lg px-3 py-2.5 text-base font-medium text-foreground transition-colors hover:bg-muted"
                       >
                         {t(link.labelKey)}
                       </Link>
                     ))}
+                  </nav>
+                </div>
+
+                <div className="mt-auto space-y-5 border-t border-border px-6 py-5">
+                  <div className="flex items-center justify-between gap-4 rounded-lg bg-muted/50 px-4 py-3">
+                    <span className="text-sm font-medium text-foreground">{t("nav.themeLabel")}</span>
+                    <Button variant="outline" size="sm" onClick={toggleTheme} className="shrink-0 gap-2 bg-background">
+                      {isDark ? (
+                        <>
+                          <Sun className="h-4 w-4" />
+                          {t("nav.light")}
+                        </>
+                      ) : (
+                        <>
+                          <Moon className="h-4 w-4" />
+                          {t("nav.dark")}
+                        </>
+                      )}
+                    </Button>
                   </div>
 
-                  {/* Mobile Actions */}
-                  <div className="flex flex-col gap-4 pt-4 border-t border-border">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{t("nav.themeLabel")}</span>
-                      <Button variant="outline" size="sm" onClick={toggleTheme} className="gap-2 bg-transparent">
-                        {isDark ? (
-                          <>
-                            <Sun className="h-4 w-4" />
-                            {t("nav.light")}
-                          </>
-                        ) : (
-                          <>
-                            <Moon className="h-4 w-4" />
-                            {t("nav.dark")}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <span className="text-sm font-medium">{t("nav.languageLabel")}</span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="justify-start gap-2 bg-transparent">
-                            <Globe className="h-4 w-4" />
-                            <span>{selectedLanguage.flag}</span>
-                            <span>{selectedLanguage.name}</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-[250px]">
-                          {languages.map((language) => (
-                            <DropdownMenuItem
-                              key={language.code}
-                              onClick={() => handleLanguageChange(language)}
-                              className="flex items-center gap-2"
-                            >
-                              <span>{language.flag}</span>
-                              <span>{language.name}</span>
-                              {selectedLanguage.code === language.code && (
-                                <span className="ml-auto text-primary">✓</span>
-                              )}
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                  <div className="space-y-2">
+                    <span className="px-1 text-sm font-medium text-foreground">{t("nav.languageLabel")}</span>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="w-full justify-start gap-2 bg-background">
+                          <Globe className="h-4 w-4 shrink-0" />
+                          <span>{selectedLanguage.flag}</span>
+                          <span>{selectedLanguage.name}</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
+                        {languages.map((language) => (
+                          <DropdownMenuItem
+                            key={language.code}
+                            onClick={() => handleLanguageChange(language)}
+                            className="flex items-center gap-2"
+                          >
+                            <span>{language.flag}</span>
+                            <span>{language.name}</span>
+                            {selectedLanguage.code === language.code && (
+                              <span className="ml-auto text-primary">✓</span>
+                            )}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </SheetContent>

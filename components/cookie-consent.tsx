@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { updateGoogleConsent } from "@/lib/google-analytics"
 
 export function CookieConsent() {
   const { t } = useLanguage()
@@ -19,21 +20,27 @@ export function CookieConsent() {
 
   const acceptCookies = () => {
     localStorage.setItem("cookie-consent", "accepted")
+    updateGoogleConsent(true)
     setShowConsent(false)
   }
 
   const declineCookies = () => {
     localStorage.setItem("cookie-consent", "declined")
+    updateGoogleConsent(false)
+    setShowConsent(false)
+  }
+
+  const dismissBanner = () => {
     setShowConsent(false)
   }
 
   if (!showConsent) return null
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:max-w-md">
+    <div className="fixed bottom-4 left-4 right-4 z-50 pb-[env(safe-area-inset-bottom)] md:left-auto md:max-w-md">
       <Card className="border-border bg-card shadow-lg">
         <CardHeader className="relative">
-          <Button variant="ghost" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={declineCookies}>
+          <Button variant="ghost" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={dismissBanner}>
             <X className="h-4 w-4" />
             <span className="sr-only">{t("cookie.close")}</span>
           </Button>
@@ -52,7 +59,7 @@ export function CookieConsent() {
           </div>
           <p className="text-xs text-muted-foreground">
             {t("cookie.readOur")}{" "}
-            <a href="#cookies" className="text-primary underline">
+            <a href="/datenschutz#cookies" className="text-primary underline">
               {t("cookie.cookiePolicy")}
             </a>{" "}
             {t("cookie.and")}{" "}

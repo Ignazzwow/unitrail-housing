@@ -61,9 +61,9 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-secondary/20 py-20">
+    <section id="contact" className="bg-secondary/20 py-12 md:py-20">
       <div className="container mx-auto px-4">
-        <div className="mx-auto mb-16 max-w-3xl text-center">
+        <div className="mx-auto mb-10 max-w-3xl text-center md:mb-16">
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("contact.title")}
           </h2>
@@ -156,7 +156,7 @@ export function Contact() {
                 <CardTitle className="text-card-foreground">{t("contact.emailUs")}</CardTitle>
               </CardHeader>
               <CardContent>
-                <a href={`mailto:${publicEmail}`} className="text-primary hover:underline">
+                <a href={`mailto:${publicEmail}`} className="break-all text-primary hover:underline">
                   {publicEmail}
                 </a>
               </CardContent>
