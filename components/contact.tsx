@@ -37,6 +37,7 @@ export function Contact() {
           phone: formData.get("phone") || "",
           message: formData.get("message"),
           source: fromLandlords ? "landlords_page" : "website_form",
+          consent: true,
         }),
       })
       if (res.ok) {

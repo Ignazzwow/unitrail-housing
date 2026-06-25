@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
 import { requireAdmin } from "@/lib/auth-utils"
+import {
+  UPLOAD_ALLOWED_TYPES,
+  UPLOAD_MAX_BYTES,
+  extensionForMime,
+  matchesImageSignature,
+} from "@/lib/upload-validation"
 
 const UPLOAD_DIR = "public/uploads"
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"]
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,20 +26,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (file.size > UPLOAD_MAX_BYTES) {
+      return NextResponse.json(
+        { error: "File too large. Maximum size is 5 MB." },
+        { status: 400 }
+      )
+    }
+
+    if (!UPLOAD_ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
         { error: "Invalid file type. Use JPEG, PNG, WebP, or GIF." },
         { status: 400 }
       )
     }
 
-    const ext = path.extname(file.name) || ".jpg"
+    const ext = extensionForMime(file.type)
+    if (!ext) {
+      return NextResponse.json({ error: "Unsupported file type." }, { status: 400 })
+    }
+
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    if (!matchesImageSignature(buffer, file.type)) {
+      return NextResponse.json(
+        { error: "File content does not match the declared image type." },
+        { status: 400 }
+      )
+    }
+
     const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}${ext}`
     const uploadPath = path.join(process.cwd(), UPLOAD_DIR, uniqueName)
 
     await mkdir(path.join(process.cwd(), UPLOAD_DIR), { recursive: true })
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
     await writeFile(uploadPath, buffer)
 
     const url = `/uploads/${uniqueName}`

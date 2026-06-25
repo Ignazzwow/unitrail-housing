@@ -38,6 +38,7 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
           phone: formData.get("phone") || "",
           message: formData.get("message"),
           source: propertyId ? "property_inquiry" : "website_form",
+          consent: true,
         }),
       })
       if (res.ok) {

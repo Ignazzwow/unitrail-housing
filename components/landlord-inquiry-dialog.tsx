@@ -49,6 +49,7 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
           city,
           message,
           source: "landlord_cta_form",
+          consent: true,
         }),
       })
       if (res.ok) {

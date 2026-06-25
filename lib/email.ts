@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer"
 import { prisma } from "./db"
+import { sanitizeEmailAddress, sanitizeEmailHeader } from "./sanitize-email"
 
 const LANDLORD_SOURCES = new Set(["landlord_cta", "landlord_cta_form", "landlords_page"])
 
@@ -99,11 +100,14 @@ export async function sendInquiryNotification(
   `
 
   const transporter = createTransporter()
+  const safeName = sanitizeEmailHeader(data.name)
+  const replyTo = sanitizeEmailAddress(data.email)
+
   await transporter.sendMail({
     from,
     to: adminEmails.join(", "),
-    replyTo: data.email,
-    subject: `[UniTrail Housing] New inquiry from ${data.name}`,
+    ...(replyTo ? { replyTo } : {}),
+    subject: `[UniTrail Housing] New inquiry from ${safeName}`,
     html,
   })
 
