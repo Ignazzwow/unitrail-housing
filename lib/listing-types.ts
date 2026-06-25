@@ -5,6 +5,17 @@ export type PropertyWithRelations = Property & {
   propertyAmenities?: (PropertyAmenity & { amenity: Amenity | null })[] | null
 }
 
+/** Plain JSON-safe copy for Server → Client Component props. */
+export function serializePropertyForClient(property: PropertyWithRelations): PropertyWithRelations {
+  return JSON.parse(JSON.stringify(property)) as PropertyWithRelations
+}
+
+export function serializePropertiesForClient(
+  properties: PropertyWithRelations[]
+): PropertyWithRelations[] {
+  return properties.map(serializePropertyForClient)
+}
+
 // Helper to get display values from Prisma property
 export function propertyToListingDisplay(p: PropertyWithRelations) {
   const imageUrls = (p.images ?? [])

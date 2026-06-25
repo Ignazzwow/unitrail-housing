@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { getListingBySlugOrId } from "@/lib/listings-data"
+import { serializePropertyForClient } from "@/lib/listing-types"
 import { ListingDetailClient } from "@/components/listing-detail-client"
 
 export const dynamic = "force-dynamic"
@@ -23,7 +24,7 @@ export default async function ListingDetailPage({
       <Navigation />
       <div className="pt-16">
         <div className="container mx-auto px-4 py-16">
-          <ListingDetailClient listing={listing} />
+          <ListingDetailClient listing={serializePropertyForClient(listing)} />
         </div>
         <Footer />
       </div>

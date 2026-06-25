@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "prisma generate && prisma db push && npx tsx scripts/sync-admin-from-env.ts && next build",
-    "dev": "next dev",
+    "dev": "prisma db push --skip-generate && next dev",
     "lint": "next lint",
     "start": "next start",
     "db:seed": "npx tsx prisma/seed.ts",

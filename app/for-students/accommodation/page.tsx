@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { getListings } from "@/lib/listings-data"
+import { serializePropertiesForClient } from "@/lib/listing-types"
 import { StudentsAccommodationClient } from "@/components/students-accommodation-client"
 
 export const metadata = {
@@ -17,7 +18,7 @@ export default async function AccommodationPage() {
     <main className="min-h-screen">
       <Navigation />
       <div className="pt-16">
-        <StudentsAccommodationClient listings={listings} />
+        <StudentsAccommodationClient listings={serializePropertiesForClient(listings)} />
         <Footer />
       </div>
     </main>

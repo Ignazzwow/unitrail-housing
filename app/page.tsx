@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Navigation } from "@/components/navigation"
 import { Hero } from "@/components/hero"
 import { HomeHeroSearchSection } from "@/components/home-hero-search-section"
@@ -18,7 +19,9 @@ export default function Home() {
         <NurembergWgSection />
         <Features />
         <HowItWorks />
-        <Contact />
+        <Suspense fallback={<div className="min-h-[24rem] bg-secondary/20 py-20" aria-hidden />}>
+          <Contact />
+        </Suspense>
         <HomeLearnMore />
         <Footer />
       </div>

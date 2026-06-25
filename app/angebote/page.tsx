@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { getListings } from "@/lib/listings-data"
+import { serializePropertiesForClient } from "@/lib/listing-types"
 import { AngeboteListClient } from "@/components/angebote-list-client"
 import { AngeboteFiltersSummary } from "@/components/angebote-filters-summary"
 import { AngeboteNoResults } from "@/components/angebote-no-results"
@@ -37,7 +38,7 @@ export default async function AngebotePage({
           {listings.length === 0 && hasFilters ? (
             <AngeboteNoResults />
           ) : (
-            <AngeboteListClient listings={listings} />
+            <AngeboteListClient listings={serializePropertiesForClient(listings)} />
           )}
         </div>
         <Footer />
