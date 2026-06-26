@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { getAuthSecret } from "./auth-secret"
+import { authorizeFromEnvCredentials, isVercelServerlessRuntime } from "./admin-env-auth"
 
 export const authOptions: NextAuthOptions = {
   secret: getAuthSecret(),
@@ -16,28 +17,48 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
 
-        const { prisma } = await import("./db")
         const email = credentials.email.trim().toLowerCase()
-        const admin = await prisma.adminUser.findUnique({
-          where: { email },
-        })
-        if (!admin) return null
+        const password = credentials.password
 
-        const valid = await bcrypt.compare(credentials.password, admin.passwordHash)
-        if (!valid) return null
-
-        // Update last login
-        await prisma.adminUser.update({
-          where: { id: admin.id },
-          data: { lastLoginAt: new Date() },
-        })
-
-        return {
-          id: admin.id,
-          email: admin.email,
-          name: admin.name,
-          role: admin.role,
+        // Vercel serverless: validate against env first (no npm/DB bootstrap required).
+        if (isVercelServerlessRuntime()) {
+          const envUser = authorizeFromEnvCredentials(email, password)
+          if (envUser) return envUser
         }
+
+        await import("./ensure-production-db").then(({ ensureProductionReady }) => ensureProductionReady())
+
+        try {
+          const { prisma } = await import("./db")
+          const admin = await prisma.adminUser.findUnique({
+            where: { email },
+          })
+
+          if (admin) {
+            const valid = await bcrypt.compare(password, admin.passwordHash)
+            if (!valid) return null
+
+            try {
+              await prisma.adminUser.update({
+                where: { id: admin.id },
+                data: { lastLoginAt: new Date() },
+              })
+            } catch {
+              // Ignore write errors on read-only filesystems
+            }
+
+            return {
+              id: admin.id,
+              email: admin.email,
+              name: admin.name,
+              role: admin.role,
+            }
+          }
+        } catch (error) {
+          console.error("[auth] Database login failed:", error)
+        }
+
+        return null
       },
     }),
   ],

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "prisma generate && prisma db push && npx tsx scripts/sync-admin-from-env.ts && next build",
+    "build": "prisma generate && prisma db push && npx tsx scripts/sync-admin-from-env.ts && npx tsx scripts/copy-runtime-db.ts && next build",
     "dev": "prisma db push --skip-generate && next dev",
     "lint": "next lint",
     "start": "next start",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:push": "npx prisma db push",
+    "admin:sync": "npx tsx scripts/sync-admin-from-env.ts",
     "audit": "npm audit --audit-level=high"
   },
   "dependencies": {

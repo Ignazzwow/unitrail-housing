@@ -1,4 +1,34 @@
 /** @type {import('next').NextConfig} */
+
+const dbFiles = ["./data/runtime.db", "./public/runtime-db.sqlite", "./prisma/prod.db"]
+
+const prismaRoutes = [
+  "/",
+  "/angebote",
+  "/angebote/[slug]",
+  "/admin",
+  "/admin/properties/new",
+  "/admin/properties/[id]/edit",
+  "/api/amenities",
+  "/api/inquiries",
+  "/api/properties",
+  "/api/properties/[slugOrId]",
+  "/api/upload",
+  "/api/admin/stats",
+  "/api/admin/properties",
+  "/api/admin/properties/[id]",
+  "/api/admin/properties/[id]/images",
+  "/api/admin/properties/[id]/images/[imageId]",
+  "/api/admin/inquiries",
+  "/api/admin/inquiries/[id]",
+  "/api/admin/setup-credentials",
+  "/api/auth/[...nextauth]",
+]
+
+const outputFileTracingIncludes = Object.fromEntries(
+  prismaRoutes.map((route) => [route, dbFiles])
+)
+
 const nextConfig = {
   poweredByHeader: false,
   eslint: {
@@ -10,6 +40,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  outputFileTracingIncludes,
   async headers() {
     return [
       {

@@ -19,18 +19,23 @@ Copy `.env.example` to `.env` and configure:
 DATABASE_URL="file:./dev.db"
 NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"  # Run: openssl rand -base64 32
 NEXTAUTH_URL="http://localhost:3000"
-ADMIN_EMAIL="housing@unitrail.in"  # For inquiry notifications
+ADMIN_LOGIN_EMAIL="info@unitrail-housing.de"
+ADMIN_LOGIN_PASSWORD="your-secure-password"
+ADMIN_EMAIL="info@unitrail-housing.de"  # For inquiry notifications
 SMTP_*  # Optional: for email notifications on new inquiries
 ```
+
+On **`npm run build`**, `scripts/sync-admin-from-env.ts` upserts the admin user from `ADMIN_LOGIN_EMAIL` + `ADMIN_LOGIN_PASSWORD` (other admin accounts are removed). Set these on your hosting provider for production.
 
 ### 2. Database Setup
 
 ```bash
 npm run db:push       # Sync schema
-npm run db:seed       # Create admin + sample data
+npm run db:seed       # Amenities + sample properties (optional)
+npm run admin:sync    # Apply ADMIN_LOGIN_* to the database (also runs on build)
 ```
 
-**Default Admin**: `admin@unitrail.in` / `admin123` — **change immediately in production!**
+**Local seed fallback** (only if no admin exists yet): `admin@unitrail.in` / `admin123` — prefer `ADMIN_LOGIN_*` via `.env` instead.
 
 ### 3. Run Development Server
 
@@ -98,3 +103,29 @@ SMTP_FROM="UniTrail Housing <info@unitrail-housing.de>"
 Copy `.env.example` to `.env` and fill in your SMTP provider details.
 
 Notifications are sent for all forms that post to `/api/inquiries` (contact page, property inquiry, landlord forms). Each email includes a direct link to the inquiry in the admin dashboard.
+
+## Production (www.unitrail-housing.de)
+
+Set these **environment variables** on your host (e.g. Vercel → Project → Settings → Environment Variables), then **redeploy**:
+
+| Variable | Production value |
+|----------|------------------|
+| `NEXTAUTH_URL` | `https://www.unitrail-housing.de` |
+| `NEXTAUTH_SECRET` | Strong random string (`openssl rand -base64 32`) |
+| `DATABASE_URL` | `file:./prod.db` (schema-relative; build creates `prisma/prod.db`) |
+| `ADMIN_LOGIN_EMAIL` | `info@unitrail-housing.de` |
+| `ADMIN_LOGIN_PASSWORD` | Your chosen admin password |
+| `ADMIN_EMAIL` | `info@unitrail-housing.de` |
+
+After deploy, sign in at **https://www.unitrail-housing.de/admin/login**.
+
+**Alternative (one-time, no redeploy):** set `ADMIN_SETUP_SECRET`, then:
+
+```bash
+curl -X POST "https://www.unitrail-housing.de/api/admin/setup-credentials" \
+  -H "Authorization: Bearer YOUR_ADMIN_SETUP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"info@unitrail-housing.de","password":"YOUR_PASSWORD","name":"Admin"}'
+```
+
+Never commit real passwords to git — only set them in the host environment or `.env` (local, gitignored).

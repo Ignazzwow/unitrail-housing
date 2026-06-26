@@ -84,8 +84,14 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
   useEffect(() => {
     fetch("/api/amenities", { credentials: "include" })
-      .then((r) => r.json())
-      .then(setAmenities)
+      .then(async (r) => {
+        const data = await r.json()
+        if (!r.ok || !Array.isArray(data)) {
+          setAmenities([])
+          return
+        }
+        setAmenities(data)
+      })
       .catch(() => setAmenities([]))
   }, [])
 
