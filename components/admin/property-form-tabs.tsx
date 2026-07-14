@@ -81,6 +81,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     furnishing: property?.furnishing ?? "unfurnished",
     availabilityStatus: property?.availabilityStatus ?? "available",
     isFeatured: property?.isFeatured ?? false,
+    isActive: property?.isActive ?? false,
     deposit: property?.deposit ?? "",
     minimumStay: property?.minimumStay ?? "",
     availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),
@@ -136,7 +137,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     setUploading(false)
   }
 
-  const handleSubmit = async (e: React.FormEvent, publish = true) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     try {
@@ -147,7 +148,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         bedrooms: Number(form.bedrooms) || 0,
         bathrooms: Number(form.bathrooms) || 0,
         areaSqm: form.areaSqm ? parseFloat(String(form.areaSqm)) : null,
-        isActive: publish,
         images: form.images.split("\n").map((s) => s.trim()).filter(Boolean),
         amenityIds: form.amenityIds,
       }
@@ -180,7 +180,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
   }
 
   return (
-    <form onSubmit={(e) => handleSubmit(e, true)} onKeyDown={preventEnterSubmit}>
+    <form onSubmit={handleSubmit} onKeyDown={preventEnterSubmit}>
       <Tabs defaultValue="basic" className="space-y-6">
         <TabsList>
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
@@ -275,16 +275,9 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="rounded-md border border-border bg-muted/50 px-3 py-2 text-sm">
-                Status:{" "}
-                <span className="font-medium text-foreground">
-                  {property?.isActive ? "Published (live on the website)" : "Draft (not visible on the website)"}
-                </span>
-                {mode === "create" && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    New properties are saved as a draft. Use &quot;Save &amp; Publish&quot; below to make it live.
-                  </p>
-                )}
+              <div className="flex items-center gap-2">
+                <Checkbox id="isActive" checked={form.isActive} onCheckedChange={(c) => update("isActive", Boolean(c))} />
+                <Label htmlFor="isActive">Sichtbar (live auf der Website)</Label>
               </div>
             </CardContent>
           </Card>
@@ -453,10 +446,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
       <div className="mt-6 flex gap-4">
         <Button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Save & Publish"}
-        </Button>
-        <Button type="button" variant="outline" onClick={(e) => handleSubmit(e, false)} disabled={loading}>
-          Save Draft
+          {loading ? "Saving..." : "Save"}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.push("/admin/properties")}>
           Cancel
