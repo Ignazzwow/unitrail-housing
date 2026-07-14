@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { writeFile, mkdir } from "fs/promises"
-import path from "path"
+import { put } from "@vercel/blob"
 import { requireAdmin } from "@/lib/auth-utils"
 import {
   UPLOAD_ALLOWED_TYPES,
@@ -8,8 +7,6 @@ import {
   extensionForMime,
   matchesImageSignature,
 } from "@/lib/upload-validation"
-
-const UPLOAD_DIR = "public/uploads"
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,13 +53,14 @@ export async function POST(request: NextRequest) {
     }
 
     const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}${ext}`
-    const uploadPath = path.join(process.cwd(), UPLOAD_DIR, uniqueName)
 
-    await mkdir(path.join(process.cwd(), UPLOAD_DIR), { recursive: true })
-    await writeFile(uploadPath, buffer)
+    const blob = await put(uniqueName, buffer, {
+      access: "public",
+      contentType: file.type,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    })
 
-    const url = `/uploads/${uniqueName}`
-    return NextResponse.json({ url })
+    return NextResponse.json({ url: blob.url })
   } catch (error) {
     console.error("Upload failed:", error)
     return NextResponse.json({ error: "Upload failed" }, { status: 500 })

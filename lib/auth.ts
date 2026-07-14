@@ -6,7 +6,6 @@ import { authorizeFromEnvCredentials, isVercelServerlessRuntime } from "./admin-
 
 export const authOptions: NextAuthOptions = {
   secret: getAuthSecret(),
-  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "credentials",

@@ -131,6 +131,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    /* Reserve the scrollbar gutter so opening a Sheet/Dialog (which locks body
+       scroll) never changes the viewport width and shifts the fixed header. */
+    scrollbar-gutter: stable;
+  }
   body {
     @apply bg-background text-foreground;
   }

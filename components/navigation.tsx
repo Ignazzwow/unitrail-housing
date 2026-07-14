@@ -108,7 +108,7 @@ export function Navigation() {
           <div className="hidden lg:flex items-center gap-4 xl:gap-6">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <button className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                   {t("nav.forStudents")}
                 </button>
               </DropdownMenuTrigger>

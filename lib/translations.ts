@@ -496,7 +496,7 @@ export const translations = {
     },
     forLandlords: {
       heroImageAlt: "Helles, modernes Mietapartment – Wohnbereich",
-      heroTitle: "Stressfreies Vermieten. Bessere Rendite. Für Vermieter gemacht.",
+      heroTitle: "Stressfreies Vermieten. Attraktive Renditen. Für Vermieter gemacht.",
       heroLead:
         "Bei UniTrail Housing machen wir die Vermietung Ihrer Immobilie einfach, profitabel und für Sie völlig entspannt. Ob eine Wohnung oder ein ganzes Portfolio – wir bieten einen smarteren Weg zu vermieten, mit der Zuverlässigkeit und dem Support, den Sie verdienen.",
       whyTitle: "Warum Vermieter UniTrail Housing wählen",

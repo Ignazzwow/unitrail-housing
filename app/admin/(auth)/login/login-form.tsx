@@ -43,7 +43,7 @@ export function AdminLoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
           <Image
@@ -53,13 +53,11 @@ export function AdminLoginForm() {
             height={48}
           />
         </div>
-        <h1 className="mb-6 text-center text-xl font-semibold text-gray-900">Admin Login</h1>
+        <h1 className="mb-6 text-center text-xl font-semibold text-foreground">Admin Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-center text-sm text-red-600">{error}</p>}
+          {error && <p className="text-center text-sm text-destructive">{error}</p>}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700">
-              Email
-            </Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
@@ -67,13 +65,10 @@ export function AdminLoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              className="border-gray-300 bg-white"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700">
-              Password
-            </Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
@@ -81,7 +76,6 @@ export function AdminLoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="border-gray-300 bg-white"
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>

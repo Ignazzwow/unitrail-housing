@@ -1,11 +1,11 @@
-import { copyBundledSqliteToTmp, isVercelServerlessRuntime } from "./ensure-db-env"
+import { isVercelServerlessRuntime } from "./admin-env-auth"
 import { upsertAdminUser } from "./upsert-admin-user"
 
 let bootstrapPromise: Promise<void> | null = null
 
 /**
- * On Vercel, copy bundled SQLite and sync admin credentials.
- * Never run `npx prisma` at runtime (serverless has no npm home).
+ * On Vercel, defensively re-sync admin credentials from env vars before a DB
+ * login lookup, in case they were rotated since the last deploy's build step.
  */
 export function ensureProductionReady(): Promise<void> {
   if (!isVercelServerlessRuntime()) {
@@ -22,9 +22,6 @@ export function ensureProductionReady(): Promise<void> {
 }
 
 async function bootstrapProductionDatabase() {
-  const hasDb = copyBundledSqliteToTmp()
-  if (!hasDb) return
-
   const email = process.env.ADMIN_LOGIN_EMAIL || process.env.ADMIN_EMAIL
   const password = process.env.ADMIN_LOGIN_PASSWORD || process.env.ADMIN_PASSWORD
 
@@ -40,7 +37,6 @@ async function bootstrapProductionDatabase() {
       name: process.env.ADMIN_NAME || "Admin",
       replaceOthers: true,
     })
-    console.log("[bootstrap] Admin synced for:", email.trim().toLowerCase())
   } catch (error) {
     console.error("[bootstrap] Admin upsert failed:", error)
   }

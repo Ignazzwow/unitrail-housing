@@ -111,7 +111,6 @@ export async function sendInquiryNotification(
     html,
   })
 
-  console.log("[email] Inquiry notification sent to:", adminEmails.join(", "))
   return { sent: true as const }
 }
 
