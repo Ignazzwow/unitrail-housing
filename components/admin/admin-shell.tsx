@@ -14,6 +14,7 @@ import {
   BarChart3,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { NotificationBell } from "@/components/admin/notification-bell"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -101,6 +102,7 @@ export function AdminShell({
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-card px-6">
           <h1 className="text-lg font-semibold text-foreground">{pageTitle ?? getPageTitle(pathname)}</h1>
           <div className="flex items-center gap-3">
+            <NotificationBell />
             <span className="text-sm text-muted-foreground">
               {session?.user?.name ?? session?.user?.email ?? "Admin"}
             </span>
