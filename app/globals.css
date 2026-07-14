@@ -131,12 +131,15 @@
   * {
     @apply border-border outline-ring/50;
   }
-  html {
-    /* Reserve the scrollbar gutter so opening a Sheet/Dialog (which locks body
-       scroll) never changes the viewport width and shifts the fixed header. */
-    scrollbar-gutter: stable;
-  }
   body {
     @apply bg-background text-foreground;
+  }
+  /* Radix (Sheet/Dialog/DropdownMenu) locks body scroll and compensates the
+     removed scrollbar via `margin-right` on <body> — but that has no effect
+     on `position: fixed` elements like the site header, which stay anchored
+     to the viewport edge. Nudge the header's right edge in by the same
+     amount so it doesn't shift when the scrollbar disappears. */
+  body[data-scroll-locked] [data-site-header] {
+    right: var(--removed-body-scroll-bar-size, 0px);
   }
 }

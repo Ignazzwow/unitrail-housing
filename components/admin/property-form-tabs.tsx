@@ -48,10 +48,18 @@ interface PropertyFormTabsProps {
   mode: "create" | "edit"
 }
 
+function todayLocalISODate() {
+  const d = new Date()
+  const mm = String(d.getMonth() + 1).padStart(2, "0")
+  const dd = String(d.getDate()).padStart(2, "0")
+  return `${d.getFullYear()}-${mm}-${dd}`
+}
+
 export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
   const [amenities, setAmenities] = useState<{ id: string; name: string }[]>([])
   const [form, setForm] = useState({
     title: property?.title ?? "",
@@ -73,10 +81,9 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     furnishing: property?.furnishing ?? "unfurnished",
     availabilityStatus: property?.availabilityStatus ?? "available",
     isFeatured: property?.isFeatured ?? false,
-    isActive: property?.isActive ?? true,
     deposit: property?.deposit ?? "",
     minimumStay: property?.minimumStay ?? "",
-    availableFrom: property?.availableFrom ?? "",
+    availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),
     images: property?.images?.map((i) => i.imageUrl).join("\n") ?? "",
     amenityIds: property?.propertyAmenities?.map((pa) => pa.amenity.id) ?? [] as string[],
     notes: "",
@@ -106,6 +113,29 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     update("amenityIds", ids)
   }
 
+  const uploadFiles = async (files: FileList | null) => {
+    if (!files?.length) return
+    setUploading(true)
+    const existing = form.images.split("\n").filter(Boolean)
+    const newUrls: string[] = []
+    for (let i = 0; i < files.length; i++) {
+      const fd = new FormData()
+      fd.append("file", files[i])
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          credentials: "include",
+          body: fd,
+        })
+        const data = await res.json()
+        if (data?.url) newUrls.push(data.url)
+        else if (data?.error) alert(data.error)
+      } catch { /* skip failed uploads */ }
+    }
+    update("images", [...existing, ...newUrls].join("\n"))
+    setUploading(false)
+  }
+
   const handleSubmit = async (e: React.FormEvent, publish = true) => {
     e.preventDefault()
     setLoading(true)
@@ -117,7 +147,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         bedrooms: Number(form.bedrooms) || 0,
         bathrooms: Number(form.bathrooms) || 0,
         areaSqm: form.areaSqm ? parseFloat(String(form.areaSqm)) : null,
-        isActive: publish ? form.isActive : false,
+        isActive: publish,
         images: form.images.split("\n").map((s) => s.trim()).filter(Boolean),
         amenityIds: form.amenityIds,
       }
@@ -143,8 +173,14 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     }
   }
 
+  const preventEnterSubmit = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter" && (e.target as HTMLElement).tagName === "INPUT") {
+      e.preventDefault()
+    }
+  }
+
   return (
-    <form onSubmit={(e) => handleSubmit(e, true)}>
+    <form onSubmit={(e) => handleSubmit(e, true)} onKeyDown={preventEnterSubmit}>
       <Tabs defaultValue="basic" className="space-y-6">
         <TabsList>
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
@@ -204,7 +240,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               </div>
               <div className="space-y-2">
                 <Label>Area / Neighborhood</Label>
-                <Input value={form.location} onChange={(e) => update("location", e.target.value)} />
+                <Textarea value={form.location} onChange={(e) => update("location", e.target.value)} rows={3} />
               </div>
               <div className="space-y-2">
                 <Label>Full Address</Label>
@@ -239,9 +275,16 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex items-center gap-2">
-                <Checkbox id="isActive" checked={form.isActive} onCheckedChange={(c) => update("isActive", Boolean(c))} />
-                <Label htmlFor="isActive">Is Active</Label>
+              <div className="rounded-md border border-border bg-muted/50 px-3 py-2 text-sm">
+                Status:{" "}
+                <span className="font-medium text-foreground">
+                  {property?.isActive ? "Published (live on the website)" : "Draft (not visible on the website)"}
+                </span>
+                {mode === "create" && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    New properties are saved as a draft. Use &quot;Save &amp; Publish&quot; below to make it live.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -316,7 +359,25 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <p className="text-sm text-muted-foreground">Upload images from your device. First image = cover photo.</p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <label className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/50 px-6 py-12 transition-colors hover:border-primary/50 hover:bg-muted cursor-pointer">
+              <label
+                className={`flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-12 transition-colors cursor-pointer ${
+                  isDragging ? "border-primary bg-muted" : "border-muted-foreground/25 bg-muted/50 hover:border-primary/50 hover:bg-muted"
+                }`}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setIsDragging(true)
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault()
+                  setIsDragging(false)
+                }}
+                onDrop={async (e) => {
+                  e.preventDefault()
+                  setIsDragging(false)
+                  if (uploading) return
+                  await uploadFiles(e.dataTransfer.files)
+                }}
+              >
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp,image/gif"
@@ -324,35 +385,17 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   disabled={uploading}
                   className="hidden"
                   onChange={async (e) => {
-                    const files = e.target.files
-                    if (!files?.length) return
-                    setUploading(true)
-                    const existing = form.images.split("\n").filter(Boolean)
-                    const newUrls: string[] = []
-                    for (let i = 0; i < files.length; i++) {
-                      const fd = new FormData()
-                      fd.append("file", files[i])
-                      try {
-                        const res = await fetch("/api/upload", {
-                          method: "POST",
-                          credentials: "include",
-                          body: fd,
-                        })
-                        const data = await res.json()
-                        if (data?.url) newUrls.push(data.url)
-                        else if (data?.error) alert(data.error)
-                      } catch { /* skip failed uploads */ }
-                    }
-                    update("images", [...existing, ...newUrls].join("\n"))
+                    await uploadFiles(e.target.files)
                     e.target.value = ""
-                    setUploading(false)
                   }}
                 />
                 <Upload className="h-10 w-10 text-muted-foreground" />
                 <span className="text-muted-foreground">
                   {uploading ? "Uploading..." : "Click to upload or drag and drop"}
                 </span>
-                <span className="text-xs text-muted-foreground">JPEG, PNG, WebP, GIF</span>
+                <span className="text-xs text-muted-foreground">
+                  JPEG, PNG, WebP, or GIF · max. 5 MB per image · automatically optimized
+                </span>
               </label>
               {form.images && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Pencil, Eye, Star } from "lucide-react"
+import { Plus, Pencil, Eye, Star, Trash2 } from "lucide-react"
 
 interface Property {
   id: string
@@ -29,6 +29,7 @@ interface Property {
   title: string
   location: string
   listingType: string
+  propertyType: string
   price: number
   availabilityStatus: string
   isActive: boolean
@@ -40,9 +41,12 @@ interface Property {
 export default function PropertiesPage() {
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [typeFilter, setTypeFilter] = useState<string>("all")
+  const [listingTypeFilter, setListingTypeFilter] = useState<string>("all")
+  const [propertyTypeFilter, setPropertyTypeFilter] = useState<string>("all")
+  const [availabilityFilter, setAvailabilityFilter] = useState<string>("all")
 
   const fetchProperties = async () => {
     try {
@@ -50,7 +54,9 @@ export default function PropertiesPage() {
       if (search) url += `&search=${encodeURIComponent(search)}`
       if (statusFilter === "active") url += "&status=active"
       if (statusFilter === "inactive") url += "&status=inactive"
-      if (typeFilter !== "all") url += `&listingType=${typeFilter}`
+      if (listingTypeFilter !== "all") url += `&listingType=${listingTypeFilter}`
+      if (propertyTypeFilter !== "all") url += `&propertyType=${propertyTypeFilter}`
+      if (availabilityFilter !== "all") url += `&availabilityStatus=${availabilityFilter}`
       const res = await fetch(url)
       const data = await res.json()
       setProperties(data.properties ?? [])
@@ -63,7 +69,28 @@ export default function PropertiesPage() {
 
   useEffect(() => {
     fetchProperties()
-  }, [statusFilter, typeFilter])
+  }, [statusFilter, listingTypeFilter, propertyTypeFilter, availabilityFilter])
+
+  const handleDelete = async (id: string, title: string) => {
+    if (!window.confirm(`"${title}" permanently delete? This cannot be undone.`)) return
+    setDeletingId(id)
+    try {
+      const res = await fetch(`/api/admin/properties/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (res.ok) {
+        setProperties((prev) => prev.filter((p) => p.id !== id))
+      } else {
+        const err = await res.json()
+        alert(err.error ?? "Failed to delete property")
+      }
+    } catch {
+      alert("Failed to delete property")
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -113,16 +140,34 @@ export default function PropertiesPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="active">Published</SelectItem>
+                  <SelectItem value="inactive">Draft</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-40">
+              <label className="mb-1 block text-sm font-medium text-muted-foreground">
+                Availability
+              </label>
+              <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="reserved">Reserved</SelectItem>
+                  <SelectItem value="rented">Rented</SelectItem>
+                  <SelectItem value="sold">Sold</SelectItem>
+                  <SelectItem value="upcoming">Upcoming</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="w-36">
               <label className="mb-1 block text-sm font-medium text-muted-foreground">
-                Type
+                Listing Type
               </label>
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <Select value={listingTypeFilter} onValueChange={setListingTypeFilter}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -130,7 +175,26 @@ export default function PropertiesPage() {
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="rent">Rent</SelectItem>
                   <SelectItem value="sale">Sale</SelectItem>
-                  <SelectItem value="student_housing">Student</SelectItem>
+                  <SelectItem value="pg">PG</SelectItem>
+                  <SelectItem value="student_housing">Student Housing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-40">
+              <label className="mb-1 block text-sm font-medium text-muted-foreground">
+                Property Type
+              </label>
+              <Select value={propertyTypeFilter} onValueChange={setPropertyTypeFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="apartment">Apartment</SelectItem>
+                  <SelectItem value="house">House</SelectItem>
+                  <SelectItem value="studio">Studio</SelectItem>
+                  <SelectItem value="pg">PG</SelectItem>
+                  <SelectItem value="student_housing">Student Housing</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -141,7 +205,9 @@ export default function PropertiesPage() {
               onClick={() => {
                 setSearch("")
                 setStatusFilter("all")
-                setTypeFilter("all")
+                setListingTypeFilter("all")
+                setPropertyTypeFilter("all")
+                setAvailabilityFilter("all")
                 setTimeout(fetchProperties, 0)
               }}
             >
@@ -204,7 +270,7 @@ export default function PropertiesPage() {
                       <TableCell>€{prop.price}/mo</TableCell>
                       <TableCell>
                         <Badge variant={prop.isActive ? "default" : "secondary"}>
-                          {prop.isActive ? "Active" : "Inactive"}
+                          {prop.isActive ? "Published" : "Draft"}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -228,6 +294,14 @@ export default function PropertiesPage() {
                             <Link href={`/angebote/${prop.slug}`} target="_blank">
                               <Eye className="h-4 w-4" />
                             </Link>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={deletingId === prop.id}
+                            onClick={() => handleDelete(prop.id, prop.title)}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
                       </TableCell>

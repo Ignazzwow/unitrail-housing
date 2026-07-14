@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { del } from "@vercel/blob"
 import { prisma } from "@/lib/db"
 import { requireAdmin } from "@/lib/auth-utils"
 
@@ -111,6 +112,17 @@ export async function DELETE(
   if (auth) return auth
 
   const { id } = await params
+
+  const images = await prisma.propertyImage.findMany({ where: { propertyId: id } })
   await prisma.property.delete({ where: { id } })
+
+  await Promise.all(
+    images.map((image) =>
+      del(image.imageUrl, { token: process.env.BLOB_READ_WRITE_TOKEN }).catch((error) =>
+        console.error("[properties] Failed to delete blob:", error)
+      )
+    )
+  )
+
   return NextResponse.json({ success: true })
 }

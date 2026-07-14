@@ -26,8 +26,15 @@ UniTrail Housing ist eine Wohnungs-/WG-Vermittlungsplattform für internationale
 - Verifiziert: `npm install`, `tsc --noEmit` und `next build` laufen jetzt sauber durch.
 
 **Nachtrag (2026-07-15) – UI-Bugs:**
-- **Header-Sprung beim Menü-Öffnen:** Radix (Sheet/Dialog/Dropdown) sperrt beim Öffnen das Scrollen, wodurch die Scrollbar verschwindet und der Viewport kurzzeitig breiter wird – der `fixed`-positionierte Header (spannt volle Viewportbreite) sprang dadurch sichtbar. Fix: `scrollbar-gutter: stable` auf `html` in `app/globals.css`, reserviert die Scrollbar-Spur dauerhaft, unabhängig davon ob eine Scrollbar gerade sichtbar ist.
+- **Header-Sprung beim Menü-Öffnen:** Radix (Sheet/Dialog/Dropdown) sperrt beim Öffnen das Scrollen und kompensiert die verschwindende Scrollbar selbst per `margin-right` auf `<body>` – das erreicht aber nie den `fixed`-positionierten Header (der ist relativ zum Viewport positioniert, nicht zur Body-Box). Erster Versuch mit `scrollbar-gutter: stable` behob das zwar für den Header, kollidierte aber mit Radix' eigener Kompensation und verursachte eine neue, doppelte Verschiebung beim Öffnen des "For Students"-Dropdowns. Endgültiger Fix: `scrollbar-gutter` wieder entfernt, stattdessen koppelt eine gezielte CSS-Regel (`body[data-scroll-locked] [data-site-header] { right: var(--removed-body-scroll-bar-size) }`) nur den Header an Radix' eigene, bereits vorhandene Kompensation (`app/globals.css`, `components/navigation.tsx`).
 - **Fehlender Pointer-Cursor:** Die shadcn `Button`-Komponente (`components/ui/button.tsx`) hatte kein `cursor-pointer` in ihren Basis-Klassen – Browser zeigen bei `<button>`-Elementen standardmäßig `cursor: default` (anders als bei Links), das sah dadurch überall "nicht klickbar" aus, u.a. bei den zwei Icon-Buttons oben rechts (Sprache, Dark/Light-Mode). Zentral in `button.tsx` gefixt (wirkt automatisch auf alle Buttons im Projekt) plus am rohen `<button>`-Trigger für "For Students" im Desktop-Menü (`components/navigation.tsx`).
+
+**Nachtrag (2026-07-15) – Datenbank/Uploads live geschaltet + Admin-Formular-Bugs:**
+- Prisma auf Postgres (Neon, via Vercel Storage) umgestellt, alle SQLite-Workarounds entfernt (siehe Abschnitt 3, Punkt 1 war damit erledigt).
+- Uploads auf Vercel Blob umgestellt (`app/api/upload/route.ts`), inkl. sauberem Löschen der Blobs beim Entfernen eines Bildes oder einer ganzen Property (vorher Karteileichen).
+- Property-Formular: "Area/Neighborhood" ist jetzt eine Textarea, Enter in einem Textfeld sendet das Formular nicht mehr versehentlich ab, Drag-and-Drop für Fotos funktioniert jetzt tatsächlich (gab es vorher nur als Text-Behauptung, kein Code dafür).
+- **Status-System für Properties**: neue Properties starten jetzt als Entwurf (nicht live), erst "Save & Publish" schaltet sie frei – vorher hing das von einer leicht zu übersehenden, zusätzlich inkonsistenten Checkbox ab. "Available From" wird bei neuen Properties automatisch mit dem heutigen Datum vorausgefüllt.
+- Properties-Liste im Admin: Löschen-Button ergänzt (gab es im Backend schon, aber keinen Button im UI), Filter um Verfügbarkeitsstatus und Property-Typ erweitert.
 
 **Nicht angefasst (bewusst):**
 - Die manuelle JS-Filterung in `nuremberg-wg-section.tsx` (Nürnberg-Schreibweisen) sieht auf den ersten Blick wie unnötige Dopplung zum DB-Filter aus, deckt aber Case-Insensitivity + drei Schreibweisen ab, was der einfache `location`-Contains-Filter nicht kann. Ein blindes "Vereinfachen" wäre ein funktionaler Rückschritt – gehört stattdessen sauber in die Listings-Konsolidierung (siehe Phase 2).
@@ -49,6 +56,7 @@ Diese Punkte sollten vor echtem, unbeaufsichtigtem Live-Betrieb stehen.
 - [ ] **Datenbank (Formular/Uploads) robust machen** – Uploads von lokalem Dateisystem auf **Vercel Blob** umstellen (naheliegend, da das Projekt ohnehin auf Vercel läuft – keine zusätzliche Infrastruktur nötig). Ohne das ist jedes hochgeladene Bild potenziell verloren, sobald eine neue Serverless-Instanz startet.
 - [ ] **DSGVO/Cookie-Banner härten** – bestehenden Banner (`cookie-consent.tsx`) auf Vollständigkeit prüfen (granulare Kategorien, kein Tracking vor Consent, Widerruf jederzeit möglich).
 - [ ] **IT-Recht-Kanzlei einbinden** – Impressum und Datenschutzerklärung durch die von IT-Recht-Kanzlei gepflegten Texte ersetzen/abgleichen; **AGB-Seite fehlt komplett und müsste neu angelegt werden** (`app/agb/` o.ä.); je nach gebuchtem Modul ggf. auch Update-Mechanismus/Abo-Sync einplanen.
+- [ ] **Cloudflare Bot-Schutz** – Anfrage-/Kontaktformulare haben aktuell nur ein einfaches In-Memory-Rate-Limit (siehe Risiko 3 oben), keinen echten Bot-Schutz. Cloudflare Turnstile o.ä. vor `/api/inquiries` und `/api/upload` schalten.
 
 ### Phase 2 – Accounts & Angebote konsolidieren
 
@@ -60,6 +68,12 @@ Diese Punkte sollten vor echtem, unbeaufsichtigtem Live-Betrieb stehen.
 ### Phase 3 – Engagement & Vertrauen
 
 - [ ] **Kundenfeedback (Kommentare/Sterne)** – braucht ein neues Datenmodell (z.B. `Review`: Bezug zu Property oder zur Plattform allgemein, Sternebewertung, Kommentartext, Moderationsstatus) plus Moderation im Admin-Bereich.
+- [ ] **SMTP einrichten** – ohne das wird aktuell keine Benachrichtigungsmail bei neuen Anfragen verschickt (Code fängt das sauber ab, aber es passiert nichts). Braucht: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` – entweder über den bestehenden Business-Mail-Anbieter oder einen dedizierten Dienst (z.B. Resend, Postmark). Noch offen: welcher Weg.
+- [ ] **Bestätigungsmail an Interessenten** – aktuell bekommt nur der Admin eine Mail bei neuer Anfrage; der Interessent selbst bekommt keine Eingangsbestätigung ("Wir haben deine Anfrage erhalten"). Setzt SMTP voraus.
+- [ ] **Mail-Protokoll (eventuell)** – Log/Übersicht verschickter Mails (Benachrichtigung, Bestätigung) zur Fehlersuche/Nachvollziehbarkeit, z.B. als eigenes Datenmodell oder simples Logging.
+- [ ] **Benachrichtigungs-Center im Admin-Dashboard** – kleine Glocke mit den letzten Updates (neue Anfrage, neue Property etc.) direkt im Dashboard, unabhängig von E-Mail.
+- [ ] **Benachrichtigungs-Einstellungen (spätere Aufgabenverteilung)** – ein Menü, über das konfigurierbar ist, welche E-Mail-Adresse bei welcher Art von Ereignis benachrichtigt wird (aktuell nur über Env-Variablen fest verdrahtet: `lib/email.ts` unterscheidet bereits zwischen normalen und Vermieter-Anfragen und schickt an unterschiedliche Adressen – das UI dafür fehlt noch). Sinnvoll, sobald mehrere Personen/Rollen Anfragen bearbeiten.
+- [ ] **Mobile-Optimierung + "Als App nutzen"-Hinweis** – mobil optimierte Navigation (eigene Bottom-Nav o.ä.) plus ein Hinweis-Banner, dass die Seite über "Teilen → Zum Home-Bildschirm" wie eine App genutzt werden kann (PWA-artiges Verhalten ohne echten nativen App-Store-Aufwand).
 - [ ] **Notification System → App/Push** – E-Mail-Benachrichtigung bei neuen Anfragen existiert bereits (`lib/email.ts`). Für In-App/Push-Benachrichtigungen wird zuerst ein Nutzerkonto-Konzept (Phase 2) gebraucht; danach Entscheidung native App vs. PWA mit Web-Push.
 
 ## 5. Offene Entscheidungen (brauche dein Go)

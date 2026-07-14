@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") ?? undefined
     const status = searchParams.get("status") ?? undefined
     const listingType = searchParams.get("listingType") ?? undefined
+    const propertyType = searchParams.get("propertyType") ?? undefined
+    const availabilityStatus = searchParams.get("availabilityStatus") ?? undefined
 
     const where: Record<string, unknown> = {}
     if (search) {
@@ -27,11 +29,11 @@ export async function GET(request: NextRequest) {
         { slug: { contains: search } },
       ]
     }
-    if (status === "available") (where as { availabilityStatus?: string }).availabilityStatus = "available"
-    if (status === "rented") (where as { availabilityStatus?: string }).availabilityStatus = "rented"
     if (status === "active") (where as { isActive?: boolean }).isActive = true
     if (status === "inactive") (where as { isActive?: boolean }).isActive = false
+    if (availabilityStatus) (where as { availabilityStatus?: string }).availabilityStatus = availabilityStatus
     if (listingType) (where as { listingType?: string }).listingType = listingType
+    if (propertyType) (where as { propertyType?: string }).propertyType = propertyType
 
     const [properties, total] = await Promise.all([
       prisma.property.findMany({

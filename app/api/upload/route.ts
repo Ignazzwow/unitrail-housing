@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { put } from "@vercel/blob"
+import sharp from "sharp"
 import { requireAdmin } from "@/lib/auth-utils"
 import {
   UPLOAD_ALLOWED_TYPES,
@@ -7,6 +8,8 @@ import {
   extensionForMime,
   matchesImageSignature,
 } from "@/lib/upload-validation"
+
+const MAX_DIMENSION = 2000
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,11 +55,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}${ext}`
+    // Re-encode to WebP and cap dimensions — cuts storage/bandwidth without a
+    // visible quality loss for listing photos, regardless of the source format.
+    const optimized = await sharp(buffer, { animated: true })
+      .rotate()
+      .resize({ width: MAX_DIMENSION, height: MAX_DIMENSION, fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 82 })
+      .toBuffer()
 
-    const blob = await put(uniqueName, buffer, {
+    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}.webp`
+
+    const blob = await put(uniqueName, optimized, {
       access: "public",
-      contentType: file.type,
+      contentType: "image/webp",
       token: process.env.BLOB_READ_WRITE_TOKEN,
     })
 
