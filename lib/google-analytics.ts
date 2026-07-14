@@ -1,5 +1,5 @@
 export const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-22J83ZRT3C"
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-N0NG22Z9MH"
 
 /** EEA + UK + Switzerland — consent required before analytics/ads storage. */
 export const CONSENT_REQUIRED_REGIONS = [
@@ -124,7 +124,7 @@ export function getGoogleConsentDefaultScript(measurementId: string) {
       } catch (e) {}
     })();
 
-    gtag('config', '${measurementId}', { anonymize_ip: true });
+    gtag('config', '${measurementId}');
   `
 }
 
