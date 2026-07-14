@@ -103,3 +103,15 @@ model Inquiry {
 
   property Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
 }
+
+// ============= SETTINGS =============
+// Which inbox gets notified for which inquiry category. Falls back to env
+// vars (LANDLORD_INQUIRY_EMAIL / ADMIN_NOTIFICATION_EMAIL) until configured.
+model NotificationSetting {
+  id        String   @id @default(cuid())
+  category  String   @unique // "student" (property/general inquiries) | "landlord"
+  email     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_settings")
+}

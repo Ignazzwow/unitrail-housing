@@ -20,10 +20,19 @@ export function isSmtpConfigured() {
   )
 }
 
-function getNotificationRecipients(source?: string) {
-  if (source && LANDLORD_SOURCES.has(source)) {
-    const landlordEmail = process.env.LANDLORD_INQUIRY_EMAIL || "vermieten@unitrail-housing.de"
-    return [landlordEmail]
+async function getNotificationRecipients(source?: string) {
+  const category = source && LANDLORD_SOURCES.has(source) ? "landlord" : "student"
+
+  const setting = await prisma.notificationSetting.findUnique({ where: { category } }).catch(() => null)
+  if (setting?.email.trim()) {
+    return setting.email
+      .split(",")
+      .map((email) => email.trim())
+      .filter(Boolean)
+  }
+
+  if (category === "landlord") {
+    return [process.env.LANDLORD_INQUIRY_EMAIL || "vermieten@unitrail-housing.de"]
   }
 
   const recipients =
@@ -71,7 +80,7 @@ export async function sendInquiryNotification(
     return { sent: false, reason: "smtp_not_configured" as const }
   }
 
-  const adminEmails = getNotificationRecipients(data.source)
+  const adminEmails = await getNotificationRecipients(data.source)
   const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@unitrail-housing.de"
   const siteUrl = getSiteUrl()
   const inquiryUrl = `${siteUrl}/admin/inquiries/${inquiryId}`

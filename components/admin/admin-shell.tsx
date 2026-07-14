@@ -12,6 +12,7 @@ import {
   LogOut,
   ExternalLink,
   BarChart3,
+  Settings,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { NotificationBell } from "@/components/admin/notification-bell"
@@ -25,6 +26,7 @@ const navItems = [
     label: "Rental Property Analyzer",
     icon: BarChart3,
   },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 
 const getPageTitle = (path: string) => {
@@ -35,6 +37,7 @@ const getPageTitle = (path: string) => {
   if (path.match(/\/admin\/inquiries\/[^/]+/)) return "Inquiry"
   if (path.startsWith("/admin/inquiries")) return "Inquiries"
   if (path.startsWith("/admin/rental-property-analyzer")) return "Rental Property Analyzer"
+  if (path.startsWith("/admin/settings")) return "Settings"
   return "Admin"
 }
 
