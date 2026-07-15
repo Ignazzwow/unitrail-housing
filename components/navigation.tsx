@@ -76,7 +76,6 @@ export function Navigation() {
   const navLinks = [
     { href: "/for-students", labelKey: "nav.forStudents" as const },
     { href: "/angebote", labelKey: "nav.listings" as const },
-    { href: "/for-landlords", labelKey: "nav.forLandlords" as const },
     { href: "/faq", labelKey: "nav.faq" as const },
     { href: "/about", labelKey: "nav.about" as const },
     { href: "/contact", labelKey: "nav.contact" as const },
@@ -111,15 +110,25 @@ export function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {t(link.labelKey)}
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </div>
 
           {/* Actions */}
           <div className="flex shrink-0 items-center gap-2">
+            {/* For Landlords — visually separated from the student-facing nav links */}
+            <Button
+              asChild
+              size="sm"
+              className="hidden bg-accent text-accent-foreground transition-transform hover:bg-accent/90 hover:scale-105 sm:inline-flex"
+            >
+              <Link href="/for-landlords">{t("nav.forLandlords")}</Link>
+            </Button>
+
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -164,6 +173,13 @@ export function Navigation() {
 
                 <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5">
                   <nav className="flex flex-col gap-1">
+                    <Link
+                      href="/for-landlords"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="mb-2 rounded-lg bg-accent px-3 py-2.5 text-base font-medium text-accent-foreground transition-colors hover:bg-accent/90"
+                    >
+                      {t("nav.forLandlords")}
+                    </Link>
                     {navLinks.map((link) => (
                       <Link
                         key={link.href}

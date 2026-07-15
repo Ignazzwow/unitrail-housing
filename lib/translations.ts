@@ -202,6 +202,9 @@ export const translations = {
       showMore: "Show more",
       showLess: "Show less",
       quickFactsTitle: "Property facts",
+      locationTitle: "Location",
+      cityAreaLabel: "City / Area",
+      noLocationDetails: "No additional location details for this property.",
     },
     nurembergWg: {
       title: "WG Apartments in Nuremberg",
@@ -681,6 +684,9 @@ export const translations = {
       showMore: "Mehr anzeigen",
       showLess: "Weniger anzeigen",
       quickFactsTitle: "Objekt-Fakten",
+      locationTitle: "Lage",
+      cityAreaLabel: "Stadt / Viertel",
+      noLocationDetails: "Für dieses Objekt sind keine weiteren Lage-Informationen hinterlegt.",
     },
     nurembergWg: {
       title: "WG-Apartments in Nürnberg",

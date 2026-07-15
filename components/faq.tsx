@@ -3,6 +3,9 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useLanguage } from "@/contexts/language-context"
 import { translations } from "@/lib/translations"
+import { ClipboardList, FileCheck, Eye, Receipt, MessageCircleQuestion } from "lucide-react"
+
+const QUESTION_ICONS = [ClipboardList, FileCheck, Eye, Receipt]
 
 export function FAQ() {
   const { language, t } = useLanguage()
@@ -25,12 +28,22 @@ export function FAQ() {
 
         <div className="mx-auto max-w-3xl">
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left text-foreground">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
+            {faqs.map((faq, index) => {
+              const Icon = QUESTION_ICONS[index] ?? MessageCircleQuestion
+              return (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left text-foreground">
+                    <span className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      {faq.question}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pl-11 text-muted-foreground">{faq.answer}</AccordionContent>
+                </AccordionItem>
+              )
+            })}
           </Accordion>
         </div>
       </div>

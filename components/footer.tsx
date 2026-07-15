@@ -4,13 +4,23 @@ import Image from "next/image"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 
-const navRoutes = [
+const studentRoutes = [
   { key: "listings", href: "/angebote" },
   { key: "forStudents", href: "/for-students" },
-  { key: "forLandlords", href: "/for-landlords" },
   { key: "faq", href: "/faq" },
   { key: "about", href: "/about" },
+]
+
+const landlordRoutes = [
+  { key: "forLandlords", href: "/for-landlords" },
   { key: "contact", href: "/contact" },
+]
+
+const legalRoutes = [
+  { labelKey: "footer.privacyPolicy", href: "/datenschutz" },
+  { labelKey: "footer.imprint", href: "/impressum" },
+  { labelKey: "footer.termsOfService", href: "/datenschutz#terms" },
+  { labelKey: "footer.cookiePolicy", href: "/datenschutz#cookies" },
 ]
 
 export function Footer() {
@@ -40,82 +50,48 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-semibold text-card-foreground">{t("footer.quickLinks")}</h3>
+            <h3 className="mb-4 font-semibold text-card-foreground">{t("nav.forStudents")}</h3>
             <ul className="space-y-2 text-sm">
-              {navRoutes.map((route) => (
+              {studentRoutes.map((route) => (
                 <li key={route.key}>
                   <Link href={route.href} className="text-muted-foreground hover:text-primary">
                     {t(`nav.${route.key}`)}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href="/datenschutz" className="text-muted-foreground hover:text-primary">
-                  {t("footer.privacyPolicy")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
-                  {t("footer.imprint")}
-                </Link>
-              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="mb-4 font-semibold text-card-foreground">{t("nav.forLandlords")}</h3>
+            <ul className="space-y-2 text-sm">
+              {landlordRoutes.map((route) => (
+                <li key={route.key}>
+                  <Link href={route.href} className="text-muted-foreground hover:text-primary">
+                    {t(`nav.${route.key}`)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h3 className="mb-4 font-semibold text-card-foreground">{t("footer.legal")}</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/datenschutz" className="text-muted-foreground hover:text-primary">
-                  {t("footer.privacyPolicy")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/impressum" className="text-muted-foreground hover:text-primary">
-                  {t("footer.imprint")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/datenschutz#terms" className="text-muted-foreground hover:text-primary">
-                  {t("footer.termsOfService")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/datenschutz#cookies" className="text-muted-foreground hover:text-primary">
-                  {t("footer.cookiePolicy")}
-                </Link>
-              </li>
+              {legalRoutes.map((route) => (
+                <li key={route.href}>
+                  <Link href={route.href} className="text-muted-foreground hover:text-primary">
+                    {t(route.labelKey)}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-4 font-semibold text-card-foreground">{t("footer.about")}</h3>
-            <p className="text-sm text-muted-foreground">
-              {t("footer.aboutDesc")}
-            </p>
           </div>
         </div>
 
         <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
           <p className="mt-2">{t("footer.gdpr")}</p>
-          <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2" aria-label={t("footer.legal")}>
-            <Link href="/datenschutz" className="hover:text-primary">
-              {t("footer.privacyPolicy")}
-            </Link>
-            <span className="text-border" aria-hidden>
-              |
-            </span>
-            <Link href="/impressum" className="hover:text-primary">
-              {t("footer.imprint")}
-            </Link>
-            <span className="text-border" aria-hidden>
-              |
-            </span>
-            <Link href="/datenschutz#cookies" className="hover:text-primary">
-              {t("footer.cookiePolicy")}
-            </Link>
-          </nav>
         </div>
       </div>
     </footer>

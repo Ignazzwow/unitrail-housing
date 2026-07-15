@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -20,7 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Eye } from "lucide-react"
+import { getInquiryCategory } from "@/lib/inquiry-category"
 
 interface Inquiry {
   id: string
@@ -29,8 +31,81 @@ interface Inquiry {
   phone?: string | null
   message: string
   status: string
+  source: string
   createdAt: string
   property?: { id: string; title: string; slug: string } | null
+}
+
+const statusVariant = (status: string) => {
+  switch (status) {
+    case "new": return "destructive"
+    case "in_progress": return "secondary"
+    case "closed": return "default"
+    default: return "outline"
+  }
+}
+
+function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Property</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Phone</TableHead>
+          <TableHead>Message</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Created</TableHead>
+          <TableHead className="w-20"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {inquiries.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">
+              No inquiries found.
+            </TableCell>
+          </TableRow>
+        ) : (
+          inquiries.map((inq) => (
+            <TableRow key={inq.id}>
+              <TableCell className="font-medium">{inq.name}</TableCell>
+              <TableCell>
+                {inq.property ? (
+                  <Link href={`/angebote/${inq.property.slug}`} target="_blank" className="text-primary hover:underline">
+                    {inq.property.title}
+                  </Link>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
+              </TableCell>
+              <TableCell className="text-muted-foreground">{inq.email}</TableCell>
+              <TableCell className="text-muted-foreground">{inq.phone ?? "—"}</TableCell>
+              <TableCell className="max-w-[200px] truncate text-muted-foreground">
+                {inq.message.slice(0, 80)}{inq.message.length > 80 ? "…" : ""}
+              </TableCell>
+              <TableCell>
+                <Badge variant={statusVariant(inq.status)}>
+                  {inq.status.replace("_", "-")}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {new Date(inq.createdAt).toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={`/admin/inquiries/${inq.id}`}>
+                    <Eye className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))
+        )}
+      </TableBody>
+    </Table>
+  )
 }
 
 export default function InquiriesPage() {
@@ -55,14 +130,8 @@ export default function InquiriesPage() {
       .catch(() => setProperties([]))
   }, [])
 
-  const statusVariant = (status: string) => {
-    switch (status) {
-      case "new": return "destructive"
-      case "in_progress": return "secondary"
-      case "closed": return "default"
-      default: return "outline"
-    }
-  }
+  const studentInquiries = inquiries.filter((inq) => getInquiryCategory(inq.source) === "student")
+  const landlordInquiries = inquiries.filter((inq) => getInquiryCategory(inq.source) === "landlord")
 
   return (
     <div className="space-y-6">
@@ -110,64 +179,20 @@ export default function InquiriesPage() {
               <p className="text-muted-foreground">Loading...</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Property</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Message</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="w-20"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {inquiries.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">
-                      No inquiries found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  inquiries.map((inq) => (
-                    <TableRow key={inq.id}>
-                      <TableCell className="font-medium">{inq.name}</TableCell>
-                      <TableCell>
-                        {inq.property ? (
-                          <Link href={`/angebote/${inq.property.slug}`} target="_blank" className="text-primary hover:underline">
-                            {inq.property.title}
-                          </Link>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">{inq.email}</TableCell>
-                      <TableCell className="text-muted-foreground">{inq.phone ?? "—"}</TableCell>
-                      <TableCell className="max-w-[200px] truncate text-muted-foreground">
-                        {inq.message.slice(0, 80)}{inq.message.length > 80 ? "…" : ""}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={statusVariant(inq.status)}>
-                          {inq.status.replace("_", "-")}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(inq.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/admin/inquiries/${inq.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <Tabs defaultValue="student">
+              <div className="border-b border-border px-4 pt-4">
+                <TabsList>
+                  <TabsTrigger value="student">Students / Clients ({studentInquiries.length})</TabsTrigger>
+                  <TabsTrigger value="landlord">Landlords ({landlordInquiries.length})</TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="student" className="mt-0">
+                <InquiriesTable inquiries={studentInquiries} />
+              </TabsContent>
+              <TabsContent value="landlord" className="mt-0">
+                <InquiriesTable inquiries={landlordInquiries} />
+              </TabsContent>
+            </Tabs>
           )}
         </CardContent>
       </Card>

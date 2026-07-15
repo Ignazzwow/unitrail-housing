@@ -1,8 +1,7 @@
 import nodemailer from "nodemailer"
 import { prisma } from "./db"
 import { sanitizeEmailAddress, sanitizeEmailHeader } from "./sanitize-email"
-
-const LANDLORD_SOURCES = new Set(["landlord_cta", "landlord_cta_form", "landlords_page"])
+import { getInquiryCategory } from "./inquiry-category"
 
 function getSiteUrl() {
   return (
@@ -21,7 +20,7 @@ export function isSmtpConfigured() {
 }
 
 async function getNotificationRecipients(source?: string) {
-  const category = source && LANDLORD_SOURCES.has(source) ? "landlord" : "student"
+  const category = getInquiryCategory(source)
 
   const setting = await prisma.notificationSetting.findUnique({ where: { category } }).catch(() => null)
   if (setting?.email.trim()) {
@@ -44,6 +43,26 @@ async function getNotificationRecipients(source?: string) {
     .split(",")
     .map((email) => email.trim())
     .filter(Boolean)
+}
+
+async function logEmail(entry: {
+  inquiryId?: string | null
+  recipients: string
+  subject: string
+  status: "sent" | "failed" | "skipped"
+  errorMessage?: string
+}) {
+  await prisma.emailLog
+    .create({
+      data: {
+        inquiryId: entry.inquiryId ?? null,
+        recipients: entry.recipients,
+        subject: entry.subject,
+        status: entry.status,
+        errorMessage: entry.errorMessage ?? null,
+      },
+    })
+    .catch((error) => console.error("[email] Failed to write email log:", error))
 }
 
 function createTransporter() {
@@ -73,14 +92,19 @@ export async function sendInquiryNotification(
     source?: string
   }
 ) {
+  const adminEmails = await getNotificationRecipients(data.source)
+  const safeName = sanitizeEmailHeader(data.name)
+  const subject = `[UniTrail Housing] New inquiry from ${safeName}`
+  const recipients = adminEmails.join(", ")
+
   if (!isSmtpConfigured()) {
     console.warn(
       "[email] SMTP is not configured. Inquiry saved, but no notification email was sent. Set SMTP_HOST, SMTP_USER, and SMTP_PASS."
     )
+    await logEmail({ inquiryId, recipients, subject, status: "skipped", errorMessage: "smtp_not_configured" })
     return { sent: false, reason: "smtp_not_configured" as const }
   }
 
-  const adminEmails = await getNotificationRecipients(data.source)
   const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@unitrail-housing.de"
   const siteUrl = getSiteUrl()
   const inquiryUrl = `${siteUrl}/admin/inquiries/${inquiryId}`
@@ -109,17 +133,23 @@ export async function sendInquiryNotification(
   `
 
   const transporter = createTransporter()
-  const safeName = sanitizeEmailHeader(data.name)
   const replyTo = sanitizeEmailAddress(data.email)
 
-  await transporter.sendMail({
-    from,
-    to: adminEmails.join(", "),
-    ...(replyTo ? { replyTo } : {}),
-    subject: `[UniTrail Housing] New inquiry from ${safeName}`,
-    html,
-  })
+  try {
+    await transporter.sendMail({
+      from,
+      to: recipients,
+      ...(replyTo ? { replyTo } : {}),
+      subject,
+      html,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error"
+    await logEmail({ inquiryId, recipients, subject, status: "failed", errorMessage: message })
+    return { sent: false, reason: "send_failed" as const }
+  }
 
+  await logEmail({ inquiryId, recipients, subject, status: "sent" })
   return { sent: true as const }
 }
 

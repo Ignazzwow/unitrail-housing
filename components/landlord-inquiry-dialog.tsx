@@ -13,8 +13,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/contexts/language-context"
+import { cn } from "@/lib/utils"
 
 type LandlordInquiryDialogProps = {
   open: boolean
@@ -25,6 +27,7 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
   const { t } = useLanguage()
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [consentChecked, setConsentChecked] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,7 +52,7 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
           city,
           message,
           source: "landlord_cta_form",
-          consent: true,
+          consent: consentChecked,
         }),
       })
       if (res.ok) {
@@ -58,6 +61,7 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
           description: t("landlordInquiry.messageSentDesc"),
         })
         form.reset()
+        setConsentChecked(false)
         onOpenChange(false)
       } else {
         const err = await res.json().catch(() => ({}))
@@ -119,12 +123,11 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
             />
           </div>
           <div className="flex items-start gap-2">
-            <input
-              type="checkbox"
+            <Checkbox
               id="landlordConsent"
-              name="landlordConsent"
-              required
-              className="mt-1 size-4 shrink-0 rounded border border-input"
+              checked={consentChecked}
+              onCheckedChange={(c) => setConsentChecked(Boolean(c))}
+              className="mt-1"
             />
             <Label htmlFor="landlordConsent" className="text-sm leading-relaxed text-muted-foreground">
               {t("landlordInquiry.consent")}{" "}
@@ -134,7 +137,12 @@ export function LandlordInquiryDialog({ open, onOpenChange }: LandlordInquiryDia
               {t("landlordInquiry.consentEnd")}
             </Label>
           </div>
-          <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            size="lg"
+            className={cn("w-full", consentChecked && "bg-accent text-accent-foreground hover:bg-accent/90")}
+            disabled={isSubmitting || !consentChecked}
+          >
             {isSubmitting ? t("landlordInquiry.sending") : t("landlordInquiry.send")}
           </Button>
         </form>

@@ -1,9 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import { cn } from "@/lib/utils"
 import {
   MapPin,
   Bed,
@@ -30,12 +29,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
 
-const DESCRIPTION_COLLAPSE_THRESHOLD = 320
-
 export function ListingDetailClient({ listing }: { listing: PropertyWithRelations }) {
   const { t, language } = useLanguage()
   const L = propertyToListingDisplay(listing, language)
   const [descriptionExpanded, setDescriptionExpanded] = useState(false)
+  const sidebarRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLParagraphElement>(null)
+  const [clampHeight, setClampHeight] = useState<number | null>(null)
+  const [needsClamp, setNeedsClamp] = useState(false)
+
+  useEffect(() => {
+    const sidebarEl = sidebarRef.current
+    const textEl = textRef.current
+    if (!sidebarEl || !textEl) return
+
+    const update = () => {
+      const height = sidebarEl.getBoundingClientRect().height
+      setClampHeight(height)
+      // Measure the text's natural height against the sidebar height to decide if clamping is needed at all.
+      const previousMaxHeight = textEl.style.maxHeight
+      textEl.style.maxHeight = "none"
+      const naturalHeight = textEl.scrollHeight
+      textEl.style.maxHeight = previousMaxHeight
+      setNeedsClamp(naturalHeight > height)
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(sidebarEl)
+    return () => observer.disconnect()
+  }, [language, L.detailedDescription, L.description])
 
   const propertyTypeKey: Record<string, string> = {
     apartment: "heroSearch.typeFlat",
@@ -125,38 +148,62 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
           <Tabs defaultValue="description">
             <TabsList>
               <TabsTrigger value="description">{t("listings.descriptionTitle")}</TabsTrigger>
+              <TabsTrigger value="location">{t("listings.locationTitle")}</TabsTrigger>
               <TabsTrigger value="amenities">{t("listings.featuresTitle")}</TabsTrigger>
+              {L.additionalInfo && (
+                <TabsTrigger value="more">{t("listings.additionalInfoTitle")}</TabsTrigger>
+              )}
             </TabsList>
 
-            <TabsContent value="description" className="space-y-6 pt-6">
-              <div>
+            <TabsContent value="description" className="pt-6">
+              <div className="relative">
                 <p
-                  className={cn(
-                    "whitespace-pre-line text-muted-foreground",
-                    !descriptionExpanded && mainText.length > DESCRIPTION_COLLAPSE_THRESHOLD && "line-clamp-6"
-                  )}
+                  ref={textRef}
+                  className="whitespace-pre-line text-muted-foreground"
+                  style={
+                    !descriptionExpanded && needsClamp && clampHeight
+                      ? { maxHeight: clampHeight, overflow: "hidden" }
+                      : undefined
+                  }
                 >
                   {mainText}
                 </p>
-                {mainText.length > DESCRIPTION_COLLAPSE_THRESHOLD && (
-                  <button
-                    type="button"
-                    onClick={() => setDescriptionExpanded((v) => !v)}
-                    className="mt-2 text-sm font-medium text-primary hover:underline"
-                  >
-                    {descriptionExpanded ? t("listings.showLess") : t("listings.showMore")}
-                  </button>
+                {!descriptionExpanded && needsClamp && (
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card to-transparent" />
                 )}
               </div>
-
-              {L.additionalInfo && (
-                <div className="border-t border-border pt-6">
-                  <h3 className="mb-3 text-lg font-semibold text-foreground">
-                    {t("listings.additionalInfoTitle")}
-                  </h3>
-                  <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
-                </div>
+              {needsClamp && (
+                <button
+                  type="button"
+                  onClick={() => setDescriptionExpanded((v) => !v)}
+                  className="mt-2 text-sm font-medium text-primary hover:underline"
+                >
+                  {descriptionExpanded ? t("listings.showLess") : t("listings.showMore")}
+                </button>
               )}
+            </TabsContent>
+
+            <TabsContent value="location" className="pt-6">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 rounded-lg border border-border p-4">
+                  <MapPin className="h-5 w-5 shrink-0 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("listings.cityAreaLabel")}</p>
+                    <p className="font-semibold text-foreground">{L.location}</p>
+                  </div>
+                </div>
+                {L.address ? (
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-4">
+                    <MapPin className="h-5 w-5 shrink-0 text-primary" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t("listings.address")}</p>
+                      <p className="font-semibold text-foreground">{listing.address}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">{t("listings.noLocationDetails")}</p>
+                )}
+              </div>
             </TabsContent>
 
             <TabsContent value="amenities" className="pt-6">
@@ -175,11 +222,17 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                 <p className="text-sm text-muted-foreground">{t("listings.noFeatures")}</p>
               )}
             </TabsContent>
+
+            {L.additionalInfo && (
+              <TabsContent value="more" className="pt-6">
+                <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
+              </TabsContent>
+            )}
           </Tabs>
         </div>
 
         <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-24 space-y-5 rounded-lg border border-border bg-card p-6">
+          <div ref={sidebarRef} className="lg:sticky lg:top-24 space-y-5 rounded-lg border border-border bg-card p-6">
             <div className="text-center">
               <div className="mb-2 flex items-baseline justify-center gap-1">
                 <span className="text-4xl font-bold text-primary">{L.price}</span>

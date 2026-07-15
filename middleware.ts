@@ -18,5 +18,7 @@ export const config = {
     "/admin/rental-property-analyzer/:path*",
     "/admin/settings",
     "/admin/settings/:path*",
+    "/admin/email-logs",
+    "/admin/email-logs/:path*",
   ],
 }

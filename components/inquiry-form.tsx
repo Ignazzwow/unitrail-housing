@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/contexts/language-context"
+import { cn } from "@/lib/utils"
 
 interface InquiryFormProps {
   propertyId?: string
@@ -20,6 +22,7 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
   const { toast } = useToast()
   const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
+  const [consentChecked, setConsentChecked] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -38,7 +41,7 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
           phone: formData.get("phone") || "",
           message: formData.get("message"),
           source: propertyId ? "property_inquiry" : "website_form",
-          consent: true,
+          consent: consentChecked,
         }),
       })
       if (res.ok) {
@@ -101,7 +104,12 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
             <Textarea id="message" name="message" rows={5} required />
           </div>
           <div className="flex items-start gap-2">
-            <input type="checkbox" id="consent" name="consent" required className="mt-1 h-4 w-4 shrink-0" />
+            <Checkbox
+              id="consent"
+              checked={consentChecked}
+              onCheckedChange={(c) => setConsentChecked(Boolean(c))}
+              className="mt-1"
+            />
             <Label htmlFor="consent" className="text-sm leading-relaxed text-muted-foreground">
               {t("contact.consent")}{" "}
               <a href="/datenschutz" className="text-primary underline">
@@ -110,7 +118,11 @@ export function InquiryForm({ propertyId, propertyTitle }: InquiryFormProps) {
               . {t("contact.consentEnd")}
             </Label>
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button
+            type="submit"
+            disabled={loading || !consentChecked}
+            className={cn("w-full", consentChecked && "bg-accent text-accent-foreground hover:bg-accent/90")}
+          >
             {loading ? t("propertyInquiry.sending") : t("propertyInquiry.send")}
           </Button>
         </form>

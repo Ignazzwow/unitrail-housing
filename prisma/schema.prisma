@@ -119,3 +119,16 @@ model NotificationSetting {
 
   @@map("notification_settings")
 }
+
+// ============= EMAIL LOG =============
+model EmailLog {
+  id           String   @id @default(cuid())
+  inquiryId    String?  @map("inquiry_id")
+  recipients   String // comma-separated
+  subject      String
+  status       String // sent, failed, skipped
+  errorMessage String?  @map("error_message")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("email_logs")
+}

@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Users, Globe, Heart } from "lucide-react"
+import { Shield, Users, Globe, Heart, Rocket, Handshake } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 export function AboutContent() {
@@ -45,9 +45,15 @@ export function AboutContent() {
         </Card>
       </div>
 
-      <div className="mx-auto max-w-2xl text-center text-muted-foreground">
-        <p className="mb-4">{t("about.body1")}</p>
-        <p>{t("about.body2")}</p>
+      <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+        <div className="rounded-lg border border-border bg-card p-6">
+          <Rocket className="mb-3 h-8 w-8 text-primary" />
+          <p className="text-muted-foreground">{t("about.body1")}</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-6">
+          <Handshake className="mb-3 h-8 w-8 text-primary" />
+          <p className="text-muted-foreground">{t("about.body2")}</p>
+        </div>
       </div>
     </section>
   )

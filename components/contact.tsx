@@ -8,10 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Mail, Phone, User } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/contexts/language-context"
+import { cn } from "@/lib/utils"
 
 export function Contact() {
   const { t } = useLanguage()
@@ -19,6 +21,7 @@ export function Contact() {
   const fromLandlords = searchParams.get("from") === "landlords"
   const publicEmail = t("contact.publicEmail")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [consentChecked, setConsentChecked] = useState(false)
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +40,7 @@ export function Contact() {
           phone: formData.get("phone") || "",
           message: formData.get("message"),
           source: fromLandlords ? "landlords_page" : "website_form",
-          consent: true,
+          consent: consentChecked,
         }),
       })
       if (res.ok) {
@@ -46,6 +49,7 @@ export function Contact() {
           description: t("contact.messageSentDesc"),
         })
         form.reset()
+        setConsentChecked(false)
       } else {
         const err = await res.json()
         toast({
@@ -130,7 +134,12 @@ export function Contact() {
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <input type="checkbox" id="consent" name="consent" required className="mt-1" />
+                    <Checkbox
+                      id="consent"
+                      checked={consentChecked}
+                      onCheckedChange={(c) => setConsentChecked(Boolean(c))}
+                      className="mt-1"
+                    />
                     <Label htmlFor="consent" className="text-sm leading-relaxed text-muted-foreground">
                       {t("contact.consent")}{" "}
                       <a href="/datenschutz" className="text-primary underline">
@@ -140,7 +149,12 @@ export function Contact() {
                     </Label>
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className={cn("w-full", consentChecked && "bg-accent text-accent-foreground hover:bg-accent/90")}
+                    disabled={isSubmitting || !consentChecked}
+                  >
                     {isSubmitting ? t("contact.sending") : t("contact.send")}
                   </Button>
                 </form>
