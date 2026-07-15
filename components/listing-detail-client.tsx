@@ -1,8 +1,22 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import { MapPin, Bed, Bath, Square, Calendar, ArrowLeft, Sofa, Building2, Info, CircleAlert } from "lucide-react"
+import { cn } from "@/lib/utils"
+import {
+  MapPin,
+  Bed,
+  Bath,
+  Square,
+  Calendar,
+  ArrowLeft,
+  Sofa,
+  Building2,
+  CircleAlert,
+  Wallet,
+  Clock,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -12,12 +26,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
+
+const DESCRIPTION_COLLAPSE_THRESHOLD = 320
 
 export function ListingDetailClient({ listing }: { listing: PropertyWithRelations }) {
   const { t, language } = useLanguage()
   const L = propertyToListingDisplay(listing, language)
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false)
 
   const propertyTypeKey: Record<string, string> = {
     apartment: "heroSearch.typeFlat",
@@ -38,6 +56,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
     upcoming: "listings.statusUpcoming",
   }
   const availabilityLabel = L.availabilityStatus !== "available" ? availabilityKey[L.availabilityStatus] : null
+  const mainText = L.detailedDescription || L.description || t("listings.noDescription")
 
   return (
     <>
@@ -102,131 +121,65 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="space-y-8 lg:col-span-2">
-          <section>
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">{t("listings.descriptionTitle")}</h2>
-            <p className="whitespace-pre-line text-muted-foreground">
-              {L.detailedDescription || L.description || t("listings.noDescription")}
-            </p>
-          </section>
+        <div className="lg:col-span-2">
+          <Tabs defaultValue="description">
+            <TabsList>
+              <TabsTrigger value="description">{t("listings.descriptionTitle")}</TabsTrigger>
+              <TabsTrigger value="amenities">{t("listings.featuresTitle")}</TabsTrigger>
+            </TabsList>
 
-          <section>
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              {t("listings.propertyDetails")}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Square className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.totalSize")}</p>
-                  <p className="font-semibold text-foreground">{L.areaSqm} m²</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Bed className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    {L.sharedRoom ? t("listings.roomType") : t("listings.rooms")}
-                  </p>
-                  <p className="font-semibold text-foreground">
-                    {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Bath className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.bathrooms")}</p>
-                  <p className="font-semibold text-foreground">{L.bathrooms}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Calendar className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.availableFrom")}</p>
-                  <p className="font-semibold text-foreground">{L.availableFrom}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Building2 className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.propertyTypeLabel")}</p>
-                  <p className="font-semibold text-foreground">
-                    {t(propertyTypeKey[L.propertyType] ?? "heroSearch.typeFlat")}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                <Sofa className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("listings.furnishingLabel")}</p>
-                  <p className="font-semibold text-foreground">
-                    {t(furnishingKey[L.furnishing] ?? "listings.unfurnished")}
-                  </p>
-                </div>
-              </div>
-              {L.address && (
-                <div className="flex items-center gap-3 rounded-lg border border-border p-4 sm:col-span-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("listings.address")}</p>
-                    <p className="font-semibold text-foreground">{listing.address}</p>
-                  </div>
-                </div>
-              )}
-              {L.deposit && (
-                <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t("listings.deposit")}</p>
-                    <p className="font-semibold text-foreground">{L.deposit} €</p>
-                  </div>
-                </div>
-              )}
-              {L.minimumStay && (
-                <div className="flex items-center gap-3 rounded-lg border border-border p-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      {t("listings.minimumStay")}
-                    </p>
-                    <p className="font-semibold text-foreground">{L.minimumStay}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              {t("listings.featuresTitle")}
-            </h2>
-            {L.features.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {L.features.map((feature, index) => (
-                  <span
-                    key={index}
-                    className="rounded-md bg-primary/10 px-3 py-1.5 text-sm text-primary"
+            <TabsContent value="description" className="space-y-6 pt-6">
+              <div>
+                <p
+                  className={cn(
+                    "whitespace-pre-line text-muted-foreground",
+                    !descriptionExpanded && mainText.length > DESCRIPTION_COLLAPSE_THRESHOLD && "line-clamp-6"
+                  )}
+                >
+                  {mainText}
+                </p>
+                {mainText.length > DESCRIPTION_COLLAPSE_THRESHOLD && (
+                  <button
+                    type="button"
+                    onClick={() => setDescriptionExpanded((v) => !v)}
+                    className="mt-2 text-sm font-medium text-primary hover:underline"
                   >
-                    {feature}
-                  </span>
-                ))}
+                    {descriptionExpanded ? t("listings.showLess") : t("listings.showMore")}
+                  </button>
+                )}
               </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("listings.noFeatures")}</p>
-            )}
-          </section>
 
-          {L.additionalInfo && (
-            <section>
-              <h2 className="mb-4 text-2xl font-semibold text-foreground">
-                {t("listings.additionalInfoTitle")}
-              </h2>
-              <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
-            </section>
-          )}
+              {L.additionalInfo && (
+                <div className="border-t border-border pt-6">
+                  <h3 className="mb-3 text-lg font-semibold text-foreground">
+                    {t("listings.additionalInfoTitle")}
+                  </h3>
+                  <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="amenities" className="pt-6">
+              {L.features.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {L.features.map((feature, index) => (
+                    <span
+                      key={index}
+                      className="rounded-md bg-primary/10 px-3 py-1.5 text-sm text-primary"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("listings.noFeatures")}</p>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
 
         <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-24 space-y-4 rounded-lg border border-border bg-card p-6">
+          <div className="lg:sticky lg:top-24 space-y-5 rounded-lg border border-border bg-card p-6">
             <div className="text-center">
               <div className="mb-2 flex items-baseline justify-center gap-1">
                 <span className="text-4xl font-bold text-primary">{L.price}</span>
@@ -237,6 +190,60 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
             <Button className="w-full" size="lg" asChild>
               <Link href={`/angebote/${listing.slug}/anfrage`}>{t("listings.contactButton")}</Link>
             </Button>
+
+            <div className="space-y-3 border-t border-border pt-5">
+              <h3 className="text-sm font-semibold text-foreground">{t("listings.quickFactsTitle")}</h3>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <Square className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">{L.areaSqm} m²</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bed className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">
+                    {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bath className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">{L.bathrooms} {t("listings.bathrooms")}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">
+                    {t(propertyTypeKey[L.propertyType] ?? "heroSearch.typeFlat")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Sofa className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">
+                    {t(furnishingKey[L.furnishing] ?? "listings.unfurnished")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">{L.availableFrom}</span>
+                </div>
+                {L.deposit && (
+                  <div className="flex items-center gap-2">
+                    <Wallet className="h-4 w-4 shrink-0 text-primary" />
+                    <span className="text-muted-foreground">{L.deposit} € {t("listings.deposit")}</span>
+                  </div>
+                )}
+                {L.minimumStay && (
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 shrink-0 text-primary" />
+                    <span className="text-muted-foreground">{L.minimumStay}</span>
+                  </div>
+                )}
+                {L.address && (
+                  <div className="col-span-2 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 shrink-0 text-primary" />
+                    <span className="text-muted-foreground">{listing.address}</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

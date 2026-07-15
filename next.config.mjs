@@ -11,6 +11,15 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/for-students/accommodation",
+        destination: "/angebote",
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

@@ -25,7 +25,7 @@ export function ForStudentsOverview() {
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <Link href="/for-students/accommodation">{t("forStudentsPage.cardAccommodationCta")}</Link>
+              <Link href="/angebote">{t("forStudentsPage.cardAccommodationCta")}</Link>
             </Button>
           </CardContent>
         </Card>

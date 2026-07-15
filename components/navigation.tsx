@@ -74,6 +74,7 @@ export function Navigation() {
   }
 
   const navLinks = [
+    { href: "/for-students", labelKey: "nav.forStudents" as const },
     { href: "/angebote", labelKey: "nav.listings" as const },
     { href: "/for-landlords", labelKey: "nav.forLandlords" as const },
     { href: "/faq", labelKey: "nav.faq" as const },
@@ -83,7 +84,6 @@ export function Navigation() {
 
   return (
     <nav
-      data-site-header
       className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
@@ -107,21 +107,6 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-4 xl:gap-6">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                  {t("nav.forStudents")}
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem asChild>
-                  <Link href="/for-students">{t("nav.studentsOverview")}</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/for-students/accommodation">{t("nav.studentsAccommodation")}</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -179,20 +164,6 @@ export function Navigation() {
 
                 <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5">
                   <nav className="flex flex-col gap-1">
-                    <Link
-                      href="/for-students"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="rounded-lg px-3 py-2.5 text-base font-medium text-foreground transition-colors hover:bg-muted"
-                    >
-                      {t("nav.forStudents")}
-                    </Link>
-                    <Link
-                      href="/for-students/accommodation"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="ml-3 rounded-lg border-l-2 border-primary/25 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                    >
-                      {t("nav.studentsAccommodation")}
-                    </Link>
                     {navLinks.map((link) => (
                       <Link
                         key={link.href}

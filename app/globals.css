@@ -134,12 +134,19 @@
   body {
     @apply bg-background text-foreground;
   }
-  /* Radix (Sheet/Dialog/DropdownMenu) locks body scroll and compensates the
-     removed scrollbar via `margin-right` on <body> — but that has no effect
-     on `position: fixed` elements like the site header, which stay anchored
-     to the viewport edge. Nudge the header's right edge in by the same
-     amount so it doesn't shift when the scrollbar disappears. */
-  body[data-scroll-locked] [data-site-header] {
-    right: var(--removed-body-scroll-bar-size, 0px);
+  html {
+    /* Reserve the scrollbar gutter permanently so the viewport width never
+       changes whether the native scrollbar is showing or not. */
+    scrollbar-gutter: stable;
+  }
+  /* Radix (Sheet/Dialog/DropdownMenu) additionally compensates for the
+     "disappearing" scrollbar itself via `margin-right` on <body> — but with
+     scrollbar-gutter already reserving that space permanently, the scrollbar
+     never actually disappears from a layout perspective, so that extra
+     margin just adds a second, redundant shift on top. Neutralize it
+     (higher specificity than Radix's injected `body[data-scroll-locked]`
+     rule so this wins regardless of style-tag injection order). */
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
   }
 }

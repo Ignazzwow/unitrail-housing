@@ -199,6 +199,9 @@ export const translations = {
       statusSold: "Sold",
       statusUpcoming: "Upcoming",
       noFeatures: "No amenities listed for this property.",
+      showMore: "Show more",
+      showLess: "Show less",
+      quickFactsTitle: "Property facts",
     },
     nurembergWg: {
       title: "WG Apartments in Nuremberg",
@@ -675,6 +678,9 @@ export const translations = {
       statusSold: "Verkauft",
       statusUpcoming: "Demnächst",
       noFeatures: "Für dieses Objekt ist keine Ausstattung hinterlegt.",
+      showMore: "Mehr anzeigen",
+      showLess: "Weniger anzeigen",
+      quickFactsTitle: "Objekt-Fakten",
     },
     nurembergWg: {
       title: "WG-Apartments in Nürnberg",
