@@ -28,7 +28,11 @@ interface PropertyFormData {
   bathrooms?: number
   areaSqm?: number | string | null
   description?: string
+  descriptionEn?: string | null
   detailedDescription?: string | null
+  detailedDescriptionEn?: string | null
+  additionalInfo?: string | null
+  additionalInfoEn?: string | null
   propertyType?: string
   listingType?: string
   address?: string | null
@@ -74,7 +78,11 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         ? ""
         : property.areaSqm,
     description: property?.description ?? "",
+    descriptionEn: property?.descriptionEn ?? "",
     detailedDescription: property?.detailedDescription ?? "",
+    detailedDescriptionEn: property?.detailedDescriptionEn ?? "",
+    additionalInfo: property?.additionalInfo ?? "",
+    additionalInfoEn: property?.additionalInfoEn ?? "",
     propertyType: property?.propertyType ?? "apartment",
     listingType: property?.listingType ?? "rent",
     address: property?.address ?? "",
@@ -87,8 +95,8 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),
     images: property?.images?.map((i) => i.imageUrl).join("\n") ?? "",
     amenityIds: property?.propertyAmenities?.map((pa) => pa.amenity.id) ?? [] as string[],
-    notes: "",
   })
+  const [activeLang, setActiveLang] = useState<"de" | "en">("de")
 
   useEffect(() => {
     fetch("/api/amenities", { credentials: "include" })
@@ -181,6 +189,30 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
   return (
     <form onSubmit={handleSubmit} onKeyDown={preventEnterSubmit}>
+      <div className="mb-4 flex items-center gap-3 rounded-md border border-border bg-muted/50 px-3 py-2">
+        <span className="text-sm font-medium text-muted-foreground">Text language:</span>
+        <div className="inline-flex rounded-md border border-border bg-background p-0.5">
+          <button
+            type="button"
+            onClick={() => setActiveLang("de")}
+            className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
+              activeLang === "de" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Deutsch
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLang("en")}
+            className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
+              activeLang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            English
+          </button>
+        </div>
+        <span className="text-xs text-muted-foreground">Applies to Description, Detailed Description, and Additional Info below.</span>
+      </div>
       <Tabs defaultValue="basic" className="space-y-6">
         <TabsList>
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
@@ -231,8 +263,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea value={form.description} onChange={(e) => update("description", e.target.value)} rows={4} />
+                <Label>Description {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.description : form.descriptionEn}
+                  onChange={(e) => update(activeLang === "de" ? "description" : "descriptionEn", e.target.value)}
+                  rows={4}
+                />
               </div>
               <div className="space-y-2">
                 <Label>City</Label>
@@ -338,8 +374,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 <Input type="date" value={form.availableFrom} onChange={(e) => update("availableFrom", e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label>Additional Notes</Label>
-                <Textarea value={form.notes} onChange={(e) => update("notes", e.target.value)} rows={3} />
+                <Label>Additional Info {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.additionalInfo : form.additionalInfoEn}
+                  onChange={(e) => update(activeLang === "de" ? "additionalInfo" : "additionalInfoEn", e.target.value)}
+                  rows={3}
+                />
               </div>
             </CardContent>
           </Card>
@@ -432,8 +472,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 <Input value={form.slug} onChange={(e) => update("slug", e.target.value)} placeholder="auto-generated from title" />
               </div>
               <div className="space-y-2">
-                <Label>Detailed Description</Label>
-                <Textarea value={form.detailedDescription} onChange={(e) => update("detailedDescription", e.target.value)} rows={6} />
+                <Label>Detailed Description {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.detailedDescription : form.detailedDescriptionEn}
+                  onChange={(e) => update(activeLang === "de" ? "detailedDescription" : "detailedDescriptionEn", e.target.value)}
+                  rows={6}
+                />
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="isFeatured" checked={form.isFeatured} onCheckedChange={(c) => update("isFeatured", Boolean(c))} />

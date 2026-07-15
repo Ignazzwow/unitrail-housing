@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import { MapPin, Bed, Bath, Square, Calendar, ArrowLeft } from "lucide-react"
+import { MapPin, Bed, Bath, Square, Calendar, ArrowLeft, Sofa, Building2, Info, CircleAlert } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -16,8 +16,28 @@ import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
 
 export function ListingDetailClient({ listing }: { listing: PropertyWithRelations }) {
-  const { t } = useLanguage()
-  const L = propertyToListingDisplay(listing)
+  const { t, language } = useLanguage()
+  const L = propertyToListingDisplay(listing, language)
+
+  const propertyTypeKey: Record<string, string> = {
+    apartment: "heroSearch.typeFlat",
+    house: "heroSearch.typeHouse",
+    studio: "heroSearch.typeStudioApartment",
+    pg: "heroSearch.typePg",
+    student_housing: "heroSearch.typeWgFlats",
+  }
+  const furnishingKey: Record<string, string> = {
+    furnished: "listings.furnished",
+    semi: "listings.semiFurnished",
+    unfurnished: "listings.unfurnished",
+  }
+  const availabilityKey: Record<string, string> = {
+    reserved: "listings.statusReserved",
+    rented: "listings.statusRented",
+    sold: "listings.statusSold",
+    upcoming: "listings.statusUpcoming",
+  }
+  const availabilityLabel = L.availabilityStatus !== "available" ? availabilityKey[L.availabilityStatus] : null
 
   return (
     <>
@@ -29,6 +49,12 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
       </Link>
 
       <div className="mb-8">
+        {availabilityLabel && (
+          <div className="mb-3 inline-flex items-center gap-1.5 rounded-md bg-destructive/10 px-2.5 py-1 text-sm font-medium text-destructive">
+            <CircleAlert className="h-4 w-4" />
+            {t(availabilityLabel)}
+          </div>
+        )}
         <h1 className="mb-4 break-words text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
           {L.title}
         </h1>
@@ -121,6 +147,24 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                   <p className="font-semibold text-foreground">{L.availableFrom}</p>
                 </div>
               </div>
+              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
+                <Building2 className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("listings.propertyTypeLabel")}</p>
+                  <p className="font-semibold text-foreground">
+                    {t(propertyTypeKey[L.propertyType] ?? "heroSearch.typeFlat")}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border border-border p-4">
+                <Sofa className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("listings.furnishingLabel")}</p>
+                  <p className="font-semibold text-foreground">
+                    {t(furnishingKey[L.furnishing] ?? "listings.unfurnished")}
+                  </p>
+                </div>
+              </div>
               {L.address && (
                 <div className="flex items-center gap-3 rounded-lg border border-border p-4 sm:col-span-2">
                   <MapPin className="h-5 w-5 text-primary" />
@@ -155,17 +199,30 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
               {t("listings.featuresTitle")}
             </h2>
-            <div className="flex flex-wrap gap-2">
-              {L.features.map((feature, index) => (
-                <span
-                  key={index}
-                  className="rounded-md bg-primary/10 px-3 py-1.5 text-sm text-primary"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
+            {L.features.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {L.features.map((feature, index) => (
+                  <span
+                    key={index}
+                    className="rounded-md bg-primary/10 px-3 py-1.5 text-sm text-primary"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t("listings.noFeatures")}</p>
+            )}
           </section>
+
+          {L.additionalInfo && (
+            <section>
+              <h2 className="mb-4 text-2xl font-semibold text-foreground">
+                {t("listings.additionalInfoTitle")}
+              </h2>
+              <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
+            </section>
+          )}
         </div>
 
         <div className="lg:col-span-1">

@@ -17,7 +17,7 @@ import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
 
 export function AngeboteListClient({ listings, hideHeader }: { listings: PropertyWithRelations[]; hideHeader?: boolean }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   return (
     <>
@@ -33,7 +33,7 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
       )}
       <div className="grid gap-8 md:grid-cols-2">
         {listings.map((listing) => {
-          const L = propertyToListingDisplay(listing)
+          const L = propertyToListingDisplay(listing, language)
           return (
           <Card key={listing.id} className="overflow-hidden border-border bg-card transition-shadow hover:shadow-lg">
             <div className="relative h-48 w-full overflow-hidden">
@@ -112,16 +112,18 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
                   <span className="text-sm text-muted-foreground">{L.availableFrom}</span>
                 </div>
               </div>
-              <div className="border-t border-border pt-4">
-                <h4 className="mb-2 text-sm font-semibold text-foreground">{t("listings.featuresTitle")}</h4>
-                <ul className="flex flex-wrap gap-2">
-                  {L.features.map((feature, index) => (
-                    <li key={index} className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {L.features.length > 0 && (
+                <div className="border-t border-border pt-4">
+                  <h4 className="mb-2 text-sm font-semibold text-foreground">{t("listings.featuresTitle")}</h4>
+                  <ul className="flex flex-wrap gap-2">
+                    {L.features.map((feature, index) => (
+                      <li key={index} className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="space-y-2">
                 <Button className="w-full" variant="outline" asChild>
                   <Link href={`/angebote/${listing.slug}`}>{t("listings.viewButton")}</Link>
