@@ -195,13 +195,17 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                   <div className="flex items-center gap-3 rounded-lg border border-border p-4">
                     <MapPin className="h-5 w-5 shrink-0 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">{t("listings.address")}</p>
+                      <p className="text-sm text-muted-foreground">{t("listings.streetLabel")}</p>
                       <p className="font-semibold text-foreground">{listing.address}</p>
                     </div>
                   </div>
-                ) : (
+                ) : null}
+                {L.locationInfo ? (
+                  <p className="whitespace-pre-line text-muted-foreground">{L.locationInfo}</p>
+                ) : null}
+                {!L.address && !L.locationInfo ? (
                   <p className="text-sm text-muted-foreground">{t("listings.noLocationDetails")}</p>
-                )}
+                ) : null}
               </div>
             </TabsContent>
 

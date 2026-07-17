@@ -32,6 +32,8 @@ model Property {
   detailedDescriptionEn String? @map("detailed_description_en")
   additionalInfo     String?  @map("additional_info") // primary/German text
   additionalInfoEn   String?  @map("additional_info_en")
+  locationInfo       String?  @map("location_info") // free-text location description (DE)
+  locationInfoEn     String?  @map("location_info_en")
   propertyType       String   @default("apartment") // apartment, house, studio, pg, student_housing
   listingType        String   @default("rent") // rent, sale, pg, student_housing
   price              Float

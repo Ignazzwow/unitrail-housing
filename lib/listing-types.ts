@@ -47,6 +47,7 @@ export function propertyToListingDisplay(p: PropertyWithRelations, language: "de
     description: pickLang(p.description, p.descriptionEn, language),
     detailedDescription: pickLang(p.detailedDescription ?? "", p.detailedDescriptionEn, language) || undefined,
     additionalInfo: pickLang(p.additionalInfo ?? "", p.additionalInfoEn, language) || undefined,
+    locationInfo: pickLang(p.locationInfo ?? "", p.locationInfoEn, language) || undefined,
     address: p.address ?? undefined,
     deposit: p.deposit ?? undefined,
     minimumStay: p.minimumStay ?? undefined,

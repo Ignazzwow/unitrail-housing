@@ -24,6 +24,8 @@ export function toPropertyFormData(property: PropertyWithRelations) {
     detailedDescriptionEn: property.detailedDescriptionEn,
     additionalInfo: property.additionalInfo,
     additionalInfoEn: property.additionalInfoEn,
+    locationInfo: property.locationInfo,
+    locationInfoEn: property.locationInfoEn,
     propertyType: property.propertyType,
     listingType: property.listingType,
     address: property.address,
@@ -36,7 +38,7 @@ export function toPropertyFormData(property: PropertyWithRelations) {
     availableFrom: property.availableFrom,
     images: property.images.map((i) => ({ imageUrl: i.imageUrl })),
     propertyAmenities: property.propertyAmenities.map((pa) => ({
-      amenity: { id: pa.amenity.id },
+      amenity: { id: pa.amenity.id, name: pa.amenity.name },
     })),
   }
 }

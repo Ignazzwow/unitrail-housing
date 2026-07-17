@@ -34,6 +34,8 @@ interface PropertyFormData {
   detailedDescriptionEn?: string | null
   additionalInfo?: string | null
   additionalInfoEn?: string | null
+  locationInfo?: string | null
+  locationInfoEn?: string | null
   propertyType?: string
   listingType?: string
   address?: string | null
@@ -53,6 +55,149 @@ interface PropertyFormTabsProps {
   mode: "create" | "edit"
 }
 
+const LABELS = {
+  de: {
+    textLanguage: "Textsprache:",
+    textLanguageHint: "Gilt für Beschreibung, Lage-Text und Weitere Informationen.",
+    tabBasic: "Basisinfo",
+    tabDescription: "Beschreibung",
+    tabLocation: "Lage",
+    tabAmenities: "Ausstattung",
+    tabAdditional: "Weitere Informationen",
+    tabPricing: "Preis & Details",
+    tabPhotos: "Fotos",
+    tabExtra: "Extra / SEO",
+    title: "Titel",
+    listingType: "Angebotsart",
+    propertyType: "Objekttyp",
+    rent: "Miete",
+    sale: "Kauf",
+    pg: "WG / PG",
+    studentHousing: "Studentenwohnen",
+    apartment: "Wohnung",
+    house: "Haus",
+    studio: "Studio",
+    bedrooms: "Schlafzimmer",
+    bathrooms: "Badezimmer",
+    area: "Fläche (m²)",
+    roomOccupancy: "Zimmerbelegung",
+    singleRoom: "Einzelzimmer (1 Person)",
+    shared2: "Geteiltes Zimmer (2 Personen)",
+    shared3: "Geteiltes Zimmer (3 Personen)",
+    roomOccupancyHint: "Wird auf der Website mit 1–3 Personen-Symbolen angezeigt.",
+    availabilityStatus: "Verfügbarkeitsstatus",
+    available: "Verfügbar",
+    reserved: "Reserviert",
+    rented: "Vermietet",
+    sold: "Verkauft",
+    upcoming: "Demnächst",
+    availableFrom: "Verfügbar ab",
+    visible: "Sichtbar (live auf der Website)",
+    description: "Beschreibung",
+    city: "Stadt / Viertel",
+    street: "Straße",
+    locationText: "Lage-Beschreibung",
+    locationTextHint: "Freitext zur Lage (z. B. Entfernung zur Uni, ÖPNV, Umgebung).",
+    cityPlaceholder: "z. B. Nürnberg",
+    streetPlaceholder: "z. B. Holzschuherstraße 12",
+    amenities: "Ausstattung (Freitext)",
+    amenitiesPlaceholder: "z. B.\nWLAN\nWaschmaschine\nGeschirrspüler\nBalkon",
+    amenitiesHint: "Ein Eintrag pro Zeile (oder mit Komma getrennt). Wird unter Ausstattung angezeigt.",
+    additionalInfo: "Weitere Informationen",
+    price: "Preis",
+    currency: "Währung",
+    deposit: "Kaution (optional)",
+    furnishing: "Möblierung",
+    furnished: "Möbliert",
+    semi: "Teilmöbliert",
+    unfurnished: "Unmöbliert",
+    minimumStay: "Mindestmietdauer",
+    minimumStayPlaceholder: "z. B. 6 Monate",
+    photosHint: "Bilder vom Gerät hochladen. Erstes Bild = Titelbild.",
+    uploading: "Wird hochgeladen…",
+    uploadPrompt: "Klicken zum Hochladen oder Dateien hierher ziehen",
+    uploadFormats: "JPEG, PNG, WebP oder GIF · max. 5 MB pro Bild · wird automatisch optimiert",
+    cover: "Titelbild",
+    slug: "Slug (URL)",
+    slugPlaceholder: "wird automatisch aus dem Titel erzeugt",
+    featured: "Hervorgehobenes Objekt",
+    saving: "Speichern…",
+    save: "Speichern",
+    cancel: "Abbrechen",
+    saveFailed: "Speichern fehlgeschlagen",
+  },
+  en: {
+    textLanguage: "Text language:",
+    textLanguageHint: "Applies to Description, Location text, and Additional information.",
+    tabBasic: "Basic Info",
+    tabDescription: "Description",
+    tabLocation: "Location",
+    tabAmenities: "Amenities",
+    tabAdditional: "Additional information",
+    tabPricing: "Pricing & Details",
+    tabPhotos: "Photos",
+    tabExtra: "Extra / SEO",
+    title: "Title",
+    listingType: "Listing type",
+    propertyType: "Property type",
+    rent: "Rent",
+    sale: "Sale",
+    pg: "PG",
+    studentHousing: "Student housing",
+    apartment: "Apartment",
+    house: "House",
+    studio: "Studio",
+    bedrooms: "Bedrooms",
+    bathrooms: "Bathrooms",
+    area: "Area (m²)",
+    roomOccupancy: "Room occupancy",
+    singleRoom: "Single room (1 person)",
+    shared2: "Shared room (2 people)",
+    shared3: "Shared room (3 people)",
+    roomOccupancyHint: "Shown on the website with 1–3 person icons.",
+    availabilityStatus: "Availability status",
+    available: "Available",
+    reserved: "Reserved",
+    rented: "Rented",
+    sold: "Sold",
+    upcoming: "Upcoming",
+    availableFrom: "Available from",
+    visible: "Visible (live on the website)",
+    description: "Description",
+    city: "City / Area",
+    street: "Street",
+    locationText: "Location description",
+    locationTextHint: "Free text about the location (e.g. distance to uni, transit, surroundings).",
+    cityPlaceholder: "e.g. Nuremberg",
+    streetPlaceholder: "e.g. Holzschuherstraße 12",
+    amenities: "Amenities (free text)",
+    amenitiesPlaceholder: "e.g.\nWi-Fi\nWashing machine\nDishwasher\nBalcony",
+    amenitiesHint: "One entry per line (or comma-separated). Shown under Amenities.",
+    additionalInfo: "Additional information",
+    price: "Price",
+    currency: "Currency",
+    deposit: "Deposit (optional)",
+    furnishing: "Furnishing",
+    furnished: "Furnished",
+    semi: "Semi-furnished",
+    unfurnished: "Unfurnished",
+    minimumStay: "Minimum stay",
+    minimumStayPlaceholder: "e.g. 6 months",
+    photosHint: "Upload images from your device. First image = cover photo.",
+    uploading: "Uploading…",
+    uploadPrompt: "Click to upload or drag and drop",
+    uploadFormats: "JPEG, PNG, WebP, or GIF · max. 5 MB per image · automatically optimized",
+    cover: "Cover",
+    slug: "Slug (URL)",
+    slugPlaceholder: "auto-generated from title",
+    featured: "Featured property",
+    saving: "Saving…",
+    save: "Save",
+    cancel: "Cancel",
+    saveFailed: "Failed to save",
+  },
+} as const
+
 function todayLocalISODate() {
   const d = new Date()
   const mm = String(d.getMonth() + 1).padStart(2, "0")
@@ -60,11 +205,21 @@ function todayLocalISODate() {
   return `${d.getFullYear()}-${mm}-${dd}`
 }
 
+function pickDescription(property?: PropertyFormData | null, lang: "de" | "en") {
+  if (lang === "en") {
+    return property?.detailedDescriptionEn || property?.descriptionEn || ""
+  }
+  return property?.detailedDescription || property?.description || ""
+}
+
 export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [activeLang, setActiveLang] = useState<"de" | "en">("de")
+  const L = LABELS[activeLang]
+
   const [form, setForm] = useState({
     title: property?.title ?? "",
     slug: property?.slug ?? "",
@@ -78,12 +233,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
       property?.areaSqm === null || property?.areaSqm === undefined
         ? ""
         : property.areaSqm,
-    description: property?.description ?? "",
-    descriptionEn: property?.descriptionEn ?? "",
-    detailedDescription: property?.detailedDescription ?? "",
-    detailedDescriptionEn: property?.detailedDescriptionEn ?? "",
+    description: pickDescription(property, "de"),
+    descriptionEn: pickDescription(property, "en"),
     additionalInfo: property?.additionalInfo ?? "",
     additionalInfoEn: property?.additionalInfoEn ?? "",
+    locationInfo: property?.locationInfo ?? "",
+    locationInfoEn: property?.locationInfoEn ?? "",
     propertyType: property?.propertyType ?? "apartment",
     listingType: property?.listingType ?? "rent",
     address: property?.address ?? "",
@@ -101,7 +256,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         .filter((n): n is string => Boolean(n?.trim()))
         .join("\n") ?? "",
   })
-  const [activeLang, setActiveLang] = useState<"de" | "en">("de")
 
   const update = (key: string, value: string | number | boolean | string[]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -124,7 +278,9 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         const data = await res.json()
         if (data?.url) newUrls.push(data.url)
         else if (data?.error) alert(data.error)
-      } catch { /* skip failed uploads */ }
+      } catch {
+        /* skip failed uploads */
+      }
     }
     update("images", [...existing, ...newUrls].join("\n"))
     setUploading(false)
@@ -142,7 +298,17 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         bathrooms: Number(form.bathrooms) || 0,
         roomOccupants: Math.min(3, Math.max(1, Number(form.roomOccupants) || 1)),
         areaSqm: form.areaSqm ? parseFloat(String(form.areaSqm)) : null,
-        images: form.images.split("\n").map((s) => s.trim()).filter(Boolean),
+        // Keep short + detailed description in sync (single field in UI)
+        description: form.description,
+        detailedDescription: form.description,
+        descriptionEn: form.descriptionEn,
+        detailedDescriptionEn: form.descriptionEn,
+        locationInfo: form.locationInfo,
+        locationInfoEn: form.locationInfoEn,
+        images: form.images
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
         amenitiesText: form.amenitiesText,
       }
       const url = mode === "create" ? "/api/admin/properties" : `/api/admin/properties/${property?.id}`
@@ -158,10 +324,10 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         router.refresh()
       } else {
         const err = await res.json()
-        alert(err.error ?? "Failed to save")
+        alert(err.error ?? L.saveFailed)
       }
     } catch {
-      alert("Failed to save")
+      alert(L.saveFailed)
     } finally {
       setLoading(false)
     }
@@ -175,8 +341,8 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
   return (
     <form onSubmit={handleSubmit} onKeyDown={preventEnterSubmit}>
-      <div className="mb-4 flex items-center gap-3 rounded-md border border-border bg-muted/50 px-3 py-2">
-        <span className="text-sm font-medium text-muted-foreground">Text language:</span>
+      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-md border border-border bg-muted/50 px-3 py-2">
+        <span className="text-sm font-medium text-muted-foreground">{L.textLanguage}</span>
         <div className="inline-flex rounded-md border border-border bg-background p-0.5">
           <button
             type="button"
@@ -197,116 +363,122 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
             English
           </button>
         </div>
-        <span className="text-xs text-muted-foreground">Applies to Beschreibung and Weitere Informationen tabs below.</span>
+        <span className="text-xs text-muted-foreground">{L.textLanguageHint}</span>
       </div>
+
       <Tabs defaultValue="basic" className="space-y-6">
-        <TabsList className="h-auto flex-wrap">
-          <TabsTrigger value="basic">Basic Info</TabsTrigger>
-          <TabsTrigger value="description">Beschreibung</TabsTrigger>
-          <TabsTrigger value="location">Lage</TabsTrigger>
-          <TabsTrigger value="amenities">Ausstattung</TabsTrigger>
-          <TabsTrigger value="additional">Weitere Informationen</TabsTrigger>
-          <TabsTrigger value="pricing">Pricing & Details</TabsTrigger>
-          <TabsTrigger value="photos">Photos</TabsTrigger>
-          <TabsTrigger value="extra">Extra / SEO</TabsTrigger>
+        <TabsList className="flex h-auto flex-wrap">
+          <TabsTrigger value="basic">{L.tabBasic}</TabsTrigger>
+          <TabsTrigger value="description">{L.tabDescription}</TabsTrigger>
+          <TabsTrigger value="location">{L.tabLocation}</TabsTrigger>
+          <TabsTrigger value="amenities">{L.tabAmenities}</TabsTrigger>
+          <TabsTrigger value="additional">{L.tabAdditional}</TabsTrigger>
+          <TabsTrigger value="pricing">{L.tabPricing}</TabsTrigger>
+          <TabsTrigger value="photos">{L.tabPhotos}</TabsTrigger>
+          <TabsTrigger value="extra">{L.tabExtra}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="basic">
           <Card>
             <CardHeader>
-              <CardTitle>Basic Info</CardTitle>
+              <CardTitle>{L.tabBasic}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Title</Label>
+                <Label>{L.title}</Label>
                 <Input value={form.title} onChange={(e) => update("title", e.target.value)} required />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Listing Type</Label>
+                  <Label>{L.listingType}</Label>
                   <Select value={form.listingType} onValueChange={(v) => update("listingType", v)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rent">Rent</SelectItem>
-                      <SelectItem value="sale">Sale</SelectItem>
-                      <SelectItem value="pg">PG</SelectItem>
-                      <SelectItem value="student_housing">Student Housing</SelectItem>
+                      <SelectItem value="rent">{L.rent}</SelectItem>
+                      <SelectItem value="sale">{L.sale}</SelectItem>
+                      <SelectItem value="pg">{L.pg}</SelectItem>
+                      <SelectItem value="student_housing">{L.studentHousing}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Property Type</Label>
+                  <Label>{L.propertyType}</Label>
                   <Select value={form.propertyType} onValueChange={(v) => update("propertyType", v)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="house">House</SelectItem>
-                      <SelectItem value="studio">Studio</SelectItem>
-                      <SelectItem value="pg">PG</SelectItem>
-                      <SelectItem value="student_housing">Student Housing</SelectItem>
+                      <SelectItem value="apartment">{L.apartment}</SelectItem>
+                      <SelectItem value="house">{L.house}</SelectItem>
+                      <SelectItem value="studio">{L.studio}</SelectItem>
+                      <SelectItem value="pg">{L.pg}</SelectItem>
+                      <SelectItem value="student_housing">{L.studentHousing}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label>Bedrooms</Label>
-                  <Input type="number" min={0} value={form.bedrooms || ""} onChange={(e) => update("bedrooms", e.target.value ? Number(e.target.value) : 0)} />
+                  <Label>{L.bedrooms}</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={form.bedrooms || ""}
+                    onChange={(e) => update("bedrooms", e.target.value ? Number(e.target.value) : 0)}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label>Bathrooms</Label>
-                  <Input type="number" min={0} value={form.bathrooms || ""} onChange={(e) => update("bathrooms", e.target.value ? Number(e.target.value) : 0)} />
+                  <Label>{L.bathrooms}</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={form.bathrooms || ""}
+                    onChange={(e) => update("bathrooms", e.target.value ? Number(e.target.value) : 0)}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label>Area (m²)</Label>
+                  <Label>{L.area}</Label>
                   <Input type="number" step="0.01" value={form.areaSqm} onChange={(e) => update("areaSqm", e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Zimmerbelegung</Label>
-                <Select
-                  value={String(form.roomOccupants || 1)}
-                  onValueChange={(v) => update("roomOccupants", Number(v))}
-                >
+                <Label>{L.roomOccupancy}</Label>
+                <Select value={String(form.roomOccupants || 1)} onValueChange={(v) => update("roomOccupants", Number(v))}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Einzelzimmer (1 Person)</SelectItem>
-                    <SelectItem value="2">Geteiltes Zimmer (2 Personen)</SelectItem>
-                    <SelectItem value="3">Geteiltes Zimmer (3 Personen)</SelectItem>
+                    <SelectItem value="1">{L.singleRoom}</SelectItem>
+                    <SelectItem value="2">{L.shared2}</SelectItem>
+                    <SelectItem value="3">{L.shared3}</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">
-                  Wird auf der Website mit 1–3 Personen-Symbolen angezeigt.
-                </p>
+                <p className="text-xs text-muted-foreground">{L.roomOccupancyHint}</p>
               </div>
               <div className="space-y-2">
-                <Label>Availability Status</Label>
+                <Label>{L.availabilityStatus}</Label>
                 <Select value={form.availabilityStatus} onValueChange={(v) => update("availabilityStatus", v)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="available">Available</SelectItem>
-                    <SelectItem value="reserved">Reserved</SelectItem>
-                    <SelectItem value="rented">Rented</SelectItem>
-                    <SelectItem value="sold">Sold</SelectItem>
-                    <SelectItem value="upcoming">Upcoming</SelectItem>
+                    <SelectItem value="available">{L.available}</SelectItem>
+                    <SelectItem value="reserved">{L.reserved}</SelectItem>
+                    <SelectItem value="rented">{L.rented}</SelectItem>
+                    <SelectItem value="sold">{L.sold}</SelectItem>
+                    <SelectItem value="upcoming">{L.upcoming}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Available From</Label>
+                <Label>{L.availableFrom}</Label>
                 <Input type="date" value={form.availableFrom} onChange={(e) => update("availableFrom", e.target.value)} />
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="isActive" checked={form.isActive} onCheckedChange={(c) => update("isActive", Boolean(c))} />
-                <Label htmlFor="isActive">Sichtbar (live auf der Website)</Label>
+                <Label htmlFor="isActive">{L.visible}</Label>
               </div>
             </CardContent>
           </Card>
@@ -315,25 +487,15 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="description">
           <Card>
             <CardHeader>
-              <CardTitle>Beschreibung</CardTitle>
+              <CardTitle>{L.tabDescription}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Short Description {activeLang === "en" && "(English)"}</Label>
+                <Label>{L.description}</Label>
                 <Textarea
                   value={activeLang === "de" ? form.description : form.descriptionEn}
                   onChange={(e) => update(activeLang === "de" ? "description" : "descriptionEn", e.target.value)}
-                  rows={4}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Detailed Description {activeLang === "en" && "(English)"}</Label>
-                <Textarea
-                  value={activeLang === "de" ? form.detailedDescription : form.detailedDescriptionEn}
-                  onChange={(e) =>
-                    update(activeLang === "de" ? "detailedDescription" : "detailedDescriptionEn", e.target.value)
-                  }
-                  rows={8}
+                  rows={10}
                 />
               </div>
             </CardContent>
@@ -343,16 +505,25 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="location">
           <Card>
             <CardHeader>
-              <CardTitle>Lage</CardTitle>
+              <CardTitle>{L.tabLocation}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>City / Area</Label>
-                <Input value={form.city} onChange={(e) => update("city", e.target.value)} placeholder="e.g. Nürnberg" />
+                <Label>{L.city}</Label>
+                <Input value={form.city} onChange={(e) => update("city", e.target.value)} placeholder={L.cityPlaceholder} />
               </div>
               <div className="space-y-2">
-                <Label>Full Address</Label>
-                <Input value={form.address} onChange={(e) => update("address", e.target.value)} placeholder="e.g. Holzschuherstraße 12" />
+                <Label>{L.street}</Label>
+                <Input value={form.address} onChange={(e) => update("address", e.target.value)} placeholder={L.streetPlaceholder} />
+              </div>
+              <div className="space-y-2">
+                <Label>{L.locationText}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.locationInfo : form.locationInfoEn}
+                  onChange={(e) => update(activeLang === "de" ? "locationInfo" : "locationInfoEn", e.target.value)}
+                  rows={6}
+                />
+                <p className="text-xs text-muted-foreground">{L.locationTextHint}</p>
               </div>
             </CardContent>
           </Card>
@@ -361,20 +532,18 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="amenities">
           <Card>
             <CardHeader>
-              <CardTitle>Ausstattung</CardTitle>
+              <CardTitle>{L.tabAmenities}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Ausstattung (Freitext)</Label>
+                <Label>{L.amenities}</Label>
                 <Textarea
                   value={form.amenitiesText}
                   onChange={(e) => update("amenitiesText", e.target.value)}
                   rows={8}
-                  placeholder={"z. B.\nWLAN\nWaschmaschine\nGeschirrspüler\nBalkon"}
+                  placeholder={L.amenitiesPlaceholder}
                 />
-                <p className="text-xs text-muted-foreground">
-                  Ein Eintrag pro Zeile (oder mit Komma getrennt). Wird auf der Objektseite unter Ausstattung angezeigt.
-                </p>
+                <p className="text-xs text-muted-foreground">{L.amenitiesHint}</p>
               </div>
             </CardContent>
           </Card>
@@ -383,11 +552,11 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="additional">
           <Card>
             <CardHeader>
-              <CardTitle>Weitere Informationen</CardTitle>
+              <CardTitle>{L.tabAdditional}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Additional Info {activeLang === "en" && "(English)"}</Label>
+                <Label>{L.additionalInfo}</Label>
                 <Textarea
                   value={activeLang === "de" ? form.additionalInfo : form.additionalInfoEn}
                   onChange={(e) => update(activeLang === "de" ? "additionalInfo" : "additionalInfoEn", e.target.value)}
@@ -401,40 +570,50 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="pricing">
           <Card>
             <CardHeader>
-              <CardTitle>Pricing & Details</CardTitle>
+              <CardTitle>{L.tabPricing}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Price</Label>
+                  <Label>{L.price}</Label>
                   <Input type="number" step="0.01" value={form.price} onChange={(e) => update("price", e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label>Currency</Label>
+                  <Label>{L.currency}</Label>
                   <Select value="EUR" disabled>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent><SelectItem value="EUR">EUR</SelectItem></SelectContent>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="EUR">EUR</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Deposit (optional)</Label>
+                <Label>{L.deposit}</Label>
                 <Input value={form.deposit} onChange={(e) => update("deposit", e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label>Furnishing</Label>
+                <Label>{L.furnishing}</Label>
                 <Select value={form.furnishing} onValueChange={(v) => update("furnishing", v)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="furnished">Furnished</SelectItem>
-                    <SelectItem value="semi">Semi</SelectItem>
-                    <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                    <SelectItem value="furnished">{L.furnished}</SelectItem>
+                    <SelectItem value="semi">{L.semi}</SelectItem>
+                    <SelectItem value="unfurnished">{L.unfurnished}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Minimum Stay</Label>
-                <Input value={form.minimumStay} onChange={(e) => update("minimumStay", e.target.value)} placeholder="e.g. 6 months" />
+                <Label>{L.minimumStay}</Label>
+                <Input
+                  value={form.minimumStay}
+                  onChange={(e) => update("minimumStay", e.target.value)}
+                  placeholder={L.minimumStayPlaceholder}
+                />
               </div>
             </CardContent>
           </Card>
@@ -443,13 +622,15 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="photos">
           <Card>
             <CardHeader>
-              <CardTitle>Photos</CardTitle>
-              <p className="text-sm text-muted-foreground">Upload images from your device. First image = cover photo.</p>
+              <CardTitle>{L.tabPhotos}</CardTitle>
+              <p className="text-sm text-muted-foreground">{L.photosHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <label
-                className={`flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-12 transition-colors cursor-pointer ${
-                  isDragging ? "border-primary bg-muted" : "border-muted-foreground/25 bg-muted/50 hover:border-primary/50 hover:bg-muted"
+                className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-12 transition-colors ${
+                  isDragging
+                    ? "border-primary bg-muted"
+                    : "border-muted-foreground/25 bg-muted/50 hover:border-primary/50 hover:bg-muted"
                 }`}
                 onDragOver={(e) => {
                   e.preventDefault()
@@ -478,38 +659,37 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   }}
                 />
                 <Upload className="h-10 w-10 text-muted-foreground" />
-                <span className="text-muted-foreground">
-                  {uploading ? "Uploading..." : "Click to upload or drag and drop"}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  JPEG, PNG, WebP, or GIF · max. 5 MB per image · automatically optimized
-                </span>
+                <span className="text-muted-foreground">{uploading ? L.uploading : L.uploadPrompt}</span>
+                <span className="text-xs text-muted-foreground">{L.uploadFormats}</span>
               </label>
               {form.images && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {form.images.split("\n").filter(Boolean).map((url, i) => (
-                    <div key={url} className="relative group aspect-square rounded-lg overflow-hidden bg-muted border">
-                      <img src={url} alt="" className="w-full h-full object-cover" />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-1 right-1 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => {
-                          const urls = form.images.split("\n").filter(Boolean)
-                          urls.splice(i, 1)
-                          update("images", urls.join("\n"))
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      {i === 0 && (
-                        <span className="absolute bottom-1 left-1 text-xs bg-primary text-primary-foreground px-1.5 rounded">
-                          Cover
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                  {form.images
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((url, i) => (
+                      <div key={url} className="group relative aspect-square overflow-hidden rounded-lg border bg-muted">
+                        <img src={url} alt="" className="h-full w-full object-cover" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute right-1 top-1 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                          onClick={() => {
+                            const urls = form.images.split("\n").filter(Boolean)
+                            urls.splice(i, 1)
+                            update("images", urls.join("\n"))
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                        {i === 0 && (
+                          <span className="absolute bottom-1 left-1 rounded bg-primary px-1.5 text-xs text-primary-foreground">
+                            {L.cover}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                 </div>
               )}
             </CardContent>
@@ -519,16 +699,20 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         <TabsContent value="extra">
           <Card>
             <CardHeader>
-              <CardTitle>Extra / SEO</CardTitle>
+              <CardTitle>{L.tabExtra}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Slug (URL)</Label>
-                <Input value={form.slug} onChange={(e) => update("slug", e.target.value)} placeholder="auto-generated from title" />
+                <Label>{L.slug}</Label>
+                <Input value={form.slug} onChange={(e) => update("slug", e.target.value)} placeholder={L.slugPlaceholder} />
               </div>
               <div className="flex items-center gap-2">
-                <Checkbox id="isFeatured" checked={form.isFeatured} onCheckedChange={(c) => update("isFeatured", Boolean(c))} />
-                <Label htmlFor="isFeatured">Featured Property</Label>
+                <Checkbox
+                  id="isFeatured"
+                  checked={form.isFeatured}
+                  onCheckedChange={(c) => update("isFeatured", Boolean(c))}
+                />
+                <Label htmlFor="isFeatured">{L.featured}</Label>
               </div>
             </CardContent>
           </Card>
@@ -537,10 +721,10 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
       <div className="mt-6 flex gap-4">
         <Button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Save"}
+          {loading ? L.saving : L.save}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.push("/admin/properties")}>
-          Cancel
+          {L.cancel}
         </Button>
       </div>
     </form>

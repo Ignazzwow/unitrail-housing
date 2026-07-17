@@ -52,6 +52,8 @@ export async function PUT(
   if (body.detailedDescriptionEn != null) data.detailedDescriptionEn = body.detailedDescriptionEn
   if (body.additionalInfo != null) data.additionalInfo = body.additionalInfo
   if (body.additionalInfoEn != null) data.additionalInfoEn = body.additionalInfoEn
+  if (body.locationInfo != null) data.locationInfo = body.locationInfo
+  if (body.locationInfoEn != null) data.locationInfoEn = body.locationInfoEn
   if (body.propertyType != null) data.propertyType = body.propertyType
   if (body.listingType != null) data.listingType = body.listingType
   if (body.price != null) data.price = parseFloat(body.price)

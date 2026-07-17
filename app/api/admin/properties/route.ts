@@ -98,6 +98,8 @@ export async function POST(request: NextRequest) {
         detailedDescriptionEn: body.detailedDescriptionEn ?? null,
         additionalInfo: body.additionalInfo ?? null,
         additionalInfoEn: body.additionalInfoEn ?? null,
+        locationInfo: body.locationInfo ?? null,
+        locationInfoEn: body.locationInfoEn ?? null,
         propertyType: body.propertyType ?? "apartment",
         listingType: body.listingType ?? "rent",
         price: parseFloat(body.price) || 0,
