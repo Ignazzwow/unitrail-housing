@@ -61,6 +61,10 @@ export async function PUT(
   if (body.longitude != null) data.longitude = parseFloat(body.longitude)
   if (body.bedrooms != null) data.bedrooms = parseInt(body.bedrooms, 10)
   if (body.bathrooms != null) data.bathrooms = parseInt(body.bathrooms, 10)
+  if (body.roomOccupants != null) {
+    const n = parseInt(String(body.roomOccupants), 10)
+    data.roomOccupants = Number.isFinite(n) && n >= 1 ? Math.min(3, Math.round(n)) : 1
+  }
   if (body.areaSqft != null) data.areaSqft = parseFloat(body.areaSqft)
   if (body.areaSqm != null) data.areaSqm = parseFloat(body.areaSqm)
   if (body.furnishing != null) data.furnishing = body.furnishing

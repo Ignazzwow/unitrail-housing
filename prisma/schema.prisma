@@ -42,6 +42,8 @@ model Property {
   longitude          Float?
   bedrooms           Int      @default(0)
   bathrooms          Int      @default(0)
+  /// 1 = Einzelzimmer, 2–3 = geteiltes Zimmer (Anzeige mit Personen-Icons)
+  roomOccupants      Int      @default(1) @map("room_occupants")
   areaSqft           Float?   @map("area_sqft")
   areaSqm            Float?   @map("area_sqm")
   furnishing         String   @default("unfurnished") // furnished, semi, unfurnished

@@ -26,6 +26,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RoomOccupancyIcon } from "@/components/room-occupancy-icon"
 import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
 
@@ -150,9 +151,7 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
               <TabsTrigger value="description">{t("listings.descriptionTitle")}</TabsTrigger>
               <TabsTrigger value="location">{t("listings.locationTitle")}</TabsTrigger>
               <TabsTrigger value="amenities">{t("listings.featuresTitle")}</TabsTrigger>
-              {L.additionalInfo && (
-                <TabsTrigger value="more">{t("listings.additionalInfoTitle")}</TabsTrigger>
-              )}
+              <TabsTrigger value="more">{t("listings.additionalInfoTitle")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="description" className="pt-6">
@@ -223,11 +222,13 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
               )}
             </TabsContent>
 
-            {L.additionalInfo && (
-              <TabsContent value="more" className="pt-6">
+            <TabsContent value="more" className="pt-6">
+              {L.additionalInfo ? (
                 <p className="whitespace-pre-line text-muted-foreground">{L.additionalInfo}</p>
-              </TabsContent>
-            )}
+              ) : (
+                <p className="text-sm text-muted-foreground">{t("listings.noAdditionalInfo")}</p>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
 
@@ -252,9 +253,15 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                   <span className="text-muted-foreground">{L.areaSqm} m²</span>
                 </div>
                 <div className="flex items-center gap-2">
+                  <RoomOccupancyIcon occupants={L.roomOccupants} iconClassName="text-primary" />
+                  <span className="text-muted-foreground">
+                    {L.sharedRoom ? t("listings.sharedRoom") : t("listings.singleRoom")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
                   <Bed className="h-4 w-4 shrink-0 text-primary" />
                   <span className="text-muted-foreground">
-                    {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
+                    {`${L.bedrooms} ${t("listings.rooms")}`}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

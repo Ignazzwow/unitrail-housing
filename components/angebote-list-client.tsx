@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import { RoomOccupancyIcon } from "@/components/room-occupancy-icon"
 import type { PropertyWithRelations } from "@/lib/listing-types"
 import { propertyToListingDisplay } from "@/lib/listing-types"
 
@@ -96,9 +97,15 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
                   </span>
                 </div>
                 <div className="flex min-w-0 items-center gap-2">
+                  <RoomOccupancyIcon occupants={L.roomOccupants} iconClassName="text-muted-foreground" />
+                  <span className="truncate text-sm text-muted-foreground">
+                    {L.sharedRoom ? t("listings.sharedRoom") : t("listings.singleRoom")}
+                  </span>
+                </div>
+                <div className="flex min-w-0 items-center gap-2">
                   <Bed className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span className="truncate text-sm text-muted-foreground">
-                    {L.sharedRoom ? t("listings.sharedRoom") : `${L.bedrooms} ${t("listings.rooms")}`}
+                    {L.bedrooms} {t("listings.rooms")}
                   </span>
                 </div>
                 <div className="flex min-w-0 items-center gap-2">

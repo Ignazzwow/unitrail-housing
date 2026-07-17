@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { requireAdmin } from "@/lib/auth-utils"
 
+function clampRoomOccupants(value: unknown): number {
+  const n = typeof value === "number" ? value : parseInt(String(value ?? "1"), 10)
+  if (!Number.isFinite(n) || n < 1) return 1
+  return Math.min(3, Math.round(n))
+}
+
 // ADMIN: GET /api/admin/properties - List all properties (with filters)
 export async function GET(request: NextRequest) {
   try {
@@ -101,6 +107,7 @@ export async function POST(request: NextRequest) {
         longitude: body.longitude != null ? parseFloat(body.longitude) : null,
         bedrooms: parseInt(body.bedrooms, 10) || 0,
         bathrooms: parseInt(body.bathrooms, 10) || 0,
+        roomOccupants: clampRoomOccupants(body.roomOccupants),
         areaSqft: body.areaSqft != null ? parseFloat(body.areaSqft) : null,
         areaSqm: body.areaSqm != null ? parseFloat(body.areaSqm) : null,
         furnishing: body.furnishing ?? "unfurnished",

@@ -26,6 +26,7 @@ interface PropertyFormData {
   price?: number | string
   bedrooms?: number
   bathrooms?: number
+  roomOccupants?: number
   areaSqm?: number | string | null
   description?: string
   descriptionEn?: string | null
@@ -73,6 +74,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     price: property?.price ?? "",
     bedrooms: property?.bedrooms ?? 0,
     bathrooms: property?.bathrooms ?? 0,
+    roomOccupants: property?.roomOccupants ?? 1,
     areaSqm:
       property?.areaSqm === null || property?.areaSqm === undefined
         ? ""
@@ -155,6 +157,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         price: parseFloat(String(form.price)) || 0,
         bedrooms: Number(form.bedrooms) || 0,
         bathrooms: Number(form.bathrooms) || 0,
+        roomOccupants: Math.min(3, Math.max(1, Number(form.roomOccupants) || 1)),
         areaSqm: form.areaSqm ? parseFloat(String(form.areaSqm)) : null,
         images: form.images.split("\n").map((s) => s.trim()).filter(Boolean),
         amenityIds: form.amenityIds,
@@ -211,11 +214,15 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
             English
           </button>
         </div>
-        <span className="text-xs text-muted-foreground">Applies to Description, Detailed Description, and Additional Info below.</span>
+        <span className="text-xs text-muted-foreground">Applies to Beschreibung and Weitere Informationen tabs below.</span>
       </div>
       <Tabs defaultValue="basic" className="space-y-6">
-        <TabsList>
+        <TabsList className="h-auto flex-wrap">
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
+          <TabsTrigger value="description">Beschreibung</TabsTrigger>
+          <TabsTrigger value="location">Lage</TabsTrigger>
+          <TabsTrigger value="amenities">Ausstattung</TabsTrigger>
+          <TabsTrigger value="additional">Weitere Informationen</TabsTrigger>
           <TabsTrigger value="pricing">Pricing & Details</TabsTrigger>
           <TabsTrigger value="photos">Photos</TabsTrigger>
           <TabsTrigger value="extra">Extra / SEO</TabsTrigger>
@@ -262,26 +269,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   </Select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Description {activeLang === "en" && "(English)"}</Label>
-                <Textarea
-                  value={activeLang === "de" ? form.description : form.descriptionEn}
-                  onChange={(e) => update(activeLang === "de" ? "description" : "descriptionEn", e.target.value)}
-                  rows={4}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>City</Label>
-                <Input value={form.city} onChange={(e) => update("city", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Area / Neighborhood</Label>
-                <Textarea value={form.location} onChange={(e) => update("location", e.target.value)} rows={3} />
-              </div>
-              <div className="space-y-2">
-                <Label>Full Address</Label>
-                <Input value={form.address} onChange={(e) => update("address", e.target.value)} />
-              </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
                   <Label>Bedrooms</Label>
@@ -295,6 +282,25 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   <Label>Area (m²)</Label>
                   <Input type="number" step="0.01" value={form.areaSqm} onChange={(e) => update("areaSqm", e.target.value)} />
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Zimmerbelegung</Label>
+                <Select
+                  value={String(form.roomOccupants || 1)}
+                  onValueChange={(v) => update("roomOccupants", Number(v))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Einzelzimmer (1 Person)</SelectItem>
+                    <SelectItem value="2">Geteiltes Zimmer (2 Personen)</SelectItem>
+                    <SelectItem value="3">Geteiltes Zimmer (3 Personen)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Wird auf der Website mit 1–3 Personen-Symbolen angezeigt.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label>Availability Status</Label>
@@ -314,6 +320,89 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox id="isActive" checked={form.isActive} onCheckedChange={(c) => update("isActive", Boolean(c))} />
                 <Label htmlFor="isActive">Sichtbar (live auf der Website)</Label>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="description">
+          <Card>
+            <CardHeader>
+              <CardTitle>Beschreibung</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Short Description {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.description : form.descriptionEn}
+                  onChange={(e) => update(activeLang === "de" ? "description" : "descriptionEn", e.target.value)}
+                  rows={4}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Detailed Description {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.detailedDescription : form.detailedDescriptionEn}
+                  onChange={(e) =>
+                    update(activeLang === "de" ? "detailedDescription" : "detailedDescriptionEn", e.target.value)
+                  }
+                  rows={8}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="location">
+          <Card>
+            <CardHeader>
+              <CardTitle>Lage</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>City / Area</Label>
+                <Input value={form.city} onChange={(e) => update("city", e.target.value)} placeholder="e.g. Nürnberg" />
+              </div>
+              <div className="space-y-2">
+                <Label>Full Address</Label>
+                <Input value={form.address} onChange={(e) => update("address", e.target.value)} placeholder="e.g. Holzschuherstraße 12" />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="amenities">
+          <Card>
+            <CardHeader>
+              <CardTitle>Ausstattung</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {amenities.map((a) => (
+                  <label key={a.id} className="flex items-center gap-1.5 text-sm">
+                    <Checkbox checked={form.amenityIds.includes(a.id)} onCheckedChange={() => toggleAmenity(a.id)} />
+                    {a.name}
+                  </label>
+                ))}
+                {amenities.length === 0 && <p className="text-sm text-muted-foreground">No amenities defined.</p>}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="additional">
+          <Card>
+            <CardHeader>
+              <CardTitle>Weitere Informationen</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Additional Info {activeLang === "en" && "(English)"}</Label>
+                <Textarea
+                  value={activeLang === "de" ? form.additionalInfo : form.additionalInfoEn}
+                  onChange={(e) => update(activeLang === "de" ? "additionalInfo" : "additionalInfoEn", e.target.value)}
+                  rows={6}
+                />
               </div>
             </CardContent>
           </Card>
@@ -354,32 +443,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Amenities</Label>
-                <div className="flex flex-wrap gap-2">
-                  {amenities.map((a) => (
-                    <label key={a.id} className="flex items-center gap-1.5 text-sm">
-                      <Checkbox checked={form.amenityIds.includes(a.id)} onCheckedChange={() => toggleAmenity(a.id)} />
-                      {a.name}
-                    </label>
-                  ))}
-                  {amenities.length === 0 && <p className="text-sm text-muted-foreground">No amenities defined.</p>}
-                </div>
-              </div>
-              <div className="space-y-2">
                 <Label>Minimum Stay</Label>
                 <Input value={form.minimumStay} onChange={(e) => update("minimumStay", e.target.value)} placeholder="e.g. 6 months" />
               </div>
               <div className="space-y-2">
                 <Label>Available From</Label>
                 <Input type="date" value={form.availableFrom} onChange={(e) => update("availableFrom", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Additional Info {activeLang === "en" && "(English)"}</Label>
-                <Textarea
-                  value={activeLang === "de" ? form.additionalInfo : form.additionalInfoEn}
-                  onChange={(e) => update(activeLang === "de" ? "additionalInfo" : "additionalInfoEn", e.target.value)}
-                  rows={3}
-                />
               </div>
             </CardContent>
           </Card>
@@ -470,14 +539,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <div className="space-y-2">
                 <Label>Slug (URL)</Label>
                 <Input value={form.slug} onChange={(e) => update("slug", e.target.value)} placeholder="auto-generated from title" />
-              </div>
-              <div className="space-y-2">
-                <Label>Detailed Description {activeLang === "en" && "(English)"}</Label>
-                <Textarea
-                  value={activeLang === "de" ? form.detailedDescription : form.detailedDescriptionEn}
-                  onChange={(e) => update(activeLang === "de" ? "detailedDescription" : "detailedDescriptionEn", e.target.value)}
-                  rows={6}
-                />
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="isFeatured" checked={form.isFeatured} onCheckedChange={(c) => update("isFeatured", Boolean(c))} />

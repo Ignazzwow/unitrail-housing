@@ -40,6 +40,7 @@ export function propertyToListingDisplay(p: PropertyWithRelations, language: "de
     areaSqm: p.areaSqm ?? 0,
     bedrooms: p.bedrooms,
     bathrooms: p.bathrooms,
+    roomOccupants: Math.min(3, Math.max(1, p.roomOccupants ?? 1)),
     availableFrom: p.availableFrom ?? "",
     images: imageUrls,
     features: featureNames,
@@ -52,6 +53,6 @@ export function propertyToListingDisplay(p: PropertyWithRelations, language: "de
     furnishing: p.furnishing,
     propertyType: p.propertyType,
     availabilityStatus: p.availabilityStatus,
-    sharedRoom: p.listingType === "pg" || (p.listingType === "student_housing" && p.bedrooms > 1),
+    sharedRoom: (p.roomOccupants ?? 1) >= 2,
   }
 }
