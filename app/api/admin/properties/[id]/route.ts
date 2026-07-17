@@ -45,6 +45,7 @@ export async function PUT(
 
   const data: Record<string, unknown> = {}
   if (body.title != null) data.title = body.title
+  if (body.titleEn != null) data.titleEn = body.titleEn
   if (body.slug != null) data.slug = body.slug
   if (body.description != null) data.description = body.description
   if (body.descriptionEn != null) data.descriptionEn = body.descriptionEn
@@ -54,6 +55,8 @@ export async function PUT(
   if (body.additionalInfoEn != null) data.additionalInfoEn = body.additionalInfoEn
   if (body.locationInfo != null) data.locationInfo = body.locationInfo
   if (body.locationInfoEn != null) data.locationInfoEn = body.locationInfoEn
+  if (body.amenitiesText != null) data.amenitiesText = body.amenitiesText
+  if (body.amenitiesTextEn != null) data.amenitiesTextEn = body.amenitiesTextEn
   if (body.propertyType != null) data.propertyType = body.propertyType
   if (body.listingType != null) data.listingType = body.listingType
   if (body.price != null) data.price = parseFloat(body.price)

@@ -22,19 +22,35 @@ function pickLang(primary: string, en: string | null | undefined, language: "de"
   return primary
 }
 
+function parseFeatureLines(text: string | null | undefined): string[] {
+  if (!text?.trim()) return []
+  return text
+    .split(/[\n,;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
 // Helper to get display values from Prisma property
 export function propertyToListingDisplay(p: PropertyWithRelations, language: "de" | "en" = "de") {
   const imageUrls = (p.images ?? [])
     .map((i) => (typeof i.imageUrl === "string" ? i.imageUrl.trim() : ""))
     .filter((url) => url.length > 0)
-  const featureNames = (p.propertyAmenities ?? [])
+
+  const fromJoin = (p.propertyAmenities ?? [])
     .map((pa) => (pa.amenity?.name ? String(pa.amenity.name).trim() : ""))
     .filter((name) => name.length > 0)
+
+  const amenitiesPrimary = p.amenitiesText?.trim()
+    ? parseFeatureLines(p.amenitiesText)
+    : fromJoin
+  const amenitiesEn = parseFeatureLines(p.amenitiesTextEn)
+  const featureNames =
+    language === "en" && amenitiesEn.length > 0 ? amenitiesEn : amenitiesPrimary
 
   return {
     id: p.id,
     slug: p.slug,
-    title: p.title,
+    title: pickLang(p.title, p.titleEn, language),
     location: p.location,
     price: String(p.price),
     areaSqm: p.areaSqm ?? 0,

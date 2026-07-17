@@ -21,7 +21,8 @@ import { Upload, X } from "lucide-react"
 interface PropertyFormData {
   id?: string
   slug?: string
-  title?: string
+    title?: string
+  titleEn?: string | null
   location?: string
   price?: number | string
   bedrooms?: number
@@ -36,6 +37,8 @@ interface PropertyFormData {
   additionalInfoEn?: string | null
   locationInfo?: string | null
   locationInfoEn?: string | null
+  amenitiesText?: string | null
+  amenitiesTextEn?: string | null
   propertyType?: string
   listingType?: string
   address?: string | null
@@ -58,7 +61,7 @@ interface PropertyFormTabsProps {
 const LABELS = {
   de: {
     textLanguage: "Textsprache:",
-    textLanguageHint: "Gilt für Beschreibung, Lage-Text und Weitere Informationen.",
+    textLanguageHint: "Gilt für Titel, Beschreibung, Lage-Text, Ausstattung und Weitere Informationen.",
     tabBasic: "Basisinfo",
     tabDescription: "Beschreibung",
     tabLocation: "Lage",
@@ -128,7 +131,7 @@ const LABELS = {
   },
   en: {
     textLanguage: "Text language:",
-    textLanguageHint: "Applies to Description, Location text, and Additional information.",
+    textLanguageHint: "Applies to Title, Description, Location text, Amenities, and Additional information.",
     tabBasic: "Basic Info",
     tabDescription: "Description",
     tabLocation: "Location",
@@ -222,6 +225,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
   const [form, setForm] = useState({
     title: property?.title ?? "",
+    titleEn: property?.titleEn ?? "",
     slug: property?.slug ?? "",
     location: property?.location ?? "",
     city: property?.location ?? "",
@@ -251,10 +255,13 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),
     images: property?.images?.map((i) => i.imageUrl).join("\n") ?? "",
     amenitiesText:
+      property?.amenitiesText?.trim() ||
       property?.propertyAmenities
         ?.map((pa) => pa.amenity?.name)
         .filter((n): n is string => Boolean(n?.trim()))
-        .join("\n") ?? "",
+        .join("\n") ||
+      "",
+    amenitiesTextEn: property?.amenitiesTextEn ?? "",
   })
 
   const update = (key: string, value: string | number | boolean | string[]) => {
@@ -305,11 +312,12 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         detailedDescriptionEn: form.descriptionEn,
         locationInfo: form.locationInfo,
         locationInfoEn: form.locationInfoEn,
+        amenitiesText: form.amenitiesText,
+        amenitiesTextEn: form.amenitiesTextEn,
         images: form.images
           .split("\n")
           .map((s) => s.trim())
           .filter(Boolean),
-        amenitiesText: form.amenitiesText,
       }
       const url = mode === "create" ? "/api/admin/properties" : `/api/admin/properties/${property?.id}`
       const method = mode === "create" ? "POST" : "PUT"
@@ -386,7 +394,11 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label>{L.title}</Label>
-                <Input value={form.title} onChange={(e) => update("title", e.target.value)} required />
+                <Input
+                  value={activeLang === "de" ? form.title : form.titleEn}
+                  onChange={(e) => update(activeLang === "de" ? "title" : "titleEn", e.target.value)}
+                  required={activeLang === "de"}
+                />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
@@ -538,8 +550,8 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <div className="space-y-2">
                 <Label>{L.amenities}</Label>
                 <Textarea
-                  value={form.amenitiesText}
-                  onChange={(e) => update("amenitiesText", e.target.value)}
+                  value={activeLang === "de" ? form.amenitiesText : form.amenitiesTextEn}
+                  onChange={(e) => update(activeLang === "de" ? "amenitiesText" : "amenitiesTextEn", e.target.value)}
                   rows={8}
                   placeholder={L.amenitiesPlaceholder}
                 />

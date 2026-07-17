@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
       data: {
         slug: finalSlug,
         title: body.title ?? "Untitled",
+        titleEn: body.titleEn ?? null,
         description: body.description ?? "",
         descriptionEn: body.descriptionEn ?? null,
         detailedDescription: body.detailedDescription ?? null,
@@ -100,6 +101,8 @@ export async function POST(request: NextRequest) {
         additionalInfoEn: body.additionalInfoEn ?? null,
         locationInfo: body.locationInfo ?? null,
         locationInfoEn: body.locationInfoEn ?? null,
+        amenitiesText: body.amenitiesText ?? null,
+        amenitiesTextEn: body.amenitiesTextEn ?? null,
         propertyType: body.propertyType ?? "apartment",
         listingType: body.listingType ?? "rent",
         price: parseFloat(body.price) || 0,
