@@ -527,7 +527,7 @@ export const translations = {
       benefitPartnerTitle: "Ein langfristiger Mietpartner, auf den Sie zählen können",
       benefitPartnerDesc:
         "Wir sind keine kurzfristige Lösung. UniTrail Housing pflegt dauerhafte Beziehungen zu Vermietern, mit stabilen Langzeitmietverträgen, kein Leerstand und Ruhe für die kommenden Jahre.",
-      benefitYieldsTitle: "Gute Renditen auf Ihre Investitionen",
+      benefitYieldsTitle: "Attraktive Renditen auf Ihre Investitionen",
       benefitYieldsDesc:
         "Ihre Immobilie ist eine wertvolle Investition — und sollte sich auch so auszahlen. Mit UniTrail Housing profitieren Sie von stabilen, attraktiven Renditen, ohne sich um Mieter oder Instandhaltung kümmern zu müssen.",
       benefitSupportTitle: "Ihr eigener fester Ansprechpartner",
@@ -547,7 +547,7 @@ export const translations = {
       promisePartEnd: " in einer klaren Partnerschaft.",
       ctaTitle: "Mehr aus Ihrer Immobilie holen?",
       ctaLead:
-        "Werden Sie Teil der wachsenden Gemeinschaft von Vermietern, die UniTrail Housing für bessere Rendite und volle Entlastung vertrauen.",
+        "Werden Sie Teil der wachsenden Gemeinschaft von Vermietern, die UniTrail Housing für attraktive Rendite und volle Entlastung vertrauen.",
       ctaButton: "Jetzt Vermieten",
     },
     features: {
