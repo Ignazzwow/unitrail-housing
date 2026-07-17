@@ -317,6 +317,10 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2">
+                <Label>Available From</Label>
+                <Input type="date" value={form.availableFrom} onChange={(e) => update("availableFrom", e.target.value)} />
+              </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="isActive" checked={form.isActive} onCheckedChange={(c) => update("isActive", Boolean(c))} />
                 <Label htmlFor="isActive">Sichtbar (live auf der Website)</Label>
@@ -445,10 +449,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <div className="space-y-2">
                 <Label>Minimum Stay</Label>
                 <Input value={form.minimumStay} onChange={(e) => update("minimumStay", e.target.value)} placeholder="e.g. 6 months" />
-              </div>
-              <div className="space-y-2">
-                <Label>Available From</Label>
-                <Input type="date" value={form.availableFrom} onChange={(e) => update("availableFrom", e.target.value)} />
               </div>
             </CardContent>
           </Card>
