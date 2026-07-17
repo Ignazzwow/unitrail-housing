@@ -41,7 +41,7 @@ export function HowItWorks() {
       number: "05",
       title: t("howItWorks.step5"),
       description: t("howItWorks.step5Desc"),
-      image: "/spacious_scandinavian_student_room.png",
+      image: "/excited-student-holding-keys.png",
     },
   ]
 
