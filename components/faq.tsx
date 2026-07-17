@@ -3,9 +3,48 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useLanguage } from "@/contexts/language-context"
 import { translations } from "@/lib/translations"
-import { ClipboardList, FileCheck, Eye, Receipt, MessageCircleQuestion } from "lucide-react"
+import {
+  ClipboardList,
+  FileCheck,
+  Eye,
+  Receipt,
+  Shield,
+  Wallet,
+  MapPin,
+  Sofa,
+  CalendarRange,
+  DoorOpen,
+  LogOut,
+  Wrench,
+  Users,
+  Sparkles,
+  UserPlus,
+  Landmark,
+  Plane,
+  HeartHandshake,
+  MessageCircleQuestion,
+} from "lucide-react"
 
-const QUESTION_ICONS = [ClipboardList, FileCheck, Eye, Receipt]
+const QUESTION_ICONS = [
+  ClipboardList,
+  FileCheck,
+  Eye,
+  Receipt,
+  Shield,
+  Wallet,
+  MapPin,
+  Sofa,
+  CalendarRange,
+  DoorOpen,
+  LogOut,
+  Wrench,
+  Users,
+  Sparkles,
+  UserPlus,
+  Landmark,
+  Plane,
+  HeartHandshake,
+]
 
 export function FAQ() {
   const { language, t } = useLanguage()
@@ -40,7 +79,9 @@ export function FAQ() {
                       {faq.question}
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="pl-11 text-muted-foreground">{faq.answer}</AccordionContent>
+                  <AccordionContent className="whitespace-pre-line pl-11 text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
                 </AccordionItem>
               )
             })}

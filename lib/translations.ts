@@ -100,10 +100,96 @@ export const translations = {
       title: "Frequently Asked Questions",
       description: "Find answers to common questions about our housing services.",
       questions: [
-        { question: "How do I apply for accommodation?", answer: "Browse our listings, select a property, and submit the online application form with your documents. Our team will review and get back to you within 2-3 business days." },
-        { question: "What documents do I need?", answer: "You typically need a valid ID, proof of enrollment, and sometimes a proof of funds. Specific requirements may vary by property." },
-        { question: "Can I view properties before signing?", answer: "Yes! We offer virtual tours and in-person viewings when possible. Contact us to schedule a viewing." },
-        { question: "What is included in the rent?", answer: "It varies by property. Most listings include basic utilities. Check each listing for specific details." },
+        {
+          question: "How do I apply for accommodation?",
+          answer:
+            "Simply contact us via our website, WhatsApp, email, or one of our listings. We'll arrange a viewing (online or in person), review your documents, and if everything is a good fit, we'll send you the rental agreement.",
+        },
+        {
+          question: "What documents do I need?",
+          answer:
+            "Depending on your situation, we may ask for:\n\n• Passport or ID card\n• Proof of financial support (e.g. blocked account, scholarship, guarantor, or employment contract)\n• Private liability insurance (before moving in)\n\nWe'll let you know exactly which documents are required during the application process.",
+        },
+        {
+          question: "Can I view the property before signing?",
+          answer:
+            "Yes! We always recommend viewing the apartment before signing the rental agreement.\n\nIf you're not in Germany yet, we can also arrange an online viewing or allow a friend or family member to attend on your behalf.",
+        },
+        {
+          question: "What is included in the rent?",
+          answer:
+            "Our rents are all-inclusive, meaning there are no hidden monthly costs.\n\nThe rent includes:\n\n• Electricity\n• Heating\n• Water\n• High-speed Wi-Fi\n• Building operating costs\n\nThis makes budgeting simple and predictable throughout your stay.",
+        },
+        {
+          question: "What is private liability insurance?",
+          answer:
+            "Private liability insurance (\"Haftpflichtversicherung\") is one of the most important types of insurance in Germany. It covers accidental damage you may cause to the apartment or to other people's property.\n\nSince unexpected accidents can happen, all UniTrail Housing tenants are required to have valid private liability insurance before moving in.",
+        },
+        {
+          question: "Do I have to pay a security deposit?",
+          answer:
+            "Yes. A refundable security deposit is required before moving in.\n\nThe deposit will be returned after you move out, provided the room is left in good condition and there are no outstanding payments.",
+        },
+        {
+          question: "Can I register my address (Anmeldung)?",
+          answer:
+            "Yes.\n\nAfter moving in, we will provide you with the Wohnungsgeberbestätigung, which you need to register your address at the local registration office (\"Bürgeramt\").",
+        },
+        {
+          question: "Are the apartments furnished?",
+          answer:
+            "It depends on the apartment.\n\nSome of our apartments are fully furnished, while others are partially furnished or unfurnished. Each property listing clearly states exactly what is included, so you'll always know what to expect before signing your rental agreement.",
+        },
+        {
+          question: "How long are the rental contracts?",
+          answer:
+            "Our rental contracts are designed specifically for international students and typically range from 6 to 24 months, depending on the apartment and availability.",
+        },
+        {
+          question: "Can I move in before my contract starts?",
+          answer:
+            "Unfortunately, no.\n\nMove-in is only possible from the agreed contract start date unless otherwise agreed in writing.",
+        },
+        {
+          question: "Can I leave before my contract ends?",
+          answer:
+            "Yes, in many cases this is possible if a suitable replacement tenant is found and approved by us. Please contact us as early as possible so we can help find a solution.",
+        },
+        {
+          question: "Who do I contact if something is broken?",
+          answer:
+            "Simply contact the UniTrail Housing team via WhatsApp or email.\n\nWe'll help you as quickly as possible and coordinate any necessary repairs with the property owner.",
+        },
+        {
+          question: "Can I choose my roommates?",
+          answer:
+            "Whenever possible, yes.\n\nIf you apply together with friends, we'll do our best to accommodate your group in the same apartment.",
+        },
+        {
+          question: "Do I have to clean the apartment?",
+          answer:
+            "Yes.\n\nAll tenants are expected to keep the shared areas clean and respect their roommates. We recommend creating a weekly cleaning schedule within the apartment to ensure a pleasant living environment for everyone.",
+        },
+        {
+          question: "Can I invite guests?",
+          answer:
+            "Occasional visitors are always welcome. Overnight guests are generally possible for a short period, provided they do not disturb your roommates. Longer stays require our prior approval.",
+        },
+        {
+          question: "Do I need a German bank account?",
+          answer:
+            "No.\n\nWhile a German bank account is recommended, we also accept international bank transfers. Our team will provide all payment details after signing the rental agreement.",
+        },
+        {
+          question: "What if I haven't arrived in Germany yet?",
+          answer:
+            "No problem!\n\nMany of our tenants sign their rental agreement before arriving in Germany. We can arrange online viewings, communicate via WhatsApp or email, and prepare everything for your move-in.",
+        },
+        {
+          question: "Why choose UniTrail Housing?",
+          answer:
+            "We specialize in housing for international students and offer:\n\n✅ All-inclusive rent with no hidden monthly costs\n✅ Fast and reliable communication\n✅ Support in English and German\n✅ Online and in-person viewings\n✅ Carefully selected shared apartments\n✅ A simple and transparent rental process",
+        },
       ],
     },
     contact: {
@@ -584,10 +670,96 @@ export const translations = {
       title: "Häufig gestellte Fragen",
       description: "Antworten auf häufige Fragen zu unseren Wohnungsdienstleistungen.",
       questions: [
-        { question: "Wie bewerbe ich mich?", answer: "Durchsuchen Sie unsere Angebote, wählen Sie eine Wohnung und reichen Sie das Online-Formular mit Ihren Unterlagen ein." },
-        { question: "Welche Unterlagen brauche ich?", answer: "In der Regel benötigen Sie einen gültigen Ausweis, Immatrikulationsbescheinigung und ggf. Finanzierungsnachweis." },
-        { question: "Kann ich Wohnungen vor dem Vertragsabschluss besichtigen?", answer: "Ja! Wir bieten virtuelle Touren und Vor-Ort-Besichtigungen an." },
-        { question: "Was ist in der Miete enthalten?", answer: "Das variiert je nach Objekt. Die meisten Angebote beinhalten Grundversorgung." },
+        {
+          question: "Wie bewerbe ich mich um eine Unterkunft?",
+          answer:
+            "Kontaktieren Sie uns einfach über unsere Website, WhatsApp, E-Mail oder über eines unserer Angebote. Wir vereinbaren eine Besichtigung (online oder vor Ort), prüfen Ihre Unterlagen und senden Ihnen bei Passung den Mietvertrag zu.",
+        },
+        {
+          question: "Welche Unterlagen brauche ich?",
+          answer:
+            "Je nach Situation können wir Folgendes anfragen:\n\n• Reisepass oder Personalausweis\n• Finanzierungsnachweis (z. B. Sperrkonto, Stipendium, Bürgschaft oder Arbeitsvertrag)\n• Private Haftpflichtversicherung (vor dem Einzug)\n\nIm Bewerbungsprozess teilen wir Ihnen genau mit, welche Unterlagen benötigt werden.",
+        },
+        {
+          question: "Kann ich die Wohnung vor der Unterzeichnung besichtigen?",
+          answer:
+            "Ja! Wir empfehlen immer, die Wohnung vor der Unterzeichnung des Mietvertrags zu besichtigen.\n\nFalls Sie noch nicht in Deutschland sind, können wir eine Online-Besichtigung organisieren oder einer Freundin bzw. einem Familienmitglied erlauben, stellvertretend teilzunehmen.",
+        },
+        {
+          question: "Was ist in der Miete enthalten?",
+          answer:
+            "Unsere Mieten sind All-inclusive — es gibt keine versteckten monatlichen Kosten.\n\nDie Miete umfasst:\n\n• Strom\n• Heizung\n• Wasser\n• Highspeed-WLAN\n• Betriebskosten\n\nSo bleibt Ihre Budgetplanung während des gesamten Aufenthalts einfach und planbar.",
+        },
+        {
+          question: "Was ist eine private Haftpflichtversicherung?",
+          answer:
+            "Die private Haftpflichtversicherung ist eine der wichtigsten Versicherungen in Deutschland. Sie deckt Schäden ab, die Sie versehentlich an der Wohnung oder am Eigentum anderer Personen verursachen.\n\nDa Unfälle jederzeit passieren können, müssen alle Mieter von UniTrail Housing vor dem Einzug eine gültige private Haftpflichtversicherung vorweisen.",
+        },
+        {
+          question: "Muss ich eine Kaution zahlen?",
+          answer:
+            "Ja. Vor dem Einzug ist eine rückzahlbare Kaution erforderlich.\n\nDie Kaution wird nach dem Auszug zurückerstattet, sofern das Zimmer in gutem Zustand hinterlassen wird und keine offenen Zahlungen bestehen.",
+        },
+        {
+          question: "Kann ich mich anmelden (Anmeldung)?",
+          answer:
+            "Ja.\n\nNach dem Einzug stellen wir Ihnen die Wohnungsgeberbestätigung aus, die Sie für die Anmeldung beim Bürgeramt benötigen.",
+        },
+        {
+          question: "Sind die Wohnungen möbliert?",
+          answer:
+            "Das hängt von der Wohnung ab.\n\nEinige unserer Wohnungen sind voll möbliert, andere teilweise oder unmöbliert. In jedem Inserat steht klar, was enthalten ist — so wissen Sie vor der Vertragsunterzeichnung genau, was Sie erwartet.",
+        },
+        {
+          question: "Wie lange laufen die Mietverträge?",
+          answer:
+            "Unsere Mietverträge sind speziell für internationale Studierende ausgelegt und laufen in der Regel zwischen 6 und 24 Monaten — je nach Wohnung und Verfügbarkeit.",
+        },
+        {
+          question: "Kann ich vor Vertragsbeginn einziehen?",
+          answer:
+            "Leider nein.\n\nEin Einzug ist erst ab dem vereinbarten Vertragsbeginn möglich, sofern nicht schriftlich etwas anderes vereinbart wurde.",
+        },
+        {
+          question: "Kann ich vor Vertragsende ausziehen?",
+          answer:
+            "Ja, in vielen Fällen ist das möglich, wenn ein geeigneter Nachmieter gefunden und von uns freigegeben wird. Bitte kontaktieren Sie uns so früh wie möglich, damit wir eine Lösung finden können.",
+        },
+        {
+          question: "Wen kontaktiere ich, wenn etwas kaputt ist?",
+          answer:
+            "Kontaktieren Sie einfach das UniTrail-Housing-Team per WhatsApp oder E-Mail.\n\nWir helfen Ihnen so schnell wie möglich und koordinieren nötige Reparaturen mit dem Eigentümer.",
+        },
+        {
+          question: "Kann ich meine Mitbewohner wählen?",
+          answer:
+            "Wann immer möglich: ja.\n\nWenn Sie sich gemeinsam mit Freunden bewerben, bemühen wir uns, Ihre Gruppe in derselben Wohnung unterzubringen.",
+        },
+        {
+          question: "Muss ich die Wohnung putzen?",
+          answer:
+            "Ja.\n\nAlle Mieter sind dafür verantwortlich, die Gemeinschaftsbereiche sauber zu halten und Rücksicht auf Mitbewohner zu nehmen. Wir empfehlen einen wöchentlichen Putzplan in der Wohnung, damit das Zusammenleben angenehm bleibt.",
+        },
+        {
+          question: "Kann ich Gäste einladen?",
+          answer:
+            "Gelegentliche Besuche sind jederzeit willkommen. Übernachtungsgäste sind in der Regel für kurze Zeit möglich, solange Mitbewohner nicht gestört werden. Längere Aufenthalte bedürfen unserer vorherigen Zustimmung.",
+        },
+        {
+          question: "Brauche ich ein deutsches Bankkonto?",
+          answer:
+            "Nein.\n\nEin deutsches Bankkonto ist empfehlenswert, aber wir akzeptieren auch internationale Überweisungen. Alle Zahlungsdetails erhalten Sie von unserem Team nach Unterzeichnung des Mietvertrags.",
+        },
+        {
+          question: "Was, wenn ich noch nicht in Deutschland angekommen bin?",
+          answer:
+            "Kein Problem!\n\nViele unserer Mieter unterschreiben den Mietvertrag bereits vor der Ankunft in Deutschland. Wir können Online-Besichtigungen organisieren, per WhatsApp oder E-Mail kommunizieren und alles für Ihren Einzug vorbereiten.",
+        },
+        {
+          question: "Warum UniTrail Housing?",
+          answer:
+            "Wir sind spezialisiert auf Wohnraum für internationale Studierende und bieten:\n\n✅ All-inclusive-Miete ohne versteckte monatliche Kosten\n✅ Schnelle und zuverlässige Kommunikation\n✅ Support auf Englisch und Deutsch\n✅ Online- und Vor-Ort-Besichtigungen\n✅ Sorgfältig ausgewählte WGs\n✅ Einen einfachen und transparenten Mietprozess",
+        },
       ],
     },
     contact: {
