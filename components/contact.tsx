@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -189,21 +188,6 @@ export function Contact() {
                 <a href="tel:+4917656800301" className="text-primary hover:underline">
                   +49 176 56800301
                 </a>
-                <div className="mt-4 flex gap-4 border-t border-border pt-4">
-                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-muted">
-                    <Image
-                      src="/paul-worlitzsch.png"
-                      alt={t("contact.phoneContactName")}
-                      fill
-                      className="object-cover object-top"
-                      sizes="96px"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-1 text-sm">
-                    <p className="font-medium text-foreground">{t("contact.phoneContactLine")}</p>
-                    <p className="text-muted-foreground">{t("contact.phoneContactName")}</p>
-                  </div>
-                </div>
                 <p className="mt-2 text-sm text-muted-foreground">{t("contact.hours")}</p>
               </CardContent>
             </Card>
