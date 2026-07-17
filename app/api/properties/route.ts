@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     const where: Record<string, unknown> = {
       isActive: true,
-      availabilityStatus: "available",
+      availabilityStatus: { in: ["available", "upcoming"] },
     }
     if (location) {
       where.location = { contains: location }

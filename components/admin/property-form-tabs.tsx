@@ -249,7 +249,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     furnishing: property?.furnishing ?? "unfurnished",
     availabilityStatus: property?.availabilityStatus ?? "available",
     isFeatured: property?.isFeatured ?? false,
-    isActive: property?.isActive ?? false,
+    isActive: property?.isActive ?? true,
     deposit: property?.deposit ?? "",
     minimumStay: property?.minimumStay ?? "",
     availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),

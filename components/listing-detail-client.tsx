@@ -77,9 +77,12 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
     reserved: "listings.statusReserved",
     rented: "listings.statusRented",
     sold: "listings.statusSold",
-    upcoming: "listings.statusUpcoming",
   }
-  const availabilityLabel = L.availabilityStatus !== "available" ? availabilityKey[L.availabilityStatus] : null
+  // "upcoming" / demnächst: no alarming red badge — just list normally
+  const availabilityLabel =
+    L.availabilityStatus !== "available" && L.availabilityStatus !== "upcoming"
+      ? availabilityKey[L.availabilityStatus]
+      : null
   const mainText = L.detailedDescription || L.description || t("listings.noDescription")
 
   return (

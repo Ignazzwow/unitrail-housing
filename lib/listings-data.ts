@@ -14,7 +14,8 @@ export async function getListings(filters?: ListingsFilters) {
   try {
     const where: Record<string, unknown> = {
       isActive: true,
-      availabilityStatus: "available",
+      // Show currently available and upcoming listings publicly
+      availabilityStatus: { in: ["available", "upcoming"] },
     }
     if (filters?.location) {
       where.location = { contains: filters.location }
