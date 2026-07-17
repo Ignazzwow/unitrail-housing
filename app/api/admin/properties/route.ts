@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { requireAdmin } from "@/lib/auth-utils"
+import { parseAmenityNames, syncPropertyAmenities } from "@/lib/amenities"
 
 function clampRoomOccupants(value: unknown): number {
   const n = typeof value === "number" ? value : parseInt(String(value ?? "1"), 10)
@@ -132,7 +133,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (body.amenityIds?.length) {
+    if (body.amenityNames != null || body.amenitiesText != null) {
+      const names = parseAmenityNames(body.amenityNames ?? body.amenitiesText)
+      await syncPropertyAmenities(property.id, names)
+    } else if (body.amenityIds?.length) {
       for (const amenityId of body.amenityIds) {
         await prisma.propertyAmenity.create({
           data: { propertyId: property.id, amenityId },

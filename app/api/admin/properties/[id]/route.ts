@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { del } from "@vercel/blob"
 import { prisma } from "@/lib/db"
 import { requireAdmin } from "@/lib/auth-utils"
+import { parseAmenityNames, syncPropertyAmenities } from "@/lib/amenities"
 
 async function checkAuth() {
   try {
@@ -92,7 +93,10 @@ export async function PUT(
       })
     }
   }
-  if (Array.isArray(body.amenityIds)) {
+  if (body.amenityNames != null || body.amenitiesText != null) {
+    const names = parseAmenityNames(body.amenityNames ?? body.amenitiesText)
+    await syncPropertyAmenities(id, names)
+  } else if (Array.isArray(body.amenityIds)) {
     await prisma.propertyAmenity.deleteMany({ where: { propertyId: id } })
     for (const amenityId of body.amenityIds) {
       await prisma.propertyAmenity.create({

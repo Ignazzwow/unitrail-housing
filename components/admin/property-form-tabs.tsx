@@ -45,7 +45,7 @@ interface PropertyFormData {
   minimumStay?: string | null
   availableFrom?: string | null
   images?: { imageUrl: string }[]
-  propertyAmenities?: { amenity: { id: string } }[]
+  propertyAmenities?: { amenity: { id: string; name?: string } }[]
 }
 
 interface PropertyFormTabsProps {
@@ -65,7 +65,6 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [amenities, setAmenities] = useState<{ id: string; name: string }[]>([])
   const [form, setForm] = useState({
     title: property?.title ?? "",
     slug: property?.slug ?? "",
@@ -96,32 +95,16 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
     minimumStay: property?.minimumStay ?? "",
     availableFrom: property?.availableFrom ?? (mode === "create" ? todayLocalISODate() : ""),
     images: property?.images?.map((i) => i.imageUrl).join("\n") ?? "",
-    amenityIds: property?.propertyAmenities?.map((pa) => pa.amenity.id) ?? [] as string[],
+    amenitiesText:
+      property?.propertyAmenities
+        ?.map((pa) => pa.amenity?.name)
+        .filter((n): n is string => Boolean(n?.trim()))
+        .join("\n") ?? "",
   })
   const [activeLang, setActiveLang] = useState<"de" | "en">("de")
 
-  useEffect(() => {
-    fetch("/api/amenities", { credentials: "include" })
-      .then(async (r) => {
-        const data = await r.json()
-        if (!r.ok || !Array.isArray(data)) {
-          setAmenities([])
-          return
-        }
-        setAmenities(data)
-      })
-      .catch(() => setAmenities([]))
-  }, [])
-
   const update = (key: string, value: string | number | boolean | string[]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
-  }
-
-  const toggleAmenity = (id: string) => {
-    const ids = form.amenityIds.includes(id)
-      ? form.amenityIds.filter((x) => x !== id)
-      : [...form.amenityIds, id]
-    update("amenityIds", ids)
   }
 
   const uploadFiles = async (files: FileList | null) => {
@@ -160,7 +143,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
         roomOccupants: Math.min(3, Math.max(1, Number(form.roomOccupants) || 1)),
         areaSqm: form.areaSqm ? parseFloat(String(form.areaSqm)) : null,
         images: form.images.split("\n").map((s) => s.trim()).filter(Boolean),
-        amenityIds: form.amenityIds,
+        amenitiesText: form.amenitiesText,
       }
       const url = mode === "create" ? "/api/admin/properties" : `/api/admin/properties/${property?.id}`
       const method = mode === "create" ? "POST" : "PUT"
@@ -381,14 +364,17 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
               <CardTitle>Ausstattung</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                {amenities.map((a) => (
-                  <label key={a.id} className="flex items-center gap-1.5 text-sm">
-                    <Checkbox checked={form.amenityIds.includes(a.id)} onCheckedChange={() => toggleAmenity(a.id)} />
-                    {a.name}
-                  </label>
-                ))}
-                {amenities.length === 0 && <p className="text-sm text-muted-foreground">No amenities defined.</p>}
+              <div className="space-y-2">
+                <Label>Ausstattung (Freitext)</Label>
+                <Textarea
+                  value={form.amenitiesText}
+                  onChange={(e) => update("amenitiesText", e.target.value)}
+                  rows={8}
+                  placeholder={"z. B.\nWLAN\nWaschmaschine\nGeschirrspüler\nBalkon"}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Ein Eintrag pro Zeile (oder mit Komma getrennt). Wird auf der Objektseite unter Ausstattung angezeigt.
+                </p>
               </div>
             </CardContent>
           </Card>
