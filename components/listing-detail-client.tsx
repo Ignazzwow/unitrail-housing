@@ -300,7 +300,9 @@ export function ListingDetailClient({ listing }: { listing: PropertyWithRelation
                 {L.minimumStay && (
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 shrink-0 text-primary" />
-                    <span className="text-muted-foreground">{L.minimumStay}</span>
+                    <span className="text-muted-foreground">
+                      {t("listings.minimumStay")}: {L.minimumStay}
+                    </span>
                   </div>
                 )}
                 {L.address && (
