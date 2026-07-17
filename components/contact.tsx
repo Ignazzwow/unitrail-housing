@@ -4,13 +4,14 @@ import type React from "react"
 
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Phone, User } from "lucide-react"
+import { Mail, Phone } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
@@ -189,12 +190,14 @@ export function Contact() {
                   +49 176 56800301
                 </a>
                 <div className="mt-4 flex gap-4 border-t border-border pt-4">
-                  <div
-                    className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-dashed border-muted-foreground/40 bg-muted/40 text-muted-foreground"
-                    aria-hidden
-                  >
-                    <User className="h-10 w-10 opacity-40" strokeWidth={1.25} />
-                    <span className="sr-only">{t("contact.contactPhotoPlaceholder")}</span>
+                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-muted">
+                    <Image
+                      src="/paul-worlitzsch.png"
+                      alt={t("contact.phoneContactName")}
+                      fill
+                      className="object-cover object-top"
+                      sizes="96px"
+                    />
                   </div>
                   <div className="min-w-0 flex-1 space-y-1 text-sm">
                     <p className="font-medium text-foreground">{t("contact.phoneContactLine")}</p>

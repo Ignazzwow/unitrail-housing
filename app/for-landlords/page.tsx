@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLanguage } from "@/contexts/language-context"
 import { LandlordInquiryDialog } from "@/components/landlord-inquiry-dialog"
+import { LandlordContactCard } from "@/components/landlord-contact-card"
 
 const BENEFIT_ICON_KEYS = [
   { icon: Banknote, titleKey: "forLandlords.benefitPaymentsTitle", descKey: "forLandlords.benefitPaymentsDesc" },
@@ -124,20 +125,23 @@ export default function ForLandlordsPage() {
         </section>
 
         <section className="container mx-auto px-4 py-16 md:py-20">
-          <div
-            className="mx-auto max-w-3xl rounded-2xl border border-primary/20 bg-primary/5 px-6 py-10 text-center md:px-10"
-            aria-labelledby="landlords-cta-heading"
-          >
-            <h2
-              id="landlords-cta-heading"
-              className="mb-3 text-2xl font-bold tracking-tight text-foreground md:text-3xl"
+          <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2 md:items-stretch">
+            <div
+              className="flex flex-col justify-center rounded-2xl border border-primary/20 bg-primary/5 px-6 py-10 text-center md:px-10"
+              aria-labelledby="landlords-cta-heading"
             >
-              {t("forLandlords.ctaTitle")}
-            </h2>
-            <p className="mx-auto mb-8 max-w-xl text-pretty text-muted-foreground">{t("forLandlords.ctaLead")}</p>
-            <Button size="lg" className="font-semibold" type="button" onClick={() => setLandlordFormOpen(true)}>
-              {t("forLandlords.ctaButton")}
-            </Button>
+              <h2
+                id="landlords-cta-heading"
+                className="mb-3 text-2xl font-bold tracking-tight text-foreground md:text-3xl"
+              >
+                {t("forLandlords.ctaTitle")}
+              </h2>
+              <p className="mx-auto mb-8 max-w-xl text-pretty text-muted-foreground">{t("forLandlords.ctaLead")}</p>
+              <Button size="lg" className="mx-auto font-semibold" type="button" onClick={() => setLandlordFormOpen(true)}>
+                {t("forLandlords.ctaButton")}
+              </Button>
+            </div>
+            <LandlordContactCard />
           </div>
         </section>
 
