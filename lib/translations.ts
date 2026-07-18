@@ -99,6 +99,8 @@ export const translations = {
     faq: {
       title: "Frequently Asked Questions",
       description: "Find answers to common questions about our housing services.",
+      searchPlaceholder: "Search questions…",
+      searchEmpty: "No matching questions. Try a different search.",
       questions: [
         {
           question: "How do I apply for accommodation?",
@@ -670,6 +672,8 @@ export const translations = {
     faq: {
       title: "Häufig gestellte Fragen",
       description: "Antworten auf häufige Fragen zu unseren Wohnungsdienstleistungen.",
+      searchPlaceholder: "Fragen durchsuchen…",
+      searchEmpty: "Keine passenden Fragen. Bitte andere Suchbegriffe versuchen.",
       questions: [
         {
           question: "Wie bewerbe ich mich um eine Unterkunft?",
