@@ -21,6 +21,22 @@ function readStoredLanguage(): Language | null {
   return null
 }
 
+/** German browser locales → de; everything else → en. */
+function detectBrowserLanguage(): Language {
+  if (typeof navigator === "undefined") return "en"
+  const candidates = [
+    ...(navigator.languages ?? []),
+    navigator.language,
+  ]
+    .filter(Boolean)
+    .map((l) => l.trim().toLowerCase())
+
+  for (const locale of candidates) {
+    if (locale === "de" || locale.startsWith("de-")) return "de"
+  }
+  return "en"
+}
+
 interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
@@ -34,7 +50,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = readStoredLanguage()
-    if (stored) setLanguageState(stored)
+    if (stored) {
+      setLanguageState(stored)
+      return
+    }
+
+    const detected = detectBrowserLanguage()
+    setLanguageState(detected)
+    try {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, detected)
+    } catch {
+      /* ignore quota / private mode */
+    }
   }, [])
 
   const setLanguage = useCallback((lang: Language) => {
