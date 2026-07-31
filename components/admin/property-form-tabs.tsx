@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Upload, X } from "lucide-react"
+import { Upload, X, GripVertical } from "lucide-react"
 
 interface PropertyFormData {
   id?: string
@@ -116,7 +116,8 @@ const LABELS = {
     unfurnished: "Unmöbliert",
     minimumStay: "Mindestmietdauer",
     minimumStayPlaceholder: "z. B. 6 Monate",
-    photosHint: "Bilder vom Gerät hochladen. Erstes Bild = Titelbild.",
+    photosHint: "Bilder vom Gerät hochladen. Per Drag & Drop sortieren — erstes Bild = Titelbild.",
+    photosReorderHint: "Ziehen Sie die Bilder, um die Reihenfolge zu ändern.",
     uploading: "Wird hochgeladen…",
     uploadPrompt: "Klicken zum Hochladen oder Dateien hierher ziehen",
     uploadFormats: "JPEG, PNG, WebP oder GIF · max. 5 MB pro Bild · wird automatisch optimiert",
@@ -186,7 +187,8 @@ const LABELS = {
     unfurnished: "Unfurnished",
     minimumStay: "Minimum stay",
     minimumStayPlaceholder: "e.g. 6 months",
-    photosHint: "Upload images from your device. First image = cover photo.",
+    photosHint: "Upload images from your device. Drag & drop to reorder — first image = cover photo.",
+    photosReorderHint: "Drag images to change their order.",
     uploading: "Uploading…",
     uploadPrompt: "Click to upload or drag and drop",
     uploadFormats: "JPEG, PNG, WebP, or GIF · max. 5 MB per image · automatically optimized",
@@ -220,6 +222,8 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [reorderFrom, setReorderFrom] = useState<number | null>(null)
+  const [reorderOver, setReorderOver] = useState<number | null>(null)
   const [activeLang, setActiveLang] = useState<"de" | "en">("de")
   const L = LABELS[activeLang]
 
@@ -266,6 +270,16 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
 
   const update = (key: string, value: string | number | boolean | string[]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const imageUrls = form.images.split("\n").filter(Boolean)
+
+  const reorderImages = (from: number, to: number) => {
+    if (from === to || from < 0 || to < 0 || from >= imageUrls.length || to >= imageUrls.length) return
+    const next = [...imageUrls]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    update("images", next.join("\n"))
   }
 
   const uploadFiles = async (files: FileList | null) => {
@@ -645,6 +659,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                     : "border-muted-foreground/25 bg-muted/50 hover:border-primary/50 hover:bg-muted"
                 }`}
                 onDragOver={(e) => {
+                  if (![...e.dataTransfer.types].includes("Files")) return
                   e.preventDefault()
                   setIsDragging(true)
                 }}
@@ -655,7 +670,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 onDrop={async (e) => {
                   e.preventDefault()
                   setIsDragging(false)
-                  if (uploading) return
+                  if (uploading || !e.dataTransfer.files?.length) return
                   await uploadFiles(e.dataTransfer.files)
                 }}
               >
@@ -674,14 +689,46 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                 <span className="text-muted-foreground">{uploading ? L.uploading : L.uploadPrompt}</span>
                 <span className="text-xs text-muted-foreground">{L.uploadFormats}</span>
               </label>
-              {form.images && (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                  {form.images
-                    .split("\n")
-                    .filter(Boolean)
-                    .map((url, i) => (
-                      <div key={url} className="group relative aspect-square overflow-hidden rounded-lg border bg-muted">
-                        <img src={url} alt="" className="h-full w-full object-cover" />
+              {imageUrls.length > 0 && (
+                <div className="space-y-2">
+                  {imageUrls.length > 1 && (
+                    <p className="text-xs text-muted-foreground">{L.photosReorderHint}</p>
+                  )}
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                    {imageUrls.map((url, i) => (
+                      <div
+                        key={`${url}-${i}`}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("text/plain", String(i))
+                          e.dataTransfer.effectAllowed = "move"
+                          setReorderFrom(i)
+                        }}
+                        onDragEnd={() => {
+                          setReorderFrom(null)
+                          setReorderOver(null)
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault()
+                          e.dataTransfer.dropEffect = "move"
+                          if (reorderOver !== i) setReorderOver(i)
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          const from = Number(e.dataTransfer.getData("text/plain"))
+                          if (Number.isFinite(from)) reorderImages(from, i)
+                          setReorderFrom(null)
+                          setReorderOver(null)
+                        }}
+                        className={`group relative aspect-square cursor-grab overflow-hidden rounded-lg border bg-muted active:cursor-grabbing ${
+                          reorderFrom === i ? "opacity-60" : ""
+                        } ${reorderOver === i && reorderFrom !== i ? "ring-2 ring-primary" : ""}`}
+                      >
+                        <img src={url} alt="" className="pointer-events-none h-full w-full object-cover" />
+                        <span className="absolute left-1 top-1 flex h-7 w-7 items-center justify-center rounded bg-background/80 text-muted-foreground shadow-sm">
+                          <GripVertical className="h-4 w-4" />
+                        </span>
                         <Button
                           type="button"
                           variant="destructive"
@@ -702,6 +749,7 @@ export function PropertyFormTabs({ property, mode }: PropertyFormTabsProps) {
                         )}
                       </div>
                     ))}
+                  </div>
                 </div>
               )}
             </CardContent>

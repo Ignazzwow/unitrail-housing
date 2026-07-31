@@ -47,3 +47,24 @@ export async function PUT(
   })
   return NextResponse.json(inquiry)
 }
+
+// ADMIN: DELETE /api/admin/inquiries/:id
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await requireAdmin()
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  const { id } = await params
+  const existing = await prisma.inquiry.findUnique({ where: { id } })
+  if (!existing) {
+    return NextResponse.json({ error: "Inquiry not found" }, { status: 404 })
+  }
+
+  await prisma.inquiry.delete({ where: { id } })
+  return NextResponse.json({ ok: true })
+}

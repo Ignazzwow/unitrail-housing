@@ -79,7 +79,14 @@ export const authOptions: NextAuthOptions = {
       return session
     },
   },
-  session: { strategy: "jwt", maxAge: 24 * 60 * 60 }, // 24 hours
+  // Persistent login across browser restarts (cookie maxAge follows session.maxAge)
+  session: {
+    strategy: "jwt",
+    maxAge: 90 * 24 * 60 * 60, // 90 days
+  },
+  jwt: {
+    maxAge: 90 * 24 * 60 * 60,
+  },
   pages: {
     signIn: "/admin/login",
   },

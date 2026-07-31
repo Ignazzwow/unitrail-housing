@@ -21,7 +21,18 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Eye } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Eye, Trash2 } from "lucide-react"
 import { getInquiryCategory } from "@/lib/inquiry-category"
 
 interface Inquiry {
@@ -38,14 +49,46 @@ interface Inquiry {
 
 const statusVariant = (status: string) => {
   switch (status) {
-    case "new": return "destructive"
-    case "in_progress": return "secondary"
-    case "closed": return "default"
-    default: return "outline"
+    case "new":
+      return "destructive"
+    case "in_progress":
+      return "secondary"
+    case "closed":
+      return "default"
+    default:
+      return "outline"
   }
 }
 
-function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
+function InquiriesTable({
+  inquiries,
+  onDeleted,
+}: {
+  inquiries: Inquiry[]
+  onDeleted: (id: string) => void
+}) {
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const handleDelete = async (id: string) => {
+    setDeletingId(id)
+    try {
+      const res = await fetch(`/api/admin/inquiries/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        alert(err.error ?? "Failed to delete inquiry")
+        return
+      }
+      onDeleted(id)
+    } catch {
+      alert("Failed to delete inquiry")
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -57,13 +100,13 @@ function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
           <TableHead>Message</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Created</TableHead>
-          <TableHead className="w-20"></TableHead>
+          <TableHead className="w-28"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {inquiries.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">
+            <TableCell colSpan={8} className="py-12 text-center text-muted-foreground">
               No inquiries found.
             </TableCell>
           </TableRow>
@@ -73,7 +116,11 @@ function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
               <TableCell className="font-medium">{inq.name}</TableCell>
               <TableCell>
                 {inq.property ? (
-                  <Link href={`/angebote/${inq.property.slug}`} target="_blank" className="text-primary hover:underline">
+                  <Link
+                    href={`/angebote/${inq.property.slug}`}
+                    target="_blank"
+                    className="text-primary hover:underline"
+                  >
                     {inq.property.title}
                   </Link>
                 ) : (
@@ -83,22 +130,53 @@ function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
               <TableCell className="text-muted-foreground">{inq.email}</TableCell>
               <TableCell className="text-muted-foreground">{inq.phone ?? "—"}</TableCell>
               <TableCell className="max-w-[200px] truncate text-muted-foreground">
-                {inq.message.slice(0, 80)}{inq.message.length > 80 ? "…" : ""}
+                {inq.message.slice(0, 80)}
+                {inq.message.length > 80 ? "…" : ""}
               </TableCell>
               <TableCell>
-                <Badge variant={statusVariant(inq.status)}>
-                  {inq.status.replace("_", "-")}
-                </Badge>
+                <Badge variant={statusVariant(inq.status)}>{inq.status.replace("_", "-")}</Badge>
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {new Date(inq.createdAt).toLocaleDateString()}
               </TableCell>
               <TableCell>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={`/admin/inquiries/${inq.id}`}>
-                    <Eye className="h-4 w-4" />
-                  </Link>
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href={`/admin/inquiries/${inq.id}`}>
+                      <Eye className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive"
+                        disabled={deletingId === inq.id}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Inquiry löschen?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Die Anfrage von <strong>{inq.name}</strong> ({inq.email}) wird dauerhaft
+                          gelöscht. Das kann nicht rückgängig gemacht werden.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          onClick={() => handleDelete(inq.id)}
+                        >
+                          Löschen
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </TableCell>
             </TableRow>
           ))
@@ -116,7 +194,10 @@ export default function InquiriesPage() {
   const [propertyFilter, setPropertyFilter] = useState<string>("all")
 
   useEffect(() => {
-    fetch(`/api/admin/inquiries?limit=100${statusFilter !== "all" ? `&status=${statusFilter}` : ""}${propertyFilter !== "all" ? `&property_id=${propertyFilter}` : ""}`)
+    setLoading(true)
+    fetch(
+      `/api/admin/inquiries?limit=100${statusFilter !== "all" ? `&status=${statusFilter}` : ""}${propertyFilter !== "all" ? `&property_id=${propertyFilter}` : ""}`
+    )
       .then((r) => r.json())
       .then((d) => setInquiries(d.inquiries ?? []))
       .catch(() => setInquiries([]))
@@ -130,6 +211,10 @@ export default function InquiriesPage() {
       .catch(() => setProperties([]))
   }, [])
 
+  const handleDeleted = (id: string) => {
+    setInquiries((prev) => prev.filter((inq) => inq.id !== id))
+  }
+
   const studentInquiries = inquiries.filter((inq) => getInquiryCategory(inq.source) === "student")
   const landlordInquiries = inquiries.filter((inq) => getInquiryCategory(inq.source) === "landlord")
 
@@ -139,14 +224,15 @@ export default function InquiriesPage() {
         <h2 className="text-lg font-semibold">Inquiries</h2>
       </div>
 
-      {/* Filters */}
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-end gap-4">
             <div className="w-40">
               <label className="mb-1 block text-sm font-medium text-muted-foreground">Status</label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="new">New</SelectItem>
@@ -158,11 +244,15 @@ export default function InquiriesPage() {
             <div className="w-56">
               <label className="mb-1 block text-sm font-medium text-muted-foreground">Property</label>
               <Select value={propertyFilter} onValueChange={setPropertyFilter}>
-                <SelectTrigger><SelectValue placeholder="All properties" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="All properties" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
                   {properties.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.title}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -171,7 +261,6 @@ export default function InquiriesPage() {
         </CardContent>
       </Card>
 
-      {/* Table */}
       <Card>
         <CardContent className="p-0">
           {loading ? (
@@ -187,10 +276,10 @@ export default function InquiriesPage() {
                 </TabsList>
               </div>
               <TabsContent value="student" className="mt-0">
-                <InquiriesTable inquiries={studentInquiries} />
+                <InquiriesTable inquiries={studentInquiries} onDeleted={handleDeleted} />
               </TabsContent>
               <TabsContent value="landlord" className="mt-0">
-                <InquiriesTable inquiries={landlordInquiries} />
+                <InquiriesTable inquiries={landlordInquiries} onDeleted={handleDeleted} />
               </TabsContent>
             </Tabs>
           )}
