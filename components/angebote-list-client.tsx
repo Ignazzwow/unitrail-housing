@@ -73,7 +73,14 @@ export function AngeboteListClient({ listings, hideHeader }: { listings: Propert
             <CardHeader>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 flex-1">
-                  <CardTitle className="mb-2 line-clamp-2 text-lg text-card-foreground sm:text-xl">{L.title}</CardTitle>
+                  <CardTitle className="mb-2 line-clamp-2 text-lg text-card-foreground sm:text-xl">
+                    <Link
+                      href={`/angebote/${listing.slug}`}
+                      className="transition-colors hover:text-primary hover:underline"
+                    >
+                      {L.title}
+                    </Link>
+                  </CardTitle>
                   <div className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4 shrink-0" />
                     <span className="truncate">{L.location}</span>
